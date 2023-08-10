@@ -2,16 +2,16 @@ import express from 'express';
 import { authRouter } from './auth.router.js';
 import { swaggerDoc } from '../config/api-doc.config.js';
 import swaggerUi from 'swagger-ui-express';
-import { appRouter } from './app.router.js';
+import { adminRouter } from './admin.router.js';
 
 
 const router = express.Router();
 
 router.use('/auth', authRouter);
-router.use('/app', appRouter);
+router.use('/admin', adminRouter);
 router.use('/', 
   swaggerUi.serve,
   swaggerUi.setup(swaggerDoc)  
 )
 
-export const API = router;
+export const API = router;  

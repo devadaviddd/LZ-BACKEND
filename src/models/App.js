@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { Database } from '../data/database.js';
 import { API } from '../router/router.js';
+import { database } from '../di/index.js';
 
 export class Application {
   #server;
@@ -22,7 +22,7 @@ export class Application {
     this.#server.listen(port, host, () => {
       console.log(`Server started at http://${host}:${port}`);
     });
-    Database.connect();
+    database.connect();
   }
 
   getServer() {
