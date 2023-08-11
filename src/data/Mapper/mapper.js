@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export class AdminMapper {
-  static  mapToModel (schema, dto) {
+  static mapToModel (schema, dto) {
     mongoose.model("Admin", schema);
     const AdminModel = mongoose.model("Admin");
     const admin = new AdminModel({

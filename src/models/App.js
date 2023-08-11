@@ -23,7 +23,7 @@ export class Application {
       console.log(`Server started at http://${host}:${port}`);
     });
     database.connect();
-  }
+  }1
 
   getServer() {
     return this.#server;

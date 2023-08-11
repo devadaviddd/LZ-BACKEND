@@ -9,7 +9,7 @@ export const adminSchema = new mongoose.Schema({
     required: [true, "Name is required"],
     validate: {
       validator: isName,
-      message: "Name cannot over 20 characters",
+      message: "Name cannot over 20 characters and contain special characters",
     }
   },
   email: {

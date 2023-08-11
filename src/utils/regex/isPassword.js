@@ -1,3 +1,3 @@
 export const isPassword = (password) => {
-  return /^[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(password);
+  return /^(?=.*[a-z])(?=.*[!@#$%^&*?]).{6,16}$/.test(password);
 }

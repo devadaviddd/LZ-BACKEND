@@ -1,5 +1,7 @@
 import { adminSchema } from "../../data/Schemas/admin.schema.js";
 import { Admin } from "../../models/Admin.js";
+import { isEmailExist } from "../../utils/errors/duplicateEmail.js";
+
 /**
  * @openapi
  * /admin/create:
@@ -19,6 +21,9 @@ import { Admin } from "../../models/Admin.js";
  *                 type: string
  *               password:
  *                 type: string
+          *       
+
+ * 
  *     responses:
  *       200:
  *         description: Admin created successfully.
@@ -64,27 +69,34 @@ import { Admin } from "../../models/Admin.js";
  */
 export const createAdmin = async (req, res) => {
   const { name, email, password } = req.body;
+  console.log(req.body);
   try {
     const admin = new Admin(adminSchema, { name, email, password });
     await admin.createAdmin();
-    res.status(200).json({
+    return res.status(200).json({
       message: "Admin created",
       admin: admin,
     });
   } catch (err) {
     console.log(err);
-
     if (err.errors) {
+      console.log('here');
       const { email, password } = err.errors;
-      res.status(400).json({
+      return res.status(400).json({
         message: "Admin not created",
         email: email?.message,
         password: password?.message,
       });
     }
-    res.status(400).json({
+    if (err) {
+      return res.status(400).json({
+        message: "Admin not created",
+        error: isEmailExist(err.message) ? "Email already exists" : err.message,
+      });
+    }
+    res.status(500).json({
       message: "Admin not created",
-      error: err,
+      error: "Internal server error",
     });
   }
 };
