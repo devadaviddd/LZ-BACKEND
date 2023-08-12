@@ -1,21 +1,19 @@
 import mongoose from "mongoose";
-import { AdminMapper } from "../data/Mapper/mapper.js";
+import { AdminMapper } from "../repository/Mapper/mapper.js";
 import { User } from "./User.js";
+const ObjectId = mongoose.Types.ObjectId;
 
-export class Admin extends User {
+export class Admin {
   #adminModel;
   constructor(AdminSchema, dto) {
-    const { name, email, password } = dto;
-    super({
-      name,
-      email,
-      password,
-    });
-    this.#adminModel = AdminMapper.mapToModel(AdminSchema, dto);
+    this.#adminModel = AdminMapper.mapToSchema(AdminSchema, dto);
   }
-  
-  async createAdmin() {
+
+  async insertAdminToDatabase(userId) {
     try {
+      if (userId) {
+        this.#adminModel._id = new ObjectId(userId);
+      }
       await this.#adminModel.save();
       console.log("Admin created");
       this._id = this.#adminModel._id;

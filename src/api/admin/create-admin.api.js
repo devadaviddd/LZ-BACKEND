@@ -1,5 +1,7 @@
-import { adminSchema } from "../../data/Schemas/admin.schema.js";
+import { ROLE } from "../../constants/role.js";
+import { adminSchema } from "../../repository/Schemas/admin.schema.js";
 import { Admin } from "../../models/Admin.js";
+import { User } from "../../models/User.js";
 import { isEmailExist } from "../../utils/errors/duplicateEmail.js";
 
 /**
@@ -21,9 +23,8 @@ import { isEmailExist } from "../../utils/errors/duplicateEmail.js";
  *                 type: string
  *               password:
  *                 type: string
-          *       
-
- * 
+ *
+ *
  *     responses:
  *       200:
  *         description: Admin created successfully.
@@ -67,12 +68,22 @@ import { isEmailExist } from "../../utils/errors/duplicateEmail.js";
  *                 error:
  *                   type: object
  */
-export const createAdmin = async (req, res) => {
+export const createAdminAPI = async (req, res) => {
+  const isAuthRole = req.isAuthRole;
+  console.log("isAuthenticated", isAuthRole);
   const { name, email, password } = req.body;
   console.log(req.body);
+  console.log("isAuthenticated", isAuthRole);
+
+  if (isAuthRole !== ROLE.ADMIN) {
+    return res.status(401).json({
+      message: "Unauthorized current user is not admin",
+    });
+  }
+
   try {
     const admin = new Admin(adminSchema, { name, email, password });
-    await admin.createAdmin();
+    await admin.insertAdminToDatabase();
     return res.status(200).json({
       message: "Admin created",
       admin: admin,
@@ -80,10 +91,11 @@ export const createAdmin = async (req, res) => {
   } catch (err) {
     console.log(err);
     if (err.errors) {
-      console.log('here');
-      const { email, password } = err.errors;
+      console.log("here");
+      const { email, password, name } = err.errors;
       return res.status(400).json({
         message: "Admin not created",
+        name: name?.message,
         email: email?.message,
         password: password?.message,
       });
