@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export class AdminMapper {
-  static mapToSchema (schema, dto) {
+  static mapToSchema(schema, dto) {
     mongoose.model("Admin", schema);
     const AdminModel = mongoose.model("Admin");
     const admin = new AdminModel({
@@ -11,12 +11,27 @@ export class AdminMapper {
       avatar: dto.avatar,
       categories: dto.categories,
     });
-    return admin;  
+
+    return admin;
+  }
+}
+
+export class CategoryMapper {
+  static mapToSchema(schema, dto) {
+    mongoose.model("Category", schema);
+    const CategoryModel = mongoose.model("Category");
+    const category = new CategoryModel({
+      name: dto.name,
+      parentId: dto.parentId,
+      admins: dto.admins,
+      subCategories: dto.subCategories,
+    });
+    return category;
   }
 }
 
 export class UserMapper {
-  static mapToSchema (schema, dto) {
+  static mapToSchema(schema, dto) {
     mongoose.model("User", schema);
     const UserModel = mongoose.model("User");
     const user = new UserModel({
@@ -26,6 +41,6 @@ export class UserMapper {
       avatar: dto.avatar,
       role: dto.role,
     });
-    return user;  
+    return user;
   }
 }

@@ -32,8 +32,7 @@ export class User {
   }
 
   static async findUserById(userId) {
-    const userRecord = await database.findExistedRecord(userId, "users");
-    console.log("userRecord", userRecord);
+    const userRecord = await database.getRecordById(userId, "users");
     return userRecord;
   }
 }

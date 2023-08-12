@@ -12,23 +12,35 @@ export class Database {
       console.log("Database connection error", error);
     }
   }
-  async insertOneRecord(document, collectionName) {
+  async insertRecord(document, collectionName) {
     try {
-      const result = await this.db.collection(collectionName).insertOne(document);
+      const result = await this.db
+        .collection(collectionName)
+        .insertOne(document);
       return result;
     } catch (error) {
       console.log("error", error);
     }
   }
-  async findExistedRecord(id, collectionName) {
-    console.log('id', id);
-    console.log('collectionName', collectionName);
+  async getRecordById(id, collectionName) {
+    console.log("id", id);
+    console.log("collectionName", collectionName);
     try {
-      const record =  await this.db.collection(collectionName).findOne({ _id: new ObjectId(id) });
-      console.log('record', record);
+      const record = await this.db
+        .collection(collectionName)
+        .findOne({ _id: new ObjectId(id) });
+      console.log("record", record);
       return record;
     } catch (error) {
-      console.log('error', error);
+      console.log("error", error);
+    }
+  }
+  async getRecordsByQuery(query, collectionName) {
+    try {
+      const records = await this.db.collection(collectionName).find(query).toArray();
+      return records;
+    } catch (error) {
+      console.log("error", error);
     }
   }
 }

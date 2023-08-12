@@ -13,12 +13,12 @@ export const authenticateUser = async (req, res, next) => {
       const requesterId = _id;
       const user = await User.findUserById(requesterId);
       console.log("user here", user);
-      user ? req.isAuthRole = user.role: req.isAuthRole = false;
+      user ? req.authUser = user: req.authUser = null;
     } else {
-      req.isAuthRole = false;
+      req.authUser = null;
     }
   } else {
-    req.isAuthRole = false;
+    req.authUser = null;
   }
   next();
 };

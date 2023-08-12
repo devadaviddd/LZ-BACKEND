@@ -69,11 +69,10 @@ import { isEmailExist } from "../../utils/errors/duplicateEmail.js";
  *                   type: object
  */
 export const createAdminAPI = async (req, res) => {
-  const isAuthRole = req.isAuthRole;
-  console.log("isAuthenticated", isAuthRole);
+  const authUser = req.authUser;
+  const { role: isAuthRole } = authUser;
   const { name, email, password } = req.body;
   console.log(req.body);
-  console.log("isAuthenticated", isAuthRole);
 
   if (isAuthRole !== ROLE.ADMIN) {
     return res.status(401).json({
@@ -91,7 +90,6 @@ export const createAdminAPI = async (req, res) => {
   } catch (err) {
     console.log(err);
     if (err.errors) {
-      console.log("here");
       const { email, password, name } = err.errors;
       return res.status(400).json({
         message: "Admin not created",

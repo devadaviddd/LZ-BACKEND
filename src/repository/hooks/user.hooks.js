@@ -28,14 +28,17 @@ export async function afterInsertToUsers(doc, next) {
       case ROLE.ADMIN:
         const admin = AdminMapper.mapToSchema(adminSchema, doc);
         console.log("admin", admin);
-        await database.insertOneRecord({
-          _id: admin._id,
-          name: admin.name,
-          email: admin.email,
-          password: admin.password,
-          categories: admin.categories,
-          avatar: admin.avatar,
-        }, "admins");
+        await database.insertRecord(
+          {
+            _id: admin._id,
+            name: admin.name,
+            email: admin.email,
+            password: admin.password,
+            categories: admin.categories,
+            avatar: admin.avatar,
+          },
+          "admins"
+        );
     }
     next();
   } catch (error) {

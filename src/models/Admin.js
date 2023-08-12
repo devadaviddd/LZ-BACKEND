@@ -5,8 +5,8 @@ const ObjectId = mongoose.Types.ObjectId;
 
 export class Admin {
   #adminModel;
-  constructor(AdminSchema, dto) {
-    this.#adminModel = AdminMapper.mapToSchema(AdminSchema, dto);
+  constructor(adminSchema, dto) {
+    this.#adminModel = AdminMapper.mapToSchema(adminSchema, dto);
   }
 
   async insertAdminToDatabase(userId) {

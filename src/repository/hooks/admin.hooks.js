@@ -21,7 +21,10 @@ export async function beforeInsertToAdmins(next) {
 export async function afterInsertToAdmins(doc, next) {
   const { _id, name, email, password } = doc;
   try {
-    await database.insertOneRecord({ _id, name, email, password, role: ROLE.ADMIN }, 'users');
+    await database.insertRecord(
+      { _id, name, email, password, role: ROLE.ADMIN },
+      "users"
+    );
     next();
   } catch (error) {
     console.log(error);

@@ -32,7 +32,7 @@ export const adminSchema = new mongoose.Schema({
     default: '',
   }, 
   categories: {
-    type: [String],
+    type: [mongoose.Schema.Types.ObjectId],
     default: [],
   }
 })
