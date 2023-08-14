@@ -35,4 +35,9 @@ export class User {
     const userRecord = await database.getRecordById(userId, "users");
     return userRecord;
   }
+
+  static async findUserByEmail(email) {
+    const userRecord = await database.getRecordsByQuery({ email }, "users");
+    return userRecord[0];
+  }
 }
