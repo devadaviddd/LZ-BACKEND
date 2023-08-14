@@ -7,7 +7,6 @@ import bcrypt from "bcrypt";
 
 export async function beforeInsertToUsers(next) {
   console.log("before insert to users");
-  console.log(this);
   try {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
@@ -20,14 +19,12 @@ export async function beforeInsertToUsers(next) {
 }
 export async function afterInsertToUsers(doc, next) {
   console.log("after insert to users");
-  console.log(doc);
   try {
     const { _id, name, email, password, role } = doc;
 
     switch (role) {
       case ROLE.ADMIN:
         const admin = AdminMapper.mapToSchema(adminSchema, doc);
-        console.log("admin", admin);
         await database.insertRecord(
           {
             _id: admin._id,

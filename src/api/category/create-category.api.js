@@ -76,12 +76,17 @@ import { isCategoryNameExist } from "../../utils/errors/duplicateCategoryName.js
  */
 export const createCategoryAPI = async (req, res) => {
   const authUser = req.authUser;
-  console.log("authUser", authUser);
   const { name, parentId } = req.body;
+  console.log('in create category api');
+  if (!authUser) {
+    return res.status(401).json({
+      message: "You are unauthorized to create category",
+    });
+  }
   const { _id: adminId, role } = authUser;
   if (role !== ROLE.ADMIN) {
-    return res.status(401).json({
-      message: "You are not authorized to create category",
+    return res.status(403).json({
+      message: "You don't have permission to create category",
     });
   }
   try {
@@ -114,6 +119,7 @@ export const createCategoryAPI = async (req, res) => {
 
       parentCategoryRecord.subCategories.push(category._id);
       const parentCategory = new Category(categorySchema, parentCategoryRecord);
+      console.log('parentCategory', parentCategory);
 
       await category.insertCategory();
       await parentCategory.updateSubCategory({
