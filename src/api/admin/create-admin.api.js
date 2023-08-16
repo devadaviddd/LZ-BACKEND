@@ -72,7 +72,6 @@ export const createAdminAPI = async (req, res) => {
   const authUser = req.authUser;
   const { role: isAuthRole } = authUser;
   const { name, email, password } = req.body;
-  console.log(req.body);
 
   if (isAuthRole !== ROLE.ADMIN) {
     return res.status(401).json({

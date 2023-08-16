@@ -23,13 +23,11 @@ export class Database {
     }
   }
   async getRecordById(id, collectionName) {
-    console.log("id", id);
     console.log("collectionName", collectionName);
     try {
       const record = await this.db
         .collection(collectionName)
         .findOne({ _id: new ObjectId(id) });
-      console.log("record", record);
       return record;
     } catch (error) {
       console.log("error", error);
@@ -39,6 +37,16 @@ export class Database {
     try {
       const records = await this.db.collection(collectionName).find(query).toArray();
       return records;
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+  async updateRecordById(id, updateFields, collectionName) {
+    try {
+      const result = await this.db
+        .collection(collectionName)
+        .updateOne({ _id: new ObjectId(id) }, { $set: updateFields });
+      return result;
     } catch (error) {
       console.log("error", error);
     }

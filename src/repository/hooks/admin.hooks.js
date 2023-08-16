@@ -6,7 +6,6 @@ import { database } from "../../di/index.js";
 
 export async function beforeInsertToAdmins(next) {
   console.log("before insert to admins");
-  console.log(this);
   try {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);

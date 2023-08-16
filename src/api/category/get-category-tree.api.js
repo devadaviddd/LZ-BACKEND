@@ -44,7 +44,7 @@ function generateSubCategories(category, allCategories) {
       if (subCategory) {
         subCategoryMap[subCategory.name] = {
           _id: subCategory._id,
-          sub: generateSubCategories(subCategory, allCategories),
+          subCategories: generateSubCategories(subCategory, allCategories),
         };
       }
     });
@@ -57,7 +57,7 @@ function generateCategoryTree(rootCategories, allCategories) {
   rootCategories.forEach((category) => {
     categoryTree[category.name] = {
       _id: category._id,
-      sub: generateSubCategories(category, allCategories),
+      subCategories: generateSubCategories(category, allCategories),
     };
   });
 

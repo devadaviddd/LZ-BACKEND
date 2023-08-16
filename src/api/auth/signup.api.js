@@ -88,7 +88,6 @@ import { isEmailExist } from "../../utils/errors/duplicateEmail.js";
  */
 export const signUpAPI = async (req, res) => {
   const { name, email, password, avatar, role } = req.body;
-  console.log(req.body);
   try {
     const user = new User(userSchema, {
       name,
@@ -118,7 +117,6 @@ export const signUpAPI = async (req, res) => {
   } catch (err) {
     console.log(err);
     if (err.errors) {
-      console.log("here");
       const { email, password, name, role } = err.errors;
       return res.status(400).json({
         message: "User not created",
