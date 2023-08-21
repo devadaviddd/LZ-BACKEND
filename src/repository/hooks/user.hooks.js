@@ -9,6 +9,7 @@ export async function beforeInsertToUsers(next) {
   console.log("before insert to users");
   try {
     const salt = await bcrypt.genSalt();
+    console.log('password', this.password);
     this.password = await bcrypt.hash(this.password, salt);
     console.log("hash successfully");
     next();
