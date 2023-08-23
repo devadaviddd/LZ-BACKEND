@@ -165,4 +165,9 @@ export class Category {
     );
     return categoryRecords;
   }
+
+  static async getAllCategories() {
+    const categories = await database.getRecordsByQuery({}, "categories");
+    return categories;
+  }
 }

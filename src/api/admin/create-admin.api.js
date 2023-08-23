@@ -1,4 +1,4 @@
-import { ROLE } from "../../constants/role.js";
+import { ROLE } from "../../constants/index.js";
 import { adminSchema } from "../../repository/Schemas/admin.schema.js";
 import { Admin } from "../../models/Admin.js";
 import { User } from "../../models/User.js";
