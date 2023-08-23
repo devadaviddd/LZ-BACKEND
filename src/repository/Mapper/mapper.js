@@ -16,6 +16,24 @@ export class AdminMapper {
   }
 }
 
+export class SellerMapper {
+  static mapToSchema(schema, dto) {
+    mongoose.model("Seller", schema);
+    const SellerModel = mongoose.model("Seller");
+    const seller = new SellerModel({
+      name: dto.name,
+      email: dto.email,
+      password: dto.password,
+      avatar: dto.avatar,
+      status: dto.status,
+      product: dto.product,
+      order: dto.order
+    });
+
+    return seller;
+  }
+}
+
 export class CategoryMapper {
   static mapToSchema(schema, dto) {
     mongoose.model("Category", schema);

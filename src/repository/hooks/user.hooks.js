@@ -1,8 +1,9 @@
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
 import { Admin } from "../../models/Admin.js";
-import { AdminMapper } from "../Mapper/mapper.js";
+import { AdminMapper, SellerMapper } from "../Mapper/mapper.js";
 import { adminSchema } from "../Schemas/admin.schema.js";
+import { sellerSchema } from "../Schemas/seller.schema.js";
 import bcrypt from "bcrypt";
 
 export async function beforeInsertToUsers(next) {
@@ -37,6 +38,21 @@ export async function afterInsertToUsers(doc, next) {
           },
           "admins"
         );
+      case ROLE.SELLER:
+        const seller = SellerMapper.mapToSchema(sellerSchema, doc);
+        await database.insertRecord(
+          {
+            _id: seller._id,
+            name: seller.name,
+            email: seller.email,
+            password: seller.password,
+            status: seller.status,
+            product: seller.product,
+            order: seller.order,
+            avatar: seller.avatar,
+          },
+          "sellers"
+        );    
     }
     next();
   } catch (error) {
