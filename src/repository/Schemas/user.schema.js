@@ -2,8 +2,11 @@ import mongoose from "mongoose";
 import { isName } from "../../utils/regex/isName.js";
 import { isEmail } from "../../utils/regex/isEmail.js";
 import { isPassword } from "../../utils/regex/isPassword.js";
-import { ROLE } from "../../constants/role.js";
-import { afterInsertToUsers, beforeInsertToUsers } from "../hooks/user.hooks.js";
+import { ROLE } from "../../constants/index.js";
+import {
+  afterInsertToUsers,
+  beforeInsertToUsers,
+} from "../hooks/user.hooks.js";
 
 export const userSchema = new mongoose.Schema({
   name: {

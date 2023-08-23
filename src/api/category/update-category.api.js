@@ -1,4 +1,4 @@
-import { ROLE } from "../../constants/role.js";
+import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
 import { Category } from "../../models/Category.js";
 import { categorySchema } from "../../repository/Schemas/category.schema.js";
@@ -8,7 +8,7 @@ export const updateCategoryAPI = async (req, res) => {
   const authUser = req.authUser;
   const { updateFields, parentId } = req.body;
   const categoryId = req.params.id;
-  console.log('categoryId', categoryId);
+  console.log("categoryId", categoryId);
   if (!authUser) {
     return res.status(401).json({
       message: "You are unauthorized to create category",
@@ -21,9 +21,15 @@ export const updateCategoryAPI = async (req, res) => {
     });
   }
   try {
-    const existedCategoryRecord = await database.getRecordById(categoryId, "categories");
+    const existedCategoryRecord = await database.getRecordById(
+      categoryId,
+      "categories"
+    );
     if (parentId) {
-      const existedCategoryParentRecord = await database.getRecordById(parentId, "categories");
+      const existedCategoryParentRecord = await database.getRecordById(
+        parentId,
+        "categories"
+      );
       if (!existedCategoryParentRecord) {
         return res.status(400).json({
           message: "Parent category not found",
@@ -32,11 +38,11 @@ export const updateCategoryAPI = async (req, res) => {
     }
     if (existedCategoryRecord) {
       const category = new Category(categorySchema, existedCategoryRecord);
-      await category.updateCategory(categoryId, adminId, updateFields) 
+      await category.updateCategory(categoryId, adminId, updateFields);
       return res.status(200).json({
         message: "Category updated successfully",
         category,
-      })
+      });
     } else {
       return res.status(404).json({
         message: "Category not found to update",
@@ -56,11 +62,11 @@ export const updateCategoryAPI = async (req, res) => {
         error: isCategoryNameExist(err.message)
           ? "Category name already exist"
           : err.message,
-      });
+      }); 
     }
   }
   res.status(500).json({
     message: "Category not created",
     error: "Internal server error",
   });
-}
+};
