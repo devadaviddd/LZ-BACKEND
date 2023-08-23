@@ -1,4 +1,4 @@
-import { ROLE } from "../../constants/role.js";
+import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
 import { Admin } from "../../models/Admin.js";
 import { AdminMapper } from "../Mapper/mapper.js";
@@ -9,7 +9,7 @@ export async function beforeInsertToUsers(next) {
   console.log("before insert to users");
   try {
     const salt = await bcrypt.genSalt();
-    console.log('password', this.password);
+    console.log("password", this.password);
     this.password = await bcrypt.hash(this.password, salt);
     console.log("hash successfully");
     next();

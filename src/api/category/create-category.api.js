@@ -1,4 +1,4 @@
-import { ROLE } from "../../constants/role.js";
+import { ROLE } from "../../constants/index.js";
 import { Category } from "../../models/Category.js";
 import { categorySchema } from "../../repository/Schemas/category.schema.js";
 import { isCategoryNameExist } from "../../utils/errors/duplicateCategoryName.js";
@@ -77,7 +77,7 @@ import { isCategoryNameExist } from "../../utils/errors/duplicateCategoryName.js
 export const createCategoryAPI = async (req, res) => {
   const authUser = req.authUser;
   const { name, parentId } = req.body;
-  console.log('in create category api');
+  console.log("in create category api");
   if (!authUser) {
     return res.status(401).json({
       message: "You are unauthorized to create category",
@@ -119,7 +119,7 @@ export const createCategoryAPI = async (req, res) => {
 
       parentCategoryRecord.subCategories.push(category._id);
       const parentCategory = new Category(categorySchema, parentCategoryRecord);
-      console.log('parentCategory', parentCategory);
+      console.log("parentCategory", parentCategory);
 
       await category.insertCategory();
       await parentCategory.updateSubCategory({

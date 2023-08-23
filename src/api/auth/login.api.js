@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { isEmail } from "../../utils/regex/isEmail.js";
 import { isPassword } from "../../utils/regex/isPassword.js";
+import { MAX_AGE } from "../../constants/index.js";
 
 export const loginAPI = async (req, res) => {
   const { email, password } = req.body;
@@ -42,8 +43,13 @@ export const loginAPI = async (req, res) => {
 
     const accessToken = jwt.sign(
       { _id: existedUser._id, role: existedUser.role },
-      process.env.SECRET_KEY
+      process.env.SECRET_KEY, 
     );
+
+    res.cookie('sb', accessToken, {
+      httpOnly: true,
+      maxAge: MAX_AGE,
+    })
 
     res.status(200).json({
       message: "Login successfully",
