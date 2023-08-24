@@ -35,7 +35,10 @@ export class Database {
   }
   async getRecordsByQuery(query, collectionName) {
     try {
-      const records = await this.db.collection(collectionName).find(query).toArray();
+      const records = await this.db
+        .collection(collectionName)
+        .find(query)
+        .toArray();
       return records;
     } catch (error) {
       console.log("error", error);
