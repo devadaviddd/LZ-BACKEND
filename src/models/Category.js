@@ -150,11 +150,6 @@ export class Category {
     return categoryRecord;
   }
 
-  static async getCategories() {
-    const categories = await database.getRecordsByQuery({}, "categories");
-    return categories;
-  }
-
   static async getCategoriesById(categoryId) {
     const query = {
       _id: new ObjectId(categoryId),
@@ -167,7 +162,7 @@ export class Category {
   }
 
   static async getAllCategories() {
-    const categories = await database.getRecordsByQuery({}, "categories");
-    return categories;
+    const categoryRecords = await database.getRecordsByQuery({}, "categories");
+    return categoryRecords;
   }
 }

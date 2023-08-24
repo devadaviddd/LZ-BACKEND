@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { database } from "../di/index.js";
 import { SellerMapper } from "../repository/Mapper/mapper.js";
 import { User } from "./User.js";
 const ObjectId = mongoose.Types.ObjectId;
@@ -26,5 +27,10 @@ export class Seller {
     } catch (error) {
         throw error;
     }
+    }
+
+    static async getAllSellers() {
+        const sellerRecords = await database.getRecordsByQuery({}, "sellers");
+        return sellerRecords;
     }
 }
