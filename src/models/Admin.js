@@ -26,4 +26,14 @@ export class Admin {
       throw error;
     }
   }
+
+  static async getAdminNamesByIds(adminId) {
+    const adminRecord = await User.findUserById(adminId);
+    return adminRecord.name;
+  }
+
+  static async getAdminEmailsByIds(adminId) {
+    const adminRecord = await User.findUserById(adminId);
+    return adminRecord.email;
+  }
 }

@@ -66,7 +66,7 @@ function generateCategoryTree(rootCategories, allCategories) {
 
 export const getAllCategoryTreeAPI = async (req, res) => {
   try {
-    const categories = await Category.getCategories();
+    const categories = await Category.getAllCategories();
     const mainCategory = categories.filter((category) => {
       return !category.parentId;
     });
