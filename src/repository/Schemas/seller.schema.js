@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { isName } from "../../utils/regex/isName.js";
 import { isEmail } from "../../utils/regex/isEmail.js";
 import { beforeInsertToSellers, afterInsertToSellers } from "../hooks/seller.hooks.js";
-import { SELLER_STATUS } from "../../constants/sellerStatus.js";
+import { SELLER_STATUS } from "../../constants/index.js";
 
 
 export const sellerSchema = new mongoose.Schema({
