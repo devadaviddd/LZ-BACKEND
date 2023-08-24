@@ -1,6 +1,6 @@
 import express from "express";
 import { authenticateUser } from "../middleware/auth.middleware.js";
-import { getAllCategoryTreeAPI } from "../api/category/get-category-tree.api.js";
+import { createProductAPI } from "../api/product/create-product.api.js";
 
 
 const router = express.Router();
