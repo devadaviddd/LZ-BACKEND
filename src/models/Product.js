@@ -25,11 +25,6 @@ export class Product {
             throw error;
         }
     }
-    
-    static async getAllProducts() {
-        const productRecords = await database.getRecordsByQuery({}, "products");
-        return productRecords;
-    }
 
     static async getAllProductsLatest() { //use to display on the landing page
         const productRecords = await database.getRecordsByQuery({}, "products");

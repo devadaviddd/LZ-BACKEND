@@ -33,4 +33,9 @@ export class Seller {
         const sellerRecords = await database.getRecordsByQuery({}, "sellers");
         return sellerRecords;
     }
+
+    static async getAllProductsSeller(sellerID) {
+        const productRecords = await database.getRecordsByQuery({}, "products");
+        return productRecords;
+    }
 }
