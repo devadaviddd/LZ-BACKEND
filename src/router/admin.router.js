@@ -7,7 +7,8 @@ import { updateCategoryAPI } from "../api/category/update-category.api.js";
 import { getAllCategoryAPI } from "../api/category/get-all-category.api.js";
 import { getAllSeller } from "../api/admin/get-all-seller-api.js";
 import { getCategoryByIdAPI } from "../api/category/get-category-by-id.api.js";
-import { upload } from "../middleware/upload.middleware.js";
+import { uploadAdmin } from "../middleware/upload.middleware.js";
+import { uploadAdminAvatar } from "../api/admin/upload-image.api.js";
 
 const router = express.Router();
 router.post("/create", authenticateUser, createAdminAPI);
@@ -16,8 +17,5 @@ router.post("/category/:id", authenticateUser, createSubCategoryAPI);
 router.post("/category", authenticateUser, createCategoryAPI);
 router.get("/category", authenticateUser, getAllCategoryAPI);
 router.get("/seller", authenticateUser, getAllSeller);
-router.post("/upload", upload.single("file"), (req, res) => {
-    console.log(req.body);
-    console.log(req.file);
-});
+router.post("/upload", uploadAdmin.single("file"), uploadAdminAvatar);
 export const adminRouter = router;
