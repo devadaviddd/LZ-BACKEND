@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { database } from "../di/index.js";
 import { SellerMapper } from "../repository/Mapper/mapper.js";
-import { User } from "./User.js";
+import { SELLER_STATUS } from "../constants/index.js";
 const ObjectId = mongoose.Types.ObjectId;
 
 export class Seller {
@@ -38,4 +38,16 @@ export class Seller {
         const productRecords = await database.getRecordsByQuery({}, "products");
         return productRecords;
     }
+
+    static async rejectSeller(sellerId) {
+        const seller = await database.updateRecordById(sellerId, { status: SELLER_STATUS.REJECTED }, "sellers");
+        return seller;
+    }
+
+    static async approveSeller(sellerId) {
+        const seller = await database.updateRecordById(sellerId, { status: SELLER_STATUS.APPROVED }, "sellers");
+        return seller;
+    }
+
+
 }

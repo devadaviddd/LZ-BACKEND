@@ -3,7 +3,6 @@ import { User } from "../models/User.js";
 
 export const authenticateUser = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  console.log("authHeader", authHeader);
   if (authHeader && authHeader.startsWith("Bearer ")) {
     const accessToken = authHeader.split(" ")[1];
     const decodedToken = jwt.verify(accessToken, process.env.SECRET_KEY);
