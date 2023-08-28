@@ -11,32 +11,10 @@ import multer from "multer";
 
 // export const uploadAdmin = multer({ storage });
 
-export const uploadAdmin = multer({ 
+export const uploadUser = multer({ 
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      return cb(null, "./public/Images/Admin");
-    },
-    filename: (req, file, cb) => {
-      return cb(null, `${Date.now()}_${file.originalname}`);
-    },
-  })
-});
-
-export const uploadSeller = multer({ 
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      return cb(null, "./public/Images/Seller");
-    },
-    filename: (req, file, cb) => {
-      return cb(null, `${Date.now()}_${file.originalname}`);
-    },
-  })
-});
-
-export const uploadCustomer = multer({ 
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      return cb(null, "./public/Images/Customer");
+      return cb(null, "./public/User");
     },
     filename: (req, file, cb) => {
       return cb(null, `${Date.now()}_${file.originalname}`);
@@ -47,7 +25,7 @@ export const uploadCustomer = multer({
 export const uploadProduct = multer({ 
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      return cb(null, "./public/Images/Product");
+      return cb(null, "./public/Product");
     },
     filename: (req, file, cb) => {
       return cb(null, `${Date.now()}_${file.originalname}`);
