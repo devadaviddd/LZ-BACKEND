@@ -1,5 +1,5 @@
 import {ROLE} from '../../constants/index.js';
-import { Seller } from '../../models/Seller.js';
+import { Admin } from '../../models/Admin.js';
 
 
 export const rejectSeller = async (req, res) => {
@@ -17,7 +17,7 @@ export const rejectSeller = async (req, res) => {
     });
   }
   try {
-    const updatedSeller = await Seller.rejectSeller(sellerId);
+    const updatedSeller = await Admin.rejectSeller(sellerId);
 
     if (!updatedSeller) {
       return res.status(404).json({ message: "404 Unable to Reject Seller" });

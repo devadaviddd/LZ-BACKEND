@@ -1,5 +1,5 @@
 import {ROLE} from '../../constants/index.js';
-import { Seller } from '../../models/Seller.js';
+import { Admin } from '../../models/Admin.js';
 
 export const approveSeller = async (req, res) => {
   const sellerId = req.params.sellerId;
@@ -16,7 +16,7 @@ export const approveSeller = async (req, res) => {
     });
   }
   try {
-    const updatedSeller = await Seller.approveSeller(sellerId);
+    const updatedSeller = await Admin.approveSeller(sellerId);
 
     if (!updatedSeller) {
       return res.status(404).json({ message: "404 Unable to Approve Seller" });
