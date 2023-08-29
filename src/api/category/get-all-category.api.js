@@ -13,6 +13,15 @@ async function getAdminEmailsByIds(adminIds) {
   return adminNames;
 }
 
+async function getCategoryNamesByIds(categoryIds) {
+  const categoryNames = [];
+  for (const categoryId of categoryIds) {
+    const category = await Category.getCategoryById(categoryId);
+    categoryNames.push(category.name);
+  }
+  return categoryNames;
+}
+
 export const getAllCategoryAPI = async (req, res) => {
   const authUser = req.authUser;
   if (!authUser) {
@@ -34,9 +43,19 @@ export const getAllCategoryAPI = async (req, res) => {
       categories.map(async (category) => {
         const adminIds = category.admins;
         const adminNames = await getAdminEmailsByIds(adminIds);
+
         return {
-          ...category,
           adminNames,
+        };
+      })
+    );
+
+    const categoriesWithSubCategoryNames = await Promise.all(
+      categories.map(async (category) => {
+        const subCategoryIds = category.subCategories;
+        const subCategoryNames = await getCategoryNamesByIds(subCategoryIds);
+        return {
+          subCategoryNames,
         };
       })
     );
@@ -44,6 +63,7 @@ export const getAllCategoryAPI = async (req, res) => {
     const categoriesMerged = categories.map((category, index) => ({
       ...category,
       admins: categoriesWithAdminNames[index].adminNames,
+      subCategoryNames: categoriesWithSubCategoryNames[index].subCategoryNames,
     }));
 
     return res.status(200).json({

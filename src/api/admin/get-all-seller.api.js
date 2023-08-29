@@ -1,7 +1,7 @@
 import {ROLE} from '../../constants/index.js';
 import { Seller } from '../../models/Seller.js';
 
-export const getAllSeller = async (req, res) => {
+export const getAllSellerAPI = async (req, res) => {
     const authUser = req.authUser;
     if (!authUser) {
       return res.status(401).json({

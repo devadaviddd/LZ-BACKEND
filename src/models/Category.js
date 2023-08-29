@@ -4,6 +4,28 @@ import { categorySchema } from "../repository/Schemas/category.schema.js";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 
+function isArraysEqual(array1, array2) {
+  if (array1.length !== array2.length) {
+    return false; // Arrays are of different lengths, so not equal
+  }
+
+  for (let i = 0; i < array1.length; i++) {
+    if (!array1[i].equals(array2[i])) {
+      return false; // Elements at position i are not equal
+    }
+  }
+
+  return true; // All elements are equal
+}
+
+function elementDiff(array1, array2) {
+  const filteredArray1 = array1.filter(
+    (id) => !array2.some((compareId) => compareId.equals(id))
+  );
+  console.log(filteredArray1);
+  return filteredArray1;
+}
+
 function handleCategoryModified(newAdmin, admins) {
   if (admins.includes(newAdmin)) {
     return null;
@@ -27,6 +49,7 @@ export class Category {
     this.parentId = this.#category.parentId;
     this.admins = this.#category.admins;
     this.subCategories = this.#category.subCategories;
+    
   }
 
   async insertCategory(categoryId) {
@@ -48,7 +71,45 @@ export class Category {
 
   async updateCategory(categoryId, adminId, dto) {
     const updateFields = {};
+    let isCreateNewSubCategory = false;
+    const subCategoriesName = [];
+    if (this.#category.subCategories.length > 0) {
+      const subCategoriesId = this.#category.subCategories;
+      console.log("this subCategoriesId", subCategoriesId);
+
+      for (const subCategoryId of subCategoriesId) {
+        const subCategoryRecord = await database.getRecordById(
+          subCategoryId.toString(),
+          "categories"
+        );
+        console.log("this subCategoryRecord", subCategoryRecord);
+        subCategoriesName.push(subCategoryRecord.name);
+      }
+    }
+    console.log("subCategoriesName", subCategoriesName);
+
     console.log("dto", dto);
+    const { subCategories } = dto;
+    const subCategoriesId = [];
+    if (subCategories) {
+      for (const subCategory of subCategories) {
+        const subCategoryRecord = await database.getRecordsByQuery(
+          {
+            name: subCategory,
+          },
+          "categories"
+        );
+        console.log("subCategoryRecord", subCategoryRecord);
+        if (subCategoryRecord.length > 0) {
+          subCategoriesId.push(subCategoryRecord[0]._id);
+        }
+      }
+    }
+    if (subCategoriesId.length !== subCategories.length) {
+      isCreateNewSubCategory = true;
+    }
+    console.log("subCategoriesId", subCategoriesId);
+
     const dtoProperties = Object.keys(dto);
     dtoProperties.forEach((property) => {
       if (
@@ -61,9 +122,37 @@ export class Category {
         updateFields[property] = dto[property];
       }
     });
+
+    let subCategoryDiff;
+    if (
+      !isArraysEqual(this.#category.subCategories, subCategoriesId) &&
+      !isCreateNewSubCategory
+    ) {
+      console.log("array1", this.#category.subCategories);
+      console.log("array2", subCategoriesId);
+      console.log(
+        "elementDiff",
+        elementDiff(this.#category.subCategories, subCategoriesId)
+      );
+      subCategoryDiff = elementDiff(
+        this.#category.subCategories,
+        subCategoriesId
+      );
+      console.log("subCategoryDiff", subCategoryDiff);
+      if (subCategoryDiff.length > 0) {
+        subCategoryDiff.map(async (id) => {
+          await database.removeIdFromListById(
+            categoryId,
+            id.toString(),
+            "categories"
+          );
+        });
+      }
+    }
+
     try {
       console.log("updateFields", updateFields);
-      if (this.subCategories.length > 0) {
+      // if (this.subCategories.length > 0) {
         const ancestorCategoryRecords = await database.getRecordsByQuery(
           {
             parentId: new ObjectId(categoryId),
@@ -82,7 +171,7 @@ export class Category {
           }
         );
         await Promise.all(updateAncestorCategories);
-      }
+      // }
 
       await database.updateRecordById(categoryId, updateFields, "categories");
 
@@ -112,6 +201,18 @@ export class Category {
       Object.assign(this, updateFields);
     } catch (error) {
       throw error;
+    }
+  }
+
+  async deleteSubCategory({ parentId, subCategoryId }) {
+    try {
+      await database.removeIdFromListById(
+        parentId,
+        subCategoryId,
+        "categories"
+      );
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -164,5 +265,13 @@ export class Category {
   static async getAllCategories() {
     const categoryRecords = await database.getRecordsByQuery({}, "categories");
     return categoryRecords;
+  }
+
+  static async deleteCategory(categoryId) {
+    const isDeleteSuccess = await database.deleteRecordById(
+      categoryId,
+      "categories"
+    );
+    return isDeleteSuccess;
   }
 }

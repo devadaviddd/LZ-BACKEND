@@ -1,34 +1,50 @@
 import multer from "multer";
+import fs from "fs";
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     return cb(null, "./public/Images/Admin");
-//   },
-//   filename: (req, file, cb) => {
-//     return cb(null, `${Date.now()}_${file.originalname}`);
-//   },
-// });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    return cb(null, "./public/user");
+  },
+  filename: (req, file, cb) => {
+    const authUser = req.authUser;
+    const { _id } = authUser;
+    const newFileName = _id.toString() + ".png";
+    const avatarPreFix = `public/user/${newFileName}`;
 
-// export const uploadAdmin = multer({ storage });
+    fs.readFile(avatarPreFix, (err, data) => {
+      if (err) {
+        if (err.code === "ENOENT") {
+          console.log("File does not exist");
+        } else {
+          throw err;
+        }
+      } else {
+        console.log("File exists");
+        fs.unlink(avatarPreFix, (err) => {
+          if (err) throw err;
+          console.log("File deleted");
+        });
+      }
 
-export const uploadUser = multer({ 
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      return cb(null, "./public/User");
-    },
-    filename: (req, file, cb) => {
-      return cb(null, `${Date.now()}_${file.originalname}`);
-    },
-  })
+      cb(null, newFileName);
+    });
+  },
 });
 
-export const uploadProduct = multer({ 
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      return cb(null, "./public/Product");
-    },
-    filename: (req, file, cb) => {
-      return cb(null, `${Date.now()}_${file.originalname}`);
-    },
-  })
-});
+const upload = multer({ storage }).single("file");
+
+export const uploadImage = async (req, res, next) => {
+  const authUser = req.authUser;
+  const { role, _id } = authUser;
+
+  console.log("User ID:", _id);
+
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      throw new Error("A Multer error occurred when uploading");
+    } else if (err) {
+      throw new Error("An unknown error occurred when uploading");
+    }
+    next();
+  });
+};

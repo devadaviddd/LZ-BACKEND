@@ -9,7 +9,7 @@ export class Database {
       this.db = mongoose.connection;
       console.log("Database connected");
     } catch (error) {
-      console.log("Database connection error", error);
+      throw Error("Database connection error");
     }
   }
   async insertRecord(document, collectionName) {
@@ -19,7 +19,7 @@ export class Database {
         .insertOne(document);
       return result;
     } catch (error) {
-      console.log("error", error);
+      throw Error(error.message);
     }
   }
 
@@ -41,7 +41,7 @@ export class Database {
         .findOne({ _id: new ObjectId(id) });
       return record;
     } catch (error) {
-      console.log("error", error);
+      throw Error(error.message);
     }
   }
   async getRecordsByQuery(query, collectionName) {
@@ -52,7 +52,7 @@ export class Database {
         .toArray();
       return records;
     } catch (error) {
-      console.log("error", error);
+      throw Error(error.message);
     }
   }
   async updateRecordById(id, updateFields, collectionName) {
@@ -62,7 +62,36 @@ export class Database {
         .updateOne({ _id: new ObjectId(id) }, { $set: updateFields });
       return result;
     } catch (error) {
-      console.log("error", error);
+      throw Error(error.message);
+    }
+  }
+
+  async removeIdFromListById(id, targetId, collectionName) {
+    try {
+      const result = await this.db.collection(collectionName).updateOne(
+        { _id: new ObjectId(id) },
+        {
+          $pull: {
+            subCategories: {
+              $in: [new ObjectId(targetId)],
+            },
+          },
+        }
+      );
+      return result;
+    } catch (error) {
+      throw Error(error.message);
+    }
+  }
+
+  async deleteRecordById(id, collectionName) {
+    try {
+      const result = await this.db
+        .collection(collectionName)
+        .deleteOne({ _id: new ObjectId(id) });
+      return result;
+    } catch (error) {
+      throw Error(error.message);
     }
   }
 }

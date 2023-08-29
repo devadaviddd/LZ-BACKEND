@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { afterUpdateToCategory } from "../hooks/category.hooks.js";
+import { isName } from "../../utils/regex/isName.js";
 
 export const categorySchema = new mongoose.Schema({
   parentId: {
@@ -11,8 +13,12 @@ export const categorySchema = new mongoose.Schema({
   },
   admins: {
     type: [mongoose.Schema.Types.ObjectId],
+    default: [],
   },
-  subCategories: {  
+  subCategories: {
     type: [mongoose.Schema.Types.ObjectId],
+    default: [],
   },
 });
+
+categorySchema.post("findOneAndUpdate", afterUpdateToCategory);

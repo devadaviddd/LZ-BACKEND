@@ -1,7 +1,7 @@
 import {ROLE} from '../../constants/index.js';
 import { Admin } from '../../models/Admin.js';
 
-export const approveSeller = async (req, res) => {
+export const approveSellerAPI = async (req, res) => {
   const sellerId = req.params.sellerId;
   const authUser = req.authUser;
   if (!authUser) {
