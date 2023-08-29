@@ -34,6 +34,22 @@ export class SellerMapper {
   }
 }
 
+export class ProductMapper {
+  static mapToSchema(schema, dto) {
+    mongoose.model("Product", schema);
+    const ProductModel = mongoose.model("Product");
+    const product = new ProductModel({
+      title: dto.title,
+      price: dto.price,
+      description: dto.description,
+      categories: dto.categories,
+      avatar: dto.avatar
+    });
+
+    return product;
+  }
+}
+
 export class CategoryMapper {
   static mapToSchema(schema, dto) {
     mongoose.model("Category", schema);

@@ -5,9 +5,9 @@ export const ROLE = {
 };
 
 export const SELLER_STATUS = {
-  PENDING: 'pending',
-  APPROVED: 'approved',
-  REJECTED: 'rejected'
+  PENDING: 'Pending',
+  APPROVED: 'Approved',
+  REJECTED: 'Rejected'
 }
 
 export const MAX_AGE = 3 * 24 * 60 * 60 * 1000;

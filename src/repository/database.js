@@ -22,8 +22,19 @@ export class Database {
       throw Error(error.message);
     }
   }
+
+  async deleteOneRecord(filter, collectionName) {
+    try {
+      const result = await this.db
+        .collection(collectionName)
+        .deleteOne(filter);
+      return result;
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+  
   async getRecordById(id, collectionName) {
-    console.log("collectionName", collectionName);
     try {
       const record = await this.db
         .collection(collectionName)
