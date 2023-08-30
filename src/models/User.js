@@ -16,7 +16,6 @@ export class User {
       this.name = this.#userModel.name;
       this.email = this.#userModel.email;
       this.password = this.#userModel.password;
-      this.avatar = this.#userModel.avatar;
       this.role = this.#userModel.role;
       this.phone = this.#userModel.phone;
     } catch (error) {

@@ -1,4 +1,5 @@
-import { CustomerMapper } from "../repository/Mapper/mapper";
+import { CustomerMapper } from "../repository/Mapper/mapper.js";
+import { database } from "../di/index.js";
 
 export class Customer {
   #customerModel;
@@ -17,14 +18,24 @@ export class Customer {
       this.name = this.#customerModel.name;
       this.email = this.#customerModel.email;
       this.password = this.#customerModel.password;
-      this.avatar = this.#customerModel.avatar;
       this.phone = this.#customerModel.phone;
       this.address = this.#customerModel.address;
     } catch (error) {
       throw error;
     }
   }
+
+  static async getProfile(customerId) {
+    const customerRecord = await database.getRecordById(
+      customerId,
+      "customers"
+    );
+    return {
+      _id: customerRecord._id,
+      name: customerRecord.name,
+      email: customerRecord.email,
+      phone: customerRecord.phone,
+      address: customerRecord.address,
+    };
+  }
 }
-
-
-

@@ -25,14 +25,13 @@ export const createProductAPI = async (req, res) => {
   } catch (err) {
     console.log(err);
     if (err.errors) {
-      const { title, price, description, categories, avatar } = err.errors;
+      const { title, price, description, categories } = err.errors;
       return res.status(400).json({
         message: "Product not created here",
         title: title?.message,
         price: price?.message,
         description: description?.message,
         categories: categories?.message,
-        avatar: avatar?.message,
       });
     }
     res.status(500).json({

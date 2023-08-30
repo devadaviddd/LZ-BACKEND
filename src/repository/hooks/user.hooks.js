@@ -35,7 +35,6 @@ export async function afterInsertToUsers(doc, next) {
             email: admin.email,
             password: admin.password,
             categories: admin.categories,
-            avatar: admin.avatar,
             phone: admin.phone,
           },
           "admins"
@@ -53,7 +52,6 @@ export async function afterInsertToUsers(doc, next) {
             product: seller.product,
             order: seller.order,
             businessName: seller.businessName,
-            avatar: seller.avatar,
             phone: seller.phone,
           },
           "sellers"
@@ -67,7 +65,6 @@ export async function afterInsertToUsers(doc, next) {
             name: customer.name,
             email: customer.email,
             password: customer.password,
-            avatar: customer.avatar,
             phone: customer.phone,
             address: customer.address,
           },
@@ -84,47 +81,3 @@ export async function afterInsertToUsers(doc, next) {
   }
 }
 
-export async function afterUpdateToUser(doc, next) {
-  console.log("after update to user");
-  console.log("doc", doc);
-  try {
-    const { _id, role, avatar } = doc;
-    if (avatar) {
-      switch (role) {
-        case ROLE.ADMIN:
-          await database.updateRecordById(
-            _id,
-            {
-              avatar: avatar,
-            },
-            "admins"
-          );
-          break;
-        case ROLE.SELLER:
-          await database.updateRecordById(
-            _id,
-            {
-              avatar: avatar,
-            },
-            "sellers"
-          );
-          break;
-        case ROLE.CUSTOMER:
-          await database.updateRecordById(
-            _id,
-            {
-              avatar: avatar,
-            },
-            "customers"
-          );
-          break;
-        default:
-          break;
-      }
-      next();
-    }
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-}

@@ -22,8 +22,8 @@ export class Admin {
       this.name = this.#adminModel.name;
       this.email = this.#adminModel.email;
       this.password = this.#adminModel.password;
-      this.avatar = this.#adminModel.avatar;
       this.categories = this.#adminModel.categories;
+      this.phone = this.#adminModel.phone;
     } catch (error) {
       throw error;
     }
@@ -39,13 +39,31 @@ export class Admin {
     return adminRecord.email;
   }
 
+  static async getProfile(adminId) {
+    const adminRecord = await database.getRecordById(adminId, "admins");
+    return {
+      _id: adminRecord._id,
+      name: adminRecord.name,
+      email: adminRecord.email,
+      phone: adminRecord.phone,
+    };
+  }
+
   static async rejectSeller(sellerId) {
-    const seller = await database.updateRecordById(sellerId, { status: SELLER_STATUS.REJECTED }, "sellers");
+    const seller = await database.updateRecordById(
+      sellerId,
+      { status: SELLER_STATUS.REJECTED },
+      "sellers"
+    );
     return seller;
-}
+  }
 
   static async approveSeller(sellerId) {
-      const seller = await database.updateRecordById(sellerId, { status: SELLER_STATUS.APPROVED }, "sellers");
-      return seller;
+    const seller = await database.updateRecordById(
+      sellerId,
+      { status: SELLER_STATUS.APPROVED },
+      "sellers"
+    );
+    return seller;
   }
 }

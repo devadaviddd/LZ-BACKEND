@@ -45,10 +45,6 @@ export const userSchema = new mongoose.Schema({
         "Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character",
     },
   },
-  avatar: {
-    type: String,
-    default: "",
-  },
   role: {
     type: String,
     enum: ROLE,

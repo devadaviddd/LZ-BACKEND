@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { isName } from "../../utils/regex/isName.js";
 import { isEmail } from "../../utils/regex/isEmail.js";
 import { isPassword } from "../../utils/regex/isPassword.js";
+import { isPhone } from "../../utils/regex/isPhone.js";
 import {
   afterInsertToAdmins,
   beforeInsertToAdmins,
@@ -35,13 +36,18 @@ export const adminSchema = new mongoose.Schema({
         "Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character",
     },
   },
-  avatar: {
-    type: String,
-    default: "",
-  },
   categories: {
     type: [mongoose.Schema.Types.ObjectId],
     default: [],
+  },
+  phone: {
+    type: String,
+    required: [true, "Phone is required"],
+    unique: true,
+    validate: {
+      validator: isPhone,
+      message: "Phone is invalid",
+    },
   },
 });
 adminSchema.pre("save", beforeInsertToAdmins);

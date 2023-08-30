@@ -48,10 +48,6 @@ export const customerSchema = new mongoose.Schema({
     type: String,
     require: [true, "Address is required"],
   },
-  avatar: {
-    type: String,
-    default: "",
-  },
 });
 
 customerSchema.pre("save", beforeInsertToCustomers);

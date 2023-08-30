@@ -19,7 +19,6 @@ export class Seller {
       this.name = this.#sellerModel.name;
       this.email = this.#sellerModel.email;
       this.password = this.#sellerModel.password;
-      this.avatar = this.#sellerModel.avatar;
       this.status = this.#sellerModel.status;
       this.product = this.#sellerModel.product;
       this.order = this.#sellerModel.order;
@@ -27,6 +26,17 @@ export class Seller {
     } catch (error) {
       throw error;
     }
+  }
+
+  static async getProfile(sellerId) {
+    const sellerRecord = await database.getRecordById(sellerId, "sellers");
+    return {
+      _id: sellerRecord._id,
+      name: sellerRecord.name,
+      email: sellerRecord.email,
+      businessName: sellerRecord.businessName,
+      phone: sellerRecord.phone,
+    };
   }
 
   static async getAllSellers() {
