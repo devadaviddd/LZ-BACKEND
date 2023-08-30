@@ -16,6 +16,7 @@ export const getAvatarAPi = async (req, res) => {
 
   fs.readFile(avatarPreFix, (err, data) => {
     if (err) {
+      
       if (err.code === "ENOENT") {
         return res.status(400).json({
           message: "File does not exist",

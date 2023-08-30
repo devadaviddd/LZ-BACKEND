@@ -23,7 +23,7 @@ export class Product {
       this.image = this.#product.image;
       this.createdBy = this.#product.createdBy;
       this.date = this.#product.date;
-      this.quantity = this.#product.quantity;
+      this.stock = this.#product.stock;
     } catch (error) {
       throw error;
     }

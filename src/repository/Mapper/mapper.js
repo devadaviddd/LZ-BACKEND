@@ -9,7 +9,6 @@ export class AdminMapper {
       name: dto.name,
       email: dto.email,
       password: dto.password,
-      avatar: dto.avatar,
       categories: dto.categories,
       phone: dto.phone,
     });
@@ -27,7 +26,6 @@ export class SellerMapper {
       name: dto.name,
       email: dto.email,
       password: dto.password,
-      avatar: dto.avatar,
       status: dto.status,
       product: dto.product,
       order: dto.order,
@@ -47,10 +45,8 @@ export class CustomerMapper {
       name: dto.name,
       email: dto.email,
       password: dto.password,
-      avatar: dto.avatar,
       phone: dto.phone,
       address: dto.address,
-      avatar: dto.avatar,
     });
     return customer;
   }
@@ -69,7 +65,7 @@ export class ProductMapper {
       image: dto.image,
       createdBy: dto.createdBy,
       date: dto.date,
-      quantity: dto.quantity,
+      stock: dto.stock,
     });
 
     return product;
@@ -100,7 +96,6 @@ export class UserMapper {
       name: dto.name,
       email: dto.email,
       password: dto.password,
-      avatar: dto.avatar,
       role: dto.role,
       phone: dto.phone,
     });
