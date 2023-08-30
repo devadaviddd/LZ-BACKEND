@@ -5,11 +5,13 @@ export class AdminMapper {
     mongoose.model("Admin", schema);
     const AdminModel = mongoose.model("Admin");
     const admin = new AdminModel({
+      id: dto.id,
       name: dto.name,
       email: dto.email,
       password: dto.password,
       avatar: dto.avatar,
       categories: dto.categories,
+      phone: dto.phone,
     });
 
     return admin;
@@ -21,16 +23,36 @@ export class SellerMapper {
     mongoose.model("Seller", schema);
     const SellerModel = mongoose.model("Seller");
     const seller = new SellerModel({
+      id: dto.id,
       name: dto.name,
       email: dto.email,
       password: dto.password,
       avatar: dto.avatar,
       status: dto.status,
       product: dto.product,
-      order: dto.order
+      order: dto.order,
+      businessName: dto.businessName,
+      phone: dto.phone,
     });
-
     return seller;
+  }
+}
+
+export class CustomerMapper {
+  static mapToSchema(schema, dto) {
+    mongoose.model("Customer", schema);
+    const CustomerModel = mongoose.model("Customer");
+    const customer = new CustomerModel({
+      id: dto.id,
+      name: dto.name,
+      email: dto.email,
+      password: dto.password,
+      avatar: dto.avatar,
+      phone: dto.phone,
+      address: dto.address,
+      avatar: dto.avatar,
+    });
+    return customer;
   }
 }
 
@@ -39,11 +61,15 @@ export class ProductMapper {
     mongoose.model("Product", schema);
     const ProductModel = mongoose.model("Product");
     const product = new ProductModel({
+      id: dto.id,
       title: dto.title,
       price: dto.price,
       description: dto.description,
       categories: dto.categories,
-      avatar: dto.avatar
+      image: dto.image,
+      createdBy: dto.createdBy,
+      date: dto.date,
+      quantity: dto.quantity,
     });
 
     return product;
@@ -55,6 +81,7 @@ export class CategoryMapper {
     mongoose.model("Category", schema);
     const CategoryModel = mongoose.model("Category");
     const category = new CategoryModel({
+      id: dto.id,
       name: dto.name,
       parentId: dto.parentId,
       admins: dto.admins,
@@ -69,11 +96,13 @@ export class UserMapper {
     mongoose.model("User", schema);
     const UserModel = mongoose.model("User");
     const user = new UserModel({
+      id: dto.id,
       name: dto.name,
       email: dto.email,
       password: dto.password,
       avatar: dto.avatar,
       role: dto.role,
+      phone: dto.phone,
     });
     return user;
   }

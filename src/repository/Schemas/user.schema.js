@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import { isName } from "../../utils/regex/isName.js";
 import { isEmail } from "../../utils/regex/isEmail.js";
-import { isPassword } from "../../utils/regex/isPassword.js";
 import { ROLE } from "../../constants/index.js";
+import { isPhone } from "../../utils/regex/isPhone.js";
+import { isPassword } from "../../utils/regex/isPassword.js";
 import {
   afterInsertToUsers,
   beforeInsertToUsers,
@@ -26,9 +27,23 @@ export const userSchema = new mongoose.Schema({
       message: "Email is invalid",
     },
   },
+  phone: {
+    type: String,
+    required: [true, "Phone is required"],
+    unique: true,
+    validate: {
+      validator: isPhone,
+      message: "Phone is invalid",
+    },
+  },
   password: {
     type: String,
     required: [true, "Password is required"],
+    validate: {
+      validator: isPassword,
+      message:
+        "Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character",
+    },
   },
   avatar: {
     type: String,

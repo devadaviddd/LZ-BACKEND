@@ -2,7 +2,7 @@ import { ROLE } from "../../constants/index.js";
 import { adminSchema } from "../../repository/Schemas/admin.schema.js";
 import { Admin } from "../../models/Admin.js";
 import { User } from "../../models/User.js";
-import { isEmailExist } from "../../utils/errors/duplicateEmail.js";
+import { isEmailOrPhoneExist } from "../../utils/errors/duplicateEmailOrPhone.js";
 
 /**
  * @openapi
@@ -100,7 +100,9 @@ export const createAdminAPI = async (req, res) => {
     if (err) {
       return res.status(400).json({
         message: "Admin not created",
-        error: isEmailExist(err.message) ? "Email already exists" : err.message,
+        error: isEmailOrPhoneExist(err.message)
+          ? "Email or Phone already exists"
+          : err.message,
       });
     }
     res.status(500).json({

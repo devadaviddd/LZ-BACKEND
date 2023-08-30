@@ -26,6 +26,9 @@ export async function afterUpdateToCategory(doc, next) {
         );
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
   next();
 }

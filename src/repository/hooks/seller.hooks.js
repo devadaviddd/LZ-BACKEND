@@ -18,10 +18,10 @@ export async function beforeInsertToSellers(next) {
 }
 
 export async function afterInsertToSellers(doc, next) {
-  const { _id, name, email, password } = doc;
+  const { _id, name, email, password, phone } = doc;
   try {
     await database.insertRecord(
-      { _id, name, email, password, role: ROLE.SELLER },
+      { _id, name, email, password, phone, role: ROLE.SELLER },
       "users"
     );
     next();
