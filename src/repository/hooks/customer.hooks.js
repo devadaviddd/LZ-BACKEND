@@ -1,11 +1,8 @@
 import bcrypt from "bcrypt";
 import { User } from "../../models/User.js";
-import { userSchema } from "../Schemas/user.schema.js";
-import { ROLE } from "../../constants/index.js";
-import { database } from "../../di/index.js";
 
-export async function beforeInsertToAdmins(next) {
-  console.log("before insert to admins");
+export async function beforeInsertToCustomers(next) {
+  console.log("before insert to customers");
   try {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
@@ -17,11 +14,11 @@ export async function beforeInsertToAdmins(next) {
   }
 }
 
-export async function afterInsertToAdmins(doc, next) {
+export async function afterInsertToCustomers(doc, next) {
   const { _id, name, email, password, phone } = doc;
   try {
     await database.insertRecord(
-      { _id, name, email, password, phone, role: ROLE.ADMIN },
+      { _id, name, email, password, phone, role: ROLE.CUSTOMER },
       "users"
     );
     next();

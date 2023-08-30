@@ -25,15 +25,13 @@ export class Database {
 
   async deleteOneRecord(filter, collectionName) {
     try {
-      const result = await this.db
-        .collection(collectionName)
-        .deleteOne(filter);
+      const result = await this.db.collection(collectionName).deleteOne(filter);
       return result;
     } catch (error) {
       console.log("error", error);
     }
   }
-  
+
   async getRecordById(id, collectionName) {
     try {
       const record = await this.db
@@ -65,6 +63,7 @@ export class Database {
       throw Error(error.message);
     }
   }
+
 
   async removeIdFromListById(id, targetId, collectionName) {
     try {

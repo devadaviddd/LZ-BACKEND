@@ -2,7 +2,10 @@ import mongoose from "mongoose";
 import { isName } from "../../utils/regex/isName.js";
 import { isEmail } from "../../utils/regex/isEmail.js";
 import { isPassword } from "../../utils/regex/isPassword.js";
-import { afterInsertToAdmins, beforeInsertToAdmins } from "../hooks/admin.hooks.js";
+import {
+  afterInsertToAdmins,
+  beforeInsertToAdmins,
+} from "../hooks/admin.hooks.js";
 
 export const adminSchema = new mongoose.Schema({
   name: {
@@ -11,7 +14,7 @@ export const adminSchema = new mongoose.Schema({
     validate: {
       validator: isName,
       message: "Name cannot over 20 characters and contain special characters",
-    }
+    },
   },
   email: {
     type: String,
@@ -21,20 +24,25 @@ export const adminSchema = new mongoose.Schema({
       validator: isEmail,
 
       message: "Email is invalid",
-    }
+    },
   },
   password: {
     type: String,
     required: [true, "Password is required"],
+    validate: {
+      validator: isPassword,
+      message:
+        "Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character",
+    },
   },
   avatar: {
     type: String,
-    default: '',
-  }, 
+    default: "",
+  },
   categories: {
     type: [mongoose.Schema.Types.ObjectId],
     default: [],
-  }
-})
+  },
+});
 adminSchema.pre("save", beforeInsertToAdmins);
 adminSchema.post("save", afterInsertToAdmins);

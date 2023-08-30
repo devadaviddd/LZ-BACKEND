@@ -3,21 +3,28 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { isEmail } from "../../utils/regex/isEmail.js";
 import { isPassword } from "../../utils/regex/isPassword.js";
+import { isPhone } from "../../utils/regex/isPhone.js";
 import { MAX_AGE } from "../../constants/index.js";
 
 export const loginAPI = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, phone } = req.body;
+  const isHasEmailOrPhone = email || phone;
   try {
-    if (!email || !password) {
+    if (!isHasEmailOrPhone || !password) {
       return res.status(400).json({
-        message: "Email and password are required",
+        message: "Email or phone and password are required",
       });
     }
 
     let message = "";
-    if (!isEmail(email)) {
+    if (email && !isEmail(email)) {
       message += "Email is invalid. ";
     }
+
+    if (phone && !isPhone(phone)) {
+      message += "Phone is invalid. ";
+    }
+
     if (!isPassword(password)) {
       message += "Password is invalid.";
     }
@@ -27,12 +34,17 @@ export const loginAPI = async (req, res) => {
       });
     }
 
-    const existedUser = await User.findUserByEmail(email);
-    if (!existedUser) {
+    const existedUserEmail = await User.findUserByEmail(email);
+    const existedUserPhone = await User.findUserByPhone(phone);
+
+
+    if (!existedUserEmail && !existedUserPhone) {
       return res.status(400).json({
         message: "User is not existed",
       });
     }
+
+    const existedUser = existedUserEmail || existedUserPhone;
 
     const auth = await bcrypt.compare(password, existedUser.password);
     if (!auth) {
@@ -43,13 +55,13 @@ export const loginAPI = async (req, res) => {
 
     const accessToken = jwt.sign(
       { _id: existedUser._id, role: existedUser.role },
-      process.env.SECRET_KEY, 
+      process.env.SECRET_KEY
     );
 
-    res.cookie('sb', accessToken, {
+    res.cookie("sb", accessToken, {
       httpOnly: true,
       maxAge: MAX_AGE,
-    })
+    });
 
     res.status(200).json({
       message: "Login successfully",
@@ -58,7 +70,7 @@ export const loginAPI = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       message: "Internal server error",
-      error: err.message, 
+      error: err.message,
     });
   }
 };

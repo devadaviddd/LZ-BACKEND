@@ -18,6 +18,7 @@ export class User {
       this.password = this.#userModel.password;
       this.avatar = this.#userModel.avatar;
       this.role = this.#userModel.role;
+      this.phone = this.#userModel.phone;
     } catch (error) {
       throw error;
     }
@@ -38,6 +39,11 @@ export class User {
 
   static async findUserByEmail(email) {
     const userRecord = await database.getRecordsByQuery({ email }, "users");
+    return userRecord[0];
+  }
+
+  static async findUserByPhone(phone) {
+    const userRecord = await database.getRecordsByQuery({ phone }, "users");
     return userRecord[0];
   }
 }
