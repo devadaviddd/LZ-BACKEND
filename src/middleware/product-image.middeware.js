@@ -3,13 +3,12 @@ import fs from "fs";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    return cb(null, "./public/user");
+    return cb(null, "./public/product");
   },
   filename: (req, file, cb) => {
-    const authUser = req.authUser;
-    const { _id } = authUser;
-    const newFileName = _id.toString() + ".png";
-    const avatarPreFix = `public/user/${newFileName}`;
+    const id = req.params.id;
+    const newFileName = id + ".png";
+    const avatarPreFix = `public/product/${newFileName}`;
 
     fs.readFile(avatarPreFix, (err, data) => {
       if (err) {
@@ -33,12 +32,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage }).single("file");
 
-export const uploadImage = async (req, res, next) => {
-  const authUser = req.authUser;
-  const { role, _id } = authUser;
-
-  console.log("User ID:", _id);
-
+export const uploadProductImage = async (req, res, next) => {
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
       throw new Error("A Multer error occurred when uploading");

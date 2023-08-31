@@ -48,4 +48,5 @@ export class Seller {
     const productRecords = await database.getRecordsByQuery({}, "products");
     return productRecords;
   }
+
 }

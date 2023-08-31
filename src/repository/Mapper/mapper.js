@@ -63,9 +63,10 @@ export class ProductMapper {
       description: dto.description,
       categories: dto.categories,
       image: dto.image,
-      createdBy: dto.createdBy,
+      seller: dto.seller,
       date: dto.date,
       stock: dto.stock,
+      image: dto.image,
     });
 
     return product;
