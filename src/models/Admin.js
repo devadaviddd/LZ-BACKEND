@@ -36,6 +36,8 @@ export class Admin {
 
   static async getAdminEmailsByIds(adminId) {
     const adminRecord = await User.findUserById(adminId);
+    console.log("adminId", adminId);
+    console.log("adminRecord", adminRecord);
     return adminRecord.email;
   }
 

@@ -24,6 +24,8 @@ export class Product {
       this.createdBy = this.#product.createdBy;
       this.date = this.#product.date;
       this.stock = this.#product.stock;
+      this.image = this.#product.image;
+      this.seller = this.#product.seller;
     } catch (error) {
       throw error;
     }
@@ -34,10 +36,21 @@ export class Product {
     return productRecords;
   }
 
-  static async getAllProductsLatest() {
-    //use to display on the landing page
-    const productRecords = await database.getRecordsByQuery({}, "products");
-    const reversedProductRecords = productRecords.reverse();
-    return reversedProductRecords;
+  static async getProductById(productId) {
+    const productRecord = await database.getRecordById(productId, "products");
+    return productRecord;
+  }
+
+  static async getImagePath(productId) {
+    const productRecord = await database.getRecordById(productId, "products");
+    return productRecord.image;
+  }
+
+  static async getAllAvailableProducts() {
+    const productRecords = await database.getRecordsByQuery(
+      { stock: { $gt: 0 } },
+      "products"
+    );
+    return productRecords;
   }
 }

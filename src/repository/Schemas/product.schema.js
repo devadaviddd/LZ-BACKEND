@@ -14,7 +14,7 @@ export const productSchema = new mongoose.Schema({
       },
       message: "Price must be greater than or equal to 0",
     },
-  }, 
+  },
   description: {
     type: String,
     required: [true, "Description is required"],
@@ -35,20 +35,25 @@ export const productSchema = new mongoose.Schema({
   },
   categories: {
     type: [mongoose.Schema.Types.ObjectId],
-    validate: {
-      validator: function (categories) {
-        return categories.length > 0;
-      },
-      message: "Categories array must have at least one element",
-    },
-    require: [true, "Categories is required"],
+    default: [],
+    // validate: {
+    //   validator: function (categories) {
+    //     return categories.length > 0;
+    //   },
+    //   message: "Categories array must have at least one element",
+    // },
+    // require: [true, "Categories is required"],
   },
-  createdBy: {
+  seller: {
     type: mongoose.Schema.Types.ObjectId,
     required: [true, "Created by is required"],
   },
   date: {
     type: Date,
     default: Date.now,
+  },
+  image: {
+    type: String,
+    default: "",
   },
 });
