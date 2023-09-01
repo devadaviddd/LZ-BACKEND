@@ -73,6 +73,22 @@ export class ProductMapper {
   }
 }
 
+export class ProductOrderMapper {
+  static mapToSchema(schema, dto) {
+    mongoose.model("ProductOrder", schema);
+    const ProductOrderModel = mongoose.model("ProductOrder");
+    const productOrder = new ProductOrderModel({
+      id: dto.id,
+      product: dto.product,
+      quantity: dto.quantity,
+      price: dto.price,
+      status: dto.status,
+      order: dto.order,
+    });
+    return productOrder;
+  }
+}
+
 export class CategoryMapper {
   static mapToSchema(schema, dto) {
     mongoose.model("Category", schema);
@@ -101,5 +117,18 @@ export class UserMapper {
       phone: dto.phone,
     });
     return user;
+  }
+}
+
+export class OrderMapper {
+  static mapToSchema(schema, dto) {
+    mongoose.model("Order", schema);
+    const OrderModel = mongoose.model("Order");
+    const order = new OrderModel({
+      id: dto.id,
+      customer: dto.customer,
+      productOrders: dto.productOrder,
+    });
+    return order;
   }
 }
