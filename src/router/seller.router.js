@@ -6,6 +6,7 @@ import { uploadProductImage } from "../middleware/product-image.middeware.js";
 import { uploadProductImageAPI } from "../api/product/upload-image.api.js";
 import { getProductImageAPI } from "../api/product/get-image.api.js";
 import { getProductAPI } from "../api/product/get-product.api.js";
+import { filterProductOrderBySellerAPI } from "../api/productOrder/filter-product-order-by-seller.api.js";
 
 const router = express.Router();
 router.post("/product", authenticateUser, createProductAPI);
@@ -18,4 +19,5 @@ router.post(
 router.get("/product/image/:id", getProductImageAPI);
 router.get("/product/:id", getProductAPI);
 router.get("/profile", authenticateUser, getSellerProfileAPI);
+router.get("/order/:id", authenticateUser, filterProductOrderBySellerAPI);
 export const sellerRouter = router;

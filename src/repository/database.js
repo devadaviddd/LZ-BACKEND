@@ -64,7 +64,6 @@ export class Database {
     }
   }
 
-
   async removeIdFromListById(id, targetId, collectionName) {
     try {
       const result = await this.db.collection(collectionName).updateOne(
@@ -88,6 +87,15 @@ export class Database {
       const result = await this.db
         .collection(collectionName)
         .deleteOne({ _id: new ObjectId(id) });
+      return result;
+    } catch (error) {
+      throw Error(error.message);
+    }
+  }
+
+  async deleteRecordsByQuery(query, collectionName) {
+    try {
+      const result = await this.db.collection(collectionName).deleteMany(query);
       return result;
     } catch (error) {
       throw Error(error.message);
