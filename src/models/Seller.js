@@ -36,6 +36,7 @@ export class Seller {
       email: sellerRecord.email,
       businessName: sellerRecord.businessName,
       phone: sellerRecord.phone,
+      status: sellerRecord.status,
     };
   }
 
