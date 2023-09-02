@@ -2,10 +2,21 @@ import { database } from "../di/index.js";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 import { ProductMapper } from "../repository/Mapper/mapper.js";
+import { getCategories } from "../api/product/create-product.api.js";
 export class Product {
   #product;
   constructor(productSchema, dto) {
     this.#product = ProductMapper.mapToSchema(productSchema, dto);
+    this._id = this.#product._id;
+    this.title = this.#product.title;
+    this.price = this.#product.price;
+    this.description = this.#product.description;
+    this.categories = this.#product.categories;
+    this.image = this.#product.image;
+    this.createdBy = this.#product.createdBy;
+    this.date = this.#product.date;
+    this.stock = this.#product.stock;
+    this.seller = this.#product.seller;
   }
   async insertProductToDatabase(productId) {
     try {
@@ -28,6 +39,48 @@ export class Product {
     } catch (error) {
       throw error;
     }
+  }
+
+  async updateProduct(productId, dto) {
+    const updateFields = {};
+
+    const { title, price, description, categoryId, stock } = dto;
+
+    if (title && title !== this.title) {
+      updateFields.title = title;
+    }
+
+    if (price && price !== this.price) {
+      updateFields.price = price;
+    }
+
+    if (description && description !== this.description) {
+      updateFields.description = description;
+    }
+
+    if (categoryId) {
+      const categories = await getCategories(categoryId);
+      console.log("categories", categories);
+      updateFields.categories = categories;
+    }
+
+    if (stock && stock !== this.stock) {
+      updateFields.stock = stock;
+    }
+
+    if (Object.keys(updateFields).length > 0) {
+      console.log("updateFields", updateFields);
+      await database.updateRecordById(
+        productId,
+        {
+          ...updateFields,
+        },
+        "products"
+      );
+      const updateProduct = await database.getRecordById(productId, "products");
+      return updateProduct;
+    }
+    return null;
   }
 
   static async getAllProducts() {
@@ -60,5 +113,18 @@ export class Product {
       "products"
     );
     return productRecords;
+  }
+
+  static async getPRoductBySellerId(sellerId) {
+    const productRecords = await database.getRecordsByQuery(
+      { seller: new ObjectId(sellerId) },
+      "products"
+    );
+    return productRecords;
+  }
+
+  static async deleteProduct(productId) {
+    const product = await database.deleteRecordById(productId, "products");
+    return product;
   }
 }

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { afterDeleteToProducts } from "../hooks/product.hooks.js";
 
 export const productSchema = new mongoose.Schema(
   {
@@ -37,13 +38,6 @@ export const productSchema = new mongoose.Schema(
     categories: {
       type: [mongoose.Schema.Types.ObjectId],
       default: [],
-      // validate: {
-      //   validator: function (categories) {
-      //     return categories.length > 0;
-      //   },
-      //   message: "Categories array must have at least one element",
-      // },
-      // require: [true, "Categories is required"],
     },
     seller: {
       type: mongoose.Schema.Types.ObjectId,
@@ -62,3 +56,5 @@ export const productSchema = new mongoose.Schema(
     strictPopulate: false,
   }
 );
+
+productSchema.post("deleteMany", afterDeleteToProducts);
