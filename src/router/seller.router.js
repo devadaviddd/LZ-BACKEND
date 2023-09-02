@@ -7,7 +7,7 @@ import { uploadProductImageAPI } from "../api/product/upload-image.api.js";
 import { getProductImageAPI } from "../api/product/get-image.api.js";
 import { filterProductOrderBySellerAPI } from "../api/productOrder/filter-product-order-by-seller.api.js";
 import { getSellerProductsAPI } from "../api/seller/get-seller-product.api.js";
-import { updateProductAPI } from "../api/seller/update-product.api.js";
+import { updateProductAPI } from "../api/product/update-product.api.js";
 import { getProductByIdAPI } from "../api/product/get-product-by-id.api.js";
 
 const router = express.Router();
