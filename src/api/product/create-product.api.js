@@ -4,7 +4,7 @@ import { Seller } from "../../models/Seller.js";
 import { Product } from "../../models/Product.js";
 import { database } from "../../di/index.js";
 
-async function getCategories(categoryId) {
+export async function getCategories(categoryId) {
   if (!categoryId) {
     return [];
   }
