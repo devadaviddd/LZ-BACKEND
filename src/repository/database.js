@@ -82,6 +82,27 @@ export class Database {
     }
   }
 
+  async removeDeletedProductFromOrder(productOrderIds, collectionName) {
+    try {
+      const result = await this.db.collection(collectionName).updateMany(
+        {},
+        {
+          $pull: {
+            productOrders: {
+              $in: [...productOrderIds],
+            },
+          },
+        },
+        {
+          multi: true,
+        }
+      );
+      return result;
+    } catch (error) {
+      throw Error(error.message);
+    }
+  }
+
   async deleteRecordById(id, collectionName) {
     try {
       const result = await this.db
@@ -96,6 +117,17 @@ export class Database {
   async deleteRecordsByQuery(query, collectionName) {
     try {
       const result = await this.db.collection(collectionName).deleteMany(query);
+      return result;
+    } catch (error) {
+      throw Error(error.message);
+    }
+  }
+
+  async updateManyRecordsByQuery(query, pipeline, collectionName) {
+    try {
+      const result = await this.db
+        .collection(collectionName)
+        .updateMany(query, pipeline);
       return result;
     } catch (error) {
       throw Error(error.message);
