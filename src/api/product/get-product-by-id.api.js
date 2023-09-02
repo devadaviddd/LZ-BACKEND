@@ -1,6 +1,6 @@
 import { Product } from "../../models/Product.js";
 
-export const getProductAPI = async (req, res) => {
+export const getProductByIdAPI = async (req, res) => {
   const productId = req.params.id;
 
   if (!productId) {
