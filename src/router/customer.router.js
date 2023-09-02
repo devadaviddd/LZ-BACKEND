@@ -3,7 +3,7 @@ import { getAllCategoryTreeAPI } from "../api/category/get-category-tree.api.js"
 import express from "express";
 import { authenticateUser } from "../middleware/auth.middleware.js";
 import { getCustomerProfileAPI } from "../api/customer/get-profile.api.js";
-import { getAllAvailableProductsAPI } from "../api/product/get-all-product-latest.api.js";
+import { getAllAvailableProductsAPI } from "../api/product/get-all-available-product.js";
 import { createOrderAPI } from "../api/order/create-order.api.js";
 import { getProductByCategoryIdAPI } from "../api/product/get-product-by-category.api.js";
 
