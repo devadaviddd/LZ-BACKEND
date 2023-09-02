@@ -2,7 +2,6 @@ import { database } from "../di/index.js";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 import { ProductMapper } from "../repository/Mapper/mapper.js";
-
 export class Product {
   #product;
   constructor(productSchema, dto) {
@@ -39,6 +38,15 @@ export class Product {
   static async getProductById(productId) {
     const productRecord = await database.getRecordById(productId, "products");
     return productRecord;
+  }
+
+  static async getProductByCategoryId(categoryId) {
+    const productRecords = await database.getRecordsByQuery(
+      { categories: new ObjectId(categoryId) },
+      "products"
+    );
+    console.log("productRecords", productRecords);
+    return productRecords;
   }
 
   static async getImagePath(productId) {

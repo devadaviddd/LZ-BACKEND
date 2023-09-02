@@ -1,6 +1,7 @@
 import { ProductOrderMapper } from "../repository/Mapper/mapper.js";
 import { database } from "../di/index.js";
 import mongoose from "mongoose";
+import { ObjectId } from "mongodb";
 
 export class ProductOrder {
   #productOrder;
@@ -48,7 +49,7 @@ export class ProductOrder {
 
   async getProductOrdersBySeller(sellerId) {
     console.log("sellerId", sellerId);
-    const productsJoined = await this.#productOrderModel.aggregate([
+    const productOrderOfSeller = await this.#productOrderModel.aggregate([
       {
         $lookup: {
           from: "products", // The name of the Product collection
@@ -61,32 +62,25 @@ export class ProductOrder {
         $unwind: "$productData",
       },
       {
-        $addFields: {
-          productName: "$productData.title",
-          image: "$productData.image",
-          seller: "$productData.seller",
-          stock: "$productData.stock",
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: ["$$ROOT", "$productData"],
+          },
+        },
+      },
+      {
+        $match: {
+          seller: new ObjectId(sellerId),
         },
       },
       {
         $project: {
-          _id: 1,
-          productName: 1,
-          image: 1,
-          seller: 1,
-          stock: 1,
-          quantity: 1,
-          price: 1,
+          productData: 0,
+          product: 0,
         },
       },
     ]);
-    console.log("productsJoined", productsJoined);
-
-    const productOrderOfSeller = productsJoined.filter(
-      (productOrder) => productOrder.seller == sellerId
-    );
     console.log("productOrderOfSeller", productOrderOfSeller);
-
     return productOrderOfSeller;
   }
 }
