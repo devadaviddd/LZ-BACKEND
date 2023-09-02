@@ -5,7 +5,7 @@ export class AdminMapper {
     mongoose.model("Admin", schema);
     const AdminModel = mongoose.model("Admin");
     const admin = new AdminModel({
-      id: dto.id,
+      id: dto._id,
       name: dto.name,
       email: dto.email,
       password: dto.password,
@@ -22,7 +22,7 @@ export class SellerMapper {
     mongoose.model("Seller", schema);
     const SellerModel = mongoose.model("Seller");
     const seller = new SellerModel({
-      id: dto.id,
+      id: dto._id,
       name: dto.name,
       email: dto.email,
       password: dto.password,
@@ -41,7 +41,7 @@ export class CustomerMapper {
     mongoose.model("Customer", schema);
     const CustomerModel = mongoose.model("Customer");
     const customer = new CustomerModel({
-      id: dto.id,
+      id: dto._id,
       name: dto.name,
       email: dto.email,
       password: dto.password,
@@ -57,7 +57,7 @@ export class ProductMapper {
     mongoose.model("Product", schema);
     const ProductModel = mongoose.model("Product");
     const product = new ProductModel({
-      id: dto.id,
+      id: dto._id,
       title: dto.title,
       price: dto.price,
       description: dto.description,
@@ -78,7 +78,7 @@ export class ProductOrderMapper {
     mongoose.model("ProductOrder", schema);
     const ProductOrderModel = mongoose.model("ProductOrder");
     const productOrder = new ProductOrderModel({
-      id: dto.id,
+      id: dto._id,
       product: dto.product,
       quantity: dto.quantity,
       price: dto.price,
@@ -94,7 +94,7 @@ export class CategoryMapper {
     mongoose.model("Category", schema);
     const CategoryModel = mongoose.model("Category");
     const category = new CategoryModel({
-      id: dto.id,
+      id: dto._id,
       name: dto.name,
       parentId: dto.parentId,
       admins: dto.admins,
@@ -109,7 +109,7 @@ export class UserMapper {
     mongoose.model("User", schema);
     const UserModel = mongoose.model("User");
     const user = new UserModel({
-      id: dto.id,
+      id: dto._id,
       name: dto.name,
       email: dto.email,
       password: dto.password,
@@ -125,7 +125,7 @@ export class OrderMapper {
     mongoose.model("Order", schema);
     const OrderModel = mongoose.model("Order");
     const order = new OrderModel({
-      id: dto.id,
+      id: dto._id,
       customer: dto.customer,
       productOrders: dto.productOrder,
     });

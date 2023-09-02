@@ -1,5 +1,6 @@
 import { ROLE } from "../../constants/index.js";
 import { Product } from "../../models/Product.js";
+import { productSchema } from "../../repository/Schemas/product.schema.js";
 
 export const deleteProductAPI = async (req, res) => {
   const authUser = req.authUser;
@@ -30,7 +31,13 @@ export const deleteProductAPI = async (req, res) => {
         message: "Product not found to delete",
       });
     }
-    await Product.deleteProduct(id);
+    const product = new Product(productSchema, existedProductRecord);
+    console.log("product.id", product._id);
+    console.log("existed.id", existedProductRecord._id);
+  
+    
+    const isDeleteSuccess = await product.deleteProduct(id);
+    console.log("isDeleteSuccess", isDeleteSuccess);
     return res.status(200).json({
       message: "Product deleted successfully",
     });
