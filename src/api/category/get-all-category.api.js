@@ -30,7 +30,7 @@ export const getAllCategoryAPI = async (req, res) => {
     });
   }
   const { role } = authUser;
-  if (role !== ROLE.ADMIN) {
+  if (role !== ROLE.ADMIN && role !== ROLE.SELLER) {
     return res.status(403).json({
       message: "You don't have permission to get all category",
     });
