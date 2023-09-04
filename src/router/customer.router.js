@@ -6,6 +6,9 @@ import { getCustomerProfileAPI } from "../api/customer/get-profile.api.js";
 import { getAllAvailableProductsAPI } from "../api/product/get-all-available-product.js";
 import { createOrderAPI } from "../api/order/create-order.api.js";
 import { getProductByCategoryIdAPI } from "../api/product/get-product-by-category.api.js";
+import { getAllCustomerProductOrders } from "../api/productOrder/get-all-customer-productorders.js";
+import { rejectProductAPI } from "../api/customer/reject-product.api.js";
+import { acceptProductAPI } from "../api/customer/accept-product.api.js";
 
 const router = express.Router();
 router.get("/category/:id", getCategoryByIdAPI);
@@ -14,4 +17,7 @@ router.get("/product", getAllAvailableProductsAPI);
 router.get("/product/:categoryId", getProductByCategoryIdAPI);
 router.get("/profile", authenticateUser, getCustomerProfileAPI);
 router.post("/checkout", authenticateUser, createOrderAPI);
+router.get("/order", authenticateUser, getAllCustomerProductOrders);
+router.patch("/order/reject/:id", authenticateUser, rejectProductAPI);
+router.patch("/order/accept/:id", authenticateUser, acceptProductAPI);
 export const customerRouter = router;
