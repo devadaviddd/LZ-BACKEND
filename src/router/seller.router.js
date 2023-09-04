@@ -10,6 +10,7 @@ import { getSellerProductsAPI } from "../api/product/get-seller-product.api.js";
 import { updateProductAPI } from "../api/product/update-product.api.js";
 import { getProductByIdAPI } from "../api/product/get-product-by-id.api.js";
 import { deleteProductAPI } from "../api/product/delete-product.api.js";
+import { getAllCategoryAPI } from "../api/category/get-all-category.api.js";
 
 const router = express.Router();
 router.post("/product", authenticateUser, createProductAPI);
@@ -20,6 +21,7 @@ router.post(
   uploadProductImage,
   uploadProductImageAPI
 );
+router.get("/category", authenticateUser, getAllCategoryAPI);
 router.get("/product/image/:id", getProductImageAPI);
 router.get("/product/:id", getProductByIdAPI);
 router.patch("/product/:id", authenticateUser, updateProductAPI);
