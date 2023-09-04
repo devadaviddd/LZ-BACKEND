@@ -1,9 +1,29 @@
 import { database } from "../../di/index.js";
+import { ObjectId } from "mongodb";
 
-export async function afterDeleteToProducts(doc, next) {
+export async function beforeDeleteToProducts(doc, next) {
   const { _id } = doc;
+  console.log("before delete", doc);
   try {
-    await database.deleteRecordsByQuery({ productId: _id }, "productorders");
+    const productOrderRecords = await database.getRecordsByQuery(
+      {
+        product: _id,
+      },
+      "productorders"
+    );
+    const productOrderIds = productOrderRecords.map((record) => record._id);
+
+    console.log("productOrderRecords", productOrderRecords);
+
+    await database.deleteRecordsByQuery({ product: _id }, "productorders");
+
+    const updateOrders = await database.removeDeletedProductFromOrder(
+      productOrderIds,
+      "orders"
+    );
+
+    console.log("updateOrders", updateOrders);
+
     next();
   } catch (error) {
     console.log(error);

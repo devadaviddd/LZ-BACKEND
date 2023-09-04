@@ -5,8 +5,11 @@ import { ProductMapper } from "../repository/Mapper/mapper.js";
 import { getCategories } from "../api/product/create-product.api.js";
 export class Product {
   #product;
+  #productModel;
   constructor(productSchema, dto) {
+    console.log("dto", dto);
     this.#product = ProductMapper.mapToSchema(productSchema, dto);
+    this.#productModel = mongoose.model("Product");
     this._id = this.#product._id;
     this.title = this.#product.title;
     this.price = this.#product.price;
@@ -123,8 +126,35 @@ export class Product {
     return productRecords;
   }
 
-  static async deleteProduct(productId) {
-    const product = await database.deleteRecordById(productId, "products");
-    return product;
+  async deleteProduct(productId) {
+    // const product = await database.deleteRecordById(productId, "products");
+    console.log("productId", productId);
+
+    const productOrderRecords = await database.getRecordsByQuery(
+      {
+        product: new ObjectId(productId),
+      },
+      "productorders"
+    );
+
+    const productOrderIds = productOrderRecords.map((record) => record._id);
+
+    console.log("productOrderRecords", productOrderRecords);
+
+    await database.deleteRecordsByQuery(
+      { product: new ObjectId(productId) },
+      "productorders"
+    );
+
+    const updateOrders = await database.removeDeletedProductFromOrder(
+      productOrderIds,
+      "orders"
+    );
+    console.log("updateOrders", updateOrders);
+
+    const isDeleteSuccess = await this.#productModel.deleteOne({
+      _id: new ObjectId(productId),
+    });
+    return isDeleteSuccess;
   }
 }

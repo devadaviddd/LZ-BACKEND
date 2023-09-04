@@ -29,12 +29,7 @@ export const getAllCategoryAPI = async (req, res) => {
       message: "You are unauthorized to get all category",
     });
   }
-  const { role } = authUser;
-  if (role !== ROLE.ADMIN && role !== ROLE.SELLER) {
-    return res.status(403).json({
-      message: "You don't have permission to get all category",
-    });
-  }
+
   try {
     const categories = await Category.getAllCategories();
     const count = categories.length;

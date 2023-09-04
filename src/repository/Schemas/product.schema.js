@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { afterDeleteToProducts } from "../hooks/product.hooks.js";
+import { beforeDeleteToProducts } from "../hooks/product.hooks.js";
 
 export const productSchema = new mongoose.Schema(
   {
@@ -57,4 +57,3 @@ export const productSchema = new mongoose.Schema(
   }
 );
 
-productSchema.post("deleteMany", afterDeleteToProducts);
