@@ -2,8 +2,7 @@ import { ProductOrder } from "../../models/ProductOrder.js";
 import { productOrderSchema } from "../../repository/Schemas/productOrder.schema.js";
 import { ROLE } from "../../constants/index.js";
 
-export const filterProductOrderBySellerAPI = async (req, res) => {
-  const id = req.params.id;
+export const getAllSellerProductOrders = async (req, res) => {
   const authUser = req.authUser;
   if (!authUser) {
     return res.status(401).json({
@@ -11,26 +10,26 @@ export const filterProductOrderBySellerAPI = async (req, res) => {
     });
   }
 
-  const { role: isAuthRole } = authUser;
+  const { role: isAuthRole, _id: sellerId } = authUser;
   if (isAuthRole !== ROLE.SELLER) {
     return res.status(403).json({
       message: "You don't have permission to filter product order by seller",
     });
   }
 
-  if (!id) {
+  if (!sellerId) {
     return res.status(400).json({
-      message: "Id is required",
+      message: "SellerId is required",
     });
   }
 
   try {
     const productOrderInstance = new ProductOrder(productOrderSchema, {});
-    const productOrderOfSeller =  await productOrderInstance.getProductOrdersBySeller(id);
+    const productOrderOfSeller =  await productOrderInstance.getProductOrdersBySeller(sellerId);
 
     return res.status(200).json({
       message: "Filter product order by seller successfully",
-      sellerId: id,
+      sellerId: sellerId,
       productOrderOfSeller,
     });
   } catch (err) {

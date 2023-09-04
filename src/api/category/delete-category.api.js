@@ -28,6 +28,24 @@ export const deleteCategoryAPI = async (req, res) => {
     console.log("existedCategoryRecord", existedCategoryRecord);
 
     if (existedCategoryRecord) {
+      const productsHasThisCategory = await database.getRecordsByQuery(
+        {
+          categories: {
+            $elemMatch: {
+              $eq: new ObjectId(categoryId),
+            },
+          },
+        },
+        "products"
+      );
+      console.log("productsHasThisCategory", productsHasThisCategory);
+
+      if (productsHasThisCategory.length > 0) {
+        return res.status(400).json({
+          message: "Cannot delete category because it has products",
+        });
+      }
+
       const categoriesHasThisCategory = await database.getRecordsByQuery(
         {
           subCategories: {
@@ -46,6 +64,7 @@ export const deleteCategoryAPI = async (req, res) => {
           message: "Cannot delete category because it has sub categories",
         });
       }
+
 
       if (categoriesHasThisCategory.length > 0) {
         const deleteThisSubCategories = categoriesHasThisCategory.map(

@@ -2,6 +2,7 @@ import { ProductOrderMapper } from "../repository/Mapper/mapper.js";
 import { database } from "../di/index.js";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
+import { PRODUCT_STATUS } from "../constants/index.js";
 
 export class ProductOrder {
   #productOrder;
@@ -12,6 +13,11 @@ export class ProductOrder {
       dto
     );
     this.#productOrderModel = mongoose.model("ProductOrder");
+    this._id = this.#productOrder._id;
+    this.product = this.#productOrder.product;
+    this.quantity = this.#productOrder.quantity;
+    this.price = this.#productOrder.price;
+    this.order = this.#productOrder.order;
   }
 
   async insertProductOrderToDatabase(productOrderId) {
@@ -41,10 +47,103 @@ export class ProductOrder {
 
   static async deleteProductOrdersByOrderId(orderId) {
     const productOrderRecords = await database.deleteRecordsByQuery(
-      { order: orderId },
+      { order: new ObjectId(orderId) },
       "productorders"
     );
     return productOrderRecords;
+  }
+
+  static async getProductOrder(productId) {
+    const productOrderRecord = await database.getRecordById(
+      productId,
+      "productorders"
+    );
+    return productOrderRecord;
+  }
+
+  async acceptProduct() {
+    await this.#productOrderModel.updateOne(
+      { _id: this._id },
+      { $set: { status: PRODUCT_STATUS.ACCEPTED } }
+    );
+
+    const updatedProductOrder = await database.getRecordById(
+      this._id.toString(),
+      "productorders"
+    );
+    return updatedProductOrder;
+  }
+
+  async rejectProduct() {
+    const productRecord = await database.getRecordById(
+      this.#productOrder.product,
+      "products"
+    );
+    console.log("productRecord", productRecord);
+
+    const { stock, _id } = productRecord;
+    const updatedStock = stock + this.#productOrder.quantity;
+
+    await database.updateRecordById(
+      _id.toString(),
+      { stock: updatedStock },
+      "products"
+    );
+
+    await this.#productOrderModel.updateOne(
+      { _id: this._id },
+      { $set: { status: PRODUCT_STATUS.REJECTED } }
+    );
+
+    const updatedProductOrder = await database.getRecordById(
+      this._id.toString(),
+      "productorders"
+    );
+    return updatedProductOrder;
+  }
+
+  async cancelProduct() {
+    await this.#productOrderModel.updateOne(
+      { _id: this._id },
+      { $set: { status: PRODUCT_STATUS.CANCELED } }
+    );
+    const updatedProductOrder = await database.getRecordById(
+      this._id.toString(),
+      "productorders"
+    );
+    return updatedProductOrder;
+  }
+
+  async shipProduct() {
+    const quantity = this.#productOrder.quantity;
+    const productRecord = await database.getRecordById(
+      this.#productOrder.product,
+      "products"
+    );
+    console.log("productRecord", productRecord);
+
+    const { stock, _id } = productRecord;
+
+    if (quantity <= stock) {
+      await this.#productOrderModel.updateOne(
+        { _id: this._id },
+        { $set: { status: PRODUCT_STATUS.SHIPPED } }
+      );
+
+      const updatedStock = stock - quantity;
+      await database.updateRecordById(
+        _id.toString(),
+        { stock: updatedStock },
+        "products"
+      );
+      const updatedProductOrder = await database.getRecordById(
+        this._id.toString(),
+        "productorders"
+      );
+      return updatedProductOrder;
+    } else {
+      throw new Error("Product out of stock");
+    }
   }
 
   async getProductOrdersBySeller(sellerId) {
