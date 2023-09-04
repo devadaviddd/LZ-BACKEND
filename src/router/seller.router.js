@@ -9,16 +9,16 @@ import { filterProductOrderBySellerAPI } from "../api/productOrder/filter-produc
 import { getSellerProductsAPI } from "../api/seller/get-seller-product.api.js";
 import { updateProductAPI } from "../api/product/update-product.api.js";
 import { getProductByIdAPI } from "../api/product/get-product-by-id.api.js";
-import { getAllCategoryAPI } from "../api/category/get-all-category.api.js";
+import { deleteProductAPI } from "../api/product/delete-product.api.js";
 
 const router = express.Router();
 router.post("/product", authenticateUser, createProductAPI);
 router.get("/product", authenticateUser, getSellerProductsAPI);
 router.post("/product/upload/:id",authenticateUser,uploadProductImage,uploadProductImageAPI);
 router.get("/product/image/:id", getProductImageAPI);
+router.delete("/product/:id", authenticateUser, deleteProductAPI);
 router.get("/product/:id", getProductByIdAPI);
 router.patch("/product/:id", authenticateUser, updateProductAPI);
 router.get("/profile", authenticateUser, getSellerProfileAPI);
 router.get("/order/:id", authenticateUser, filterProductOrderBySellerAPI);
-// router.get("/seller/category",authenticateUser, getAllCategoryAPI)
 export const sellerRouter = router;
