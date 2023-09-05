@@ -5,13 +5,11 @@ export const uploadProductImageAPI = async (req, res) => {
   const authUser = req.authUser;
   const file = req.file;
   const id = req.params.id;
-
   if (!id) {
     return res.status(400).json({
       message: "Product id is required",
     });
   }
-
   if (!authUser) {
     return res.status(401).json({
       message: "You are unauthorized to upload image",
@@ -24,7 +22,6 @@ export const uploadProductImageAPI = async (req, res) => {
       message: "You don't have permission to upload image",
     });
   }
-
   if (file) {
     await database.updateRecordById(id, {
       image: file.path,

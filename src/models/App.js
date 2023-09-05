@@ -13,6 +13,8 @@ export class Application {
     this.#server.use(bodyParser.json());
     this.#server.use(bodyParser.urlencoded({ extended: true }));
     this.#server.use(cors());
+    this.#server.use(express.json());
+    this.#server.use(express.static('public'));
     this.#server.use(API);
   }
   

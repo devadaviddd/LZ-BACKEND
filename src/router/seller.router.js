@@ -27,6 +27,7 @@ router.patch("/product/ship/:id", authenticateUser, shipProductAPI);
 router.patch("/product/cancel/:id", authenticateUser, cancelProductAPI);
 router.get("/category", authenticateUser, getAllCategoryAPI);
 router.get("/product/image/:id", getProductImageAPI);
+router.delete("/product/:id", authenticateUser, deleteProductAPI);
 router.get("/product/:id", getProductByIdAPI);
 router.patch("/product/:id", authenticateUser, updateProductAPI);
 router.delete("/product/:id", authenticateUser, deleteProductAPI);
