@@ -36,6 +36,19 @@ export const createOrderAPI = async (req, res) => {
     const orderId = newOrder._id;
 
     for (const productOrder of productOrders) {
+      const existedProduct = await database.getRecordById(
+        productOrder.product,
+        "products"
+      );
+
+      if (!existedProduct) {
+        await database.deleteRecordById(orderId, "orders");
+        await ProductOrder.deleteProductOrdersByOrderId(orderId);
+        return res.status(400).json({
+          message: "Product not found",
+        });
+      }
+
       if (!productOrder.product) {
         await database.deleteRecordById(orderId, "orders");
         await ProductOrder.deleteProductOrdersByOrderId(orderId);
