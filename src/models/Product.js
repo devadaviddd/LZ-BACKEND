@@ -118,7 +118,7 @@ export class Product {
     return productRecords;
   }
 
-  static async getPRoductBySellerId(sellerId) {
+  static async getProductBySellerId(sellerId) {
     const productRecords = await database.getRecordsByQuery(
       { seller: new ObjectId(sellerId) },
       "products"
