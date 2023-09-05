@@ -163,7 +163,19 @@ export class ProductOrder {
       {
         $replaceRoot: {
           newRoot: {
-            $mergeObjects: ["$$ROOT", "$productData"],
+            $mergeObjects: [
+              "$$ROOT",
+              {
+                title: "$productData.title",
+                price: "$productData.price",
+                description: "$productData.description",
+                image: "$productData.image",
+                category: "$productData.categories",
+                seller: "$productData.seller",
+                date: "$productData.date",
+                stock: "$productData.stock",
+              },
+            ],
           },
         },
       },

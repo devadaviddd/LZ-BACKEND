@@ -16,7 +16,7 @@ export const getSellerProductsAPI = async (req, res) => {
   }
 
   try {
-    const productsOfSeller = await Product.getPRoductBySellerId(sellerId);
+    const productsOfSeller = await Product.getProductBySellerId(sellerId);
     const count = productsOfSeller.length;
 
     return res.status(200).json({
