@@ -4,77 +4,6 @@ import { Category } from "../../models/Category.js";
 import { categorySchema } from "../../repository/Schemas/category.schema.js";
 import { isCategoryNameExist } from "../../utils/errors/duplicateCategoryName.js";
 
-/**
- * @openapi
- * /admin/category:
- *   post:
- *     tags: [Admin]
- *     summary: Create a new category
- *     description: Use this route to create a new category or sub-category.
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               parentId:
- *                 type: string
- *             example:
- *               name: Electronics
- *               parentId: 64d78f463793095ca1ac5778
- *     responses:
- *       200:
- *         description: Category created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 category:
- *                   type: object
- *                 parentCategory:
- *                   type: object
- *                 createdBy:
- *                   type: string
- *       400:
- *         description: Bad request
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 name:
- *                   type: string
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 error:
- *                   type: string
- */
 export const createCategoryAPI = async (req, res) => {
   const authUser = req.authUser;
   const { name, updateFields } = req.body;
@@ -95,13 +24,14 @@ export const createCategoryAPI = async (req, res) => {
       admins: [adminId],
     });
     await category.insertCategory();
-    await database.updateRecordById(
+
+    await category.updateCategory(
       category._id,
-      {
-        ...updateFields,
-      },
-      "categories"
+      adminId,
+      updateFields,
+      database
     );
+
     return res.status(200).json({
       message: "Main Category created successfully",
       category,

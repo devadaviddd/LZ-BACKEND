@@ -20,23 +20,6 @@ export class ProductOrder {
     this.order = this.#productOrder.order;
   }
 
-  async insertProductOrderToDatabase(productOrderId) {
-    try {
-      if (productOrderId) {
-        this.#productOrder._id = new ObjectId(productOrderId);
-      }
-      await this.#productOrder.save();
-      console.log("ProductOrder created");
-      this._id = this.#productOrder._id;
-      this.product = this.#productOrder.product;
-      this.quantity = this.#productOrder.quantity;
-      this.price = this.#productOrder.price;
-      this.order = this.#productOrder.order;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   static async getProductOrdersByOrderId(orderId, database) {
     const productOrderRecords = await database.getRecordsByQuery(
       { order: orderId },
@@ -59,6 +42,23 @@ export class ProductOrder {
       "productorders"
     );
     return productOrderRecord;
+  }
+
+  async insertProductOrderToDatabase(productOrderId) {
+    try {
+      if (productOrderId) {
+        this.#productOrder._id = new ObjectId(productOrderId);
+      }
+      await this.#productOrder.save();
+      console.log("ProductOrder created");
+      this._id = this.#productOrder._id;
+      this.product = this.#productOrder.product;
+      this.quantity = this.#productOrder.quantity;
+      this.price = this.#productOrder.price;
+      this.order = this.#productOrder.order;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async acceptProduct(database) {

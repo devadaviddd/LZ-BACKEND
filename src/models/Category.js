@@ -48,6 +48,42 @@ export class Category {
     this.admins = this.#category.admins;
     this.subCategories = this.#category.subCategories;
   }
+  
+  static async getCategoryById(categoryId, database) {
+    const categoryRecord = await database.getRecordById(
+      categoryId,
+      "categories"
+    );
+    return categoryRecord;
+  }
+
+  static async getAllCategories(database) {
+    const categoryRecords = await database.getRecordsByQuery({}, "categories");
+    return categoryRecords;
+  }
+
+  static async deleteCategory(categoryId, database) {
+    const isDeleteSuccess = await database.deleteRecordById(
+      categoryId,
+      "categories"
+    );
+    return isDeleteSuccess;
+  }
+
+  static async getSubCategoryByName(name, database) {
+    const subCategoryRecord = await database.getRecordsByQuery(
+      {
+        name: name,
+      },
+      "categories"
+    );
+    return subCategoryRecord[0];
+  }
+  
+  static async getRecordsByQuery(query, database) {
+    const records = await database.getRecordsByQuery(query, "categories");
+    return records;
+  }
 
   async insertCategory(categoryId) {
     try {
@@ -102,7 +138,7 @@ export class Category {
         }
       }
     }
-    if (subCategoriesId.length !== subCategories.length) {
+    if (subCategories && subCategoriesId.length !== subCategories.length) {
       isCreateNewSubCategory = true;
     }
     console.log("subCategoriesId", subCategoriesId);
@@ -224,26 +260,5 @@ export class Category {
     } catch (error) {
       throw error;
     }
-  }
-
-  static async getCategoryById(categoryId, database) {
-    const categoryRecord = await database.getRecordById(
-      categoryId,
-      "categories"
-    );
-    return categoryRecord;
-  }
-
-  static async getAllCategories(database) {
-    const categoryRecords = await database.getRecordsByQuery({}, "categories");
-    return categoryRecords;
-  }
-
-  static async deleteCategory(categoryId, database) {
-    const isDeleteSuccess = await database.deleteRecordById(
-      categoryId,
-      "categories"
-    );
-    return isDeleteSuccess;
   }
 }

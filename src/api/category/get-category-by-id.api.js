@@ -1,4 +1,3 @@
-import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
 import { Category } from "../../models/Category.js";
 

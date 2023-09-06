@@ -10,24 +10,6 @@ export class Admin {
     this.#adminModel = AdminMapper.mapToSchema(adminSchema, dto);
   }
 
-  async insertAdminToDatabase(userId) {
-    try {
-      if (userId) {
-        this.#adminModel._id = new ObjectId(userId);
-      }
-      await this.#adminModel.save();
-      console.log("Admin created");
-      this._id = this.#adminModel._id;
-      this.name = this.#adminModel.name;
-      this.email = this.#adminModel.email;
-      this.password = this.#adminModel.password;
-      this.categories = this.#adminModel.categories;
-      this.phone = this.#adminModel.phone;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   static async getAdminEmailsByIds(adminId, database) {
     const adminRecord = await User.findUserById(adminId, database);
     console.log("adminId", adminId);
@@ -61,5 +43,23 @@ export class Admin {
       "sellers"
     );
     return seller;
+  }
+
+  async insertAdminToDatabase(userId) {
+    try {
+      if (userId) {
+        this.#adminModel._id = new ObjectId(userId);
+      }
+      await this.#adminModel.save();
+      console.log("Admin created");
+      this._id = this.#adminModel._id;
+      this.name = this.#adminModel.name;
+      this.email = this.#adminModel.email;
+      this.password = this.#adminModel.password;
+      this.categories = this.#adminModel.categories;
+      this.phone = this.#adminModel.phone;
+    } catch (error) {
+      throw error;
+    }
   }
 }

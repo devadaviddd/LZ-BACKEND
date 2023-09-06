@@ -4,6 +4,8 @@ import { User } from "../../models/User.js";
 import { isEmailOrPhoneExist } from "../../utils/errors/duplicateEmailOrPhone.js";
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
+import { Seller } from "../../models/Seller.js";
+import { Customer } from "../../models/Customer.js";
 
 export const signUpAPI = async (req, res) => {
   const { name, email, password, phone, businessName, address, role } =
@@ -25,12 +27,12 @@ export const signUpAPI = async (req, res) => {
         });
       }
       console.log("user._id", user._id);
-      await database.updateRecordById(
+      await Seller.updateSeller(
         user._id.toString(),
         {
           businessName: businessName,
         },
-        "sellers"
+        database
       );
     } else if (role === ROLE.CUSTOMER) {
       if (!address) {
@@ -38,12 +40,12 @@ export const signUpAPI = async (req, res) => {
           message: "Address is required",
         });
       }
-      await database.updateRecordById(
+      await Customer.updateCustomer(
         user._id.toString(),
         {
-          address,
+          address: address,
         },
-        "customers"
+        database
       );
     }
 

@@ -1,5 +1,4 @@
 import express from "express";
-import { createAdminAPI } from "../api/admin/create-admin.api.js";
 import { authenticateUser } from "../middleware/auth.middleware.js";
 import { createCategoryAPI } from "../api/category/create-category.api.js";
 import { createSubCategoryAPI } from "../api/category/create-subcategory.api.js";
@@ -13,7 +12,6 @@ import { getAdminProfileAPI } from "../api/admin/get-profile.api.js";
 
 const router = express.Router();
 router.get("/profile", authenticateUser, getAdminProfileAPI);
-router.post("/create", authenticateUser, createAdminAPI);
 router.patch("/category/:id", authenticateUser, updateCategoryAPI);
 router.post("/category/:id", authenticateUser, createSubCategoryAPI);
 router.delete("/category/:id", authenticateUser, deleteCategoryAPI);

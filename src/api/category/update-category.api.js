@@ -21,14 +21,15 @@ export const updateCategoryAPI = async (req, res) => {
     });
   }
   try {
-    const existedCategoryRecord = await database.getRecordById(
+    const existedCategoryRecord = await Category.getCategoryById(
       categoryId,
-      "categories"
+      database
     );
+
     if (parentId) {
-      const existedCategoryParentRecord = await database.getRecordById(
+      const existedCategoryParentRecord = await Category.getCategoryById(
         parentId,
-        "categories"
+        database
       );
       if (!existedCategoryParentRecord) {
         return res.status(400).json({
@@ -38,7 +39,12 @@ export const updateCategoryAPI = async (req, res) => {
     }
     if (existedCategoryRecord) {
       const category = new Category(categorySchema, existedCategoryRecord);
-      await category.updateCategory(categoryId, adminId, updateFields, database);
+      await category.updateCategory(
+        categoryId,
+        adminId,
+        updateFields,
+        database
+      );
       return res.status(200).json({
         message: "Category updated successfully",
         category,
@@ -62,7 +68,7 @@ export const updateCategoryAPI = async (req, res) => {
         error: isCategoryNameExist(err.message)
           ? "Category name already exist"
           : err.message,
-      }); 
+      });
     }
   }
   res.status(500).json({

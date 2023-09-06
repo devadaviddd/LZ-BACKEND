@@ -3,15 +3,13 @@ import { productSchema } from "../../repository/Schemas/product.schema.js";
 import { Seller } from "../../models/Seller.js";
 import { Product } from "../../models/Product.js";
 import { database } from "../../di/index.js";
+import { Category } from "../../models/Category.js";
 
 export async function getCategories(categoryId) {
   if (!categoryId) {
     return [];
   }
-  const existedCategory = await database.getRecordById(
-    categoryId,
-    "categories"
-  );
+  const existedCategory = await Category.getCategoryById(categoryId, database);
 
   if (!existedCategory) {
     return [];
@@ -25,7 +23,7 @@ export async function getCategories(categoryId) {
   let categories = [categoryId, parentId];
 
   while (parentId) {
-    const parentCategory = await database.getRecordById(parentId, "categories");
+    const parentCategory = await Category.getCategoryById(parentId, database);
     if (!parentCategory) {
       break;
     }

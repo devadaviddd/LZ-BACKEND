@@ -5,6 +5,30 @@ export class Customer {
   constructor(customerModel, dto) {
     this.#customerModel = CustomerMapper.mapToSchema(customerModel, dto);
   }
+  
+  static async getProfile(customerId, database) {
+    const customerRecord = await database.getRecordById(
+      customerId,
+      "customers"
+    );
+    return {
+      _id: customerRecord._id,
+      name: customerRecord.name,
+      email: customerRecord.email,
+      phone: customerRecord.phone,
+      address: customerRecord.address,
+    };
+  }
+
+  static async updateCustomer(customerId, updatedFields, database) {
+    await database.updateRecordById(customerId, updatedFields, "customers");
+    const updatedCustomer = await database.getRecordById(
+      customerId,
+      "customers"
+    );
+    console.log("updatedCustomer", updatedCustomer);
+    return updatedCustomer;
+  }
 
   async insertCustomerToDatabase(customerId) {
     try {
@@ -22,19 +46,5 @@ export class Customer {
     } catch (error) {
       throw error;
     }
-  }
-
-  static async getProfile(customerId, database) {
-    const customerRecord = await database.getRecordById(
-      customerId,
-      "customers"
-    );
-    return {
-      _id: customerRecord._id,
-      name: customerRecord.name,
-      email: customerRecord.email,
-      phone: customerRecord.phone,
-      address: customerRecord.address,
-    };
   }
 }
