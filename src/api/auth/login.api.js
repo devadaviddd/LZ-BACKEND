@@ -5,6 +5,7 @@ import { isEmail } from "../../utils/regex/isEmail.js";
 import { isPassword } from "../../utils/regex/isPassword.js";
 import { isPhone } from "../../utils/regex/isPhone.js";
 import { MAX_AGE } from "../../constants/index.js";
+import { database } from "../../di/index.js";
 
 export const loginAPI = async (req, res) => {
   const { email, password, phone } = req.body;
@@ -34,8 +35,8 @@ export const loginAPI = async (req, res) => {
       });
     }
 
-    const existedUserEmail = await User.findUserByEmail(email);
-    const existedUserPhone = await User.findUserByPhone(phone);
+    const existedUserEmail = await User.findUserByEmail(email, database);
+    const existedUserPhone = await User.findUserByPhone(phone, database);
 
 
     if (!existedUserEmail && !existedUserPhone) {

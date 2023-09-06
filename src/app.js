@@ -1,5 +1,7 @@
 import "dotenv/config";
-import { Application } from "./models/App.js";
+
+import { database } from "./di/index.js";
+import { Application } from "./models/app.js";
 
 export const app = new Application();
-app.startServer();
+app.startServer(database);

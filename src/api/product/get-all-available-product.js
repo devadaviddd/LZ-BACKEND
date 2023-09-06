@@ -1,8 +1,9 @@
+import { database } from "../../di/index.js";
 import { Product } from "../../models/Product.js";
 
 export const getAllAvailableProductsAPI = async (req, res) => {
   try {
-    const products = await Product.getAllAvailableProducts();
+    const products = await Product.getAllAvailableProducts(database);
     const count = products.length;
     return res.status(200).json({
       message: "Get all available products successfully",

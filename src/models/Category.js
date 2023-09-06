@@ -1,6 +1,4 @@
-import { database } from "../di/index.js";
 import { CategoryMapper } from "../repository/Mapper/mapper.js";
-import { categorySchema } from "../repository/Schemas/category.schema.js";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 
@@ -49,7 +47,6 @@ export class Category {
     this.parentId = this.#category.parentId;
     this.admins = this.#category.admins;
     this.subCategories = this.#category.subCategories;
-    
   }
 
   async insertCategory(categoryId) {
@@ -69,7 +66,7 @@ export class Category {
     }
   }
 
-  async updateCategory(categoryId, adminId, dto) {
+  async updateCategory(categoryId, adminId, dto, database) {
     const updateFields = {};
     let isCreateNewSubCategory = false;
     const subCategoriesName = [];
@@ -152,26 +149,24 @@ export class Category {
 
     try {
       console.log("updateFields", updateFields);
-      // if (this.subCategories.length > 0) {
-        const ancestorCategoryRecords = await database.getRecordsByQuery(
-          {
-            parentId: new ObjectId(categoryId),
-          },
-          "categories"
-        );
-        console.log("categoryId", categoryId);
-        console.log("ancestorCategoryRecords", ancestorCategoryRecords);
-        const updateAncestorCategories = ancestorCategoryRecords.map(
-          async (record) => {
-            await database.updateRecordById(
-              record._id,
-              updateFields,
-              "categories"
-            );
-          }
-        );
-        await Promise.all(updateAncestorCategories);
-      // }
+      const ancestorCategoryRecords = await database.getRecordsByQuery(
+        {
+          parentId: new ObjectId(categoryId),
+        },
+        "categories"
+      );
+      console.log("categoryId", categoryId);
+      console.log("ancestorCategoryRecords", ancestorCategoryRecords);
+      const updateAncestorCategories = ancestorCategoryRecords.map(
+        async (record) => {
+          await database.updateRecordById(
+            record._id,
+            updateFields,
+            "categories"
+          );
+        }
+      );
+      await Promise.all(updateAncestorCategories);
 
       await database.updateRecordById(categoryId, updateFields, "categories");
 
@@ -204,18 +199,6 @@ export class Category {
     }
   }
 
-  async deleteSubCategory({ parentId, subCategoryId }) {
-    try {
-      await database.removeIdFromListById(
-        parentId,
-        subCategoryId,
-        "categories"
-      );
-    } catch (err) {
-      throw err;
-    }
-  }
-
   async updateSubCategory({ parentId, subCategoryId }) {
     try {
       const newCategory = await this.#categoryModel.findOneAndUpdate(
@@ -243,7 +226,7 @@ export class Category {
     }
   }
 
-  static async getCategoryById(categoryId) {
+  static async getCategoryById(categoryId, database) {
     const categoryRecord = await database.getRecordById(
       categoryId,
       "categories"
@@ -251,23 +234,12 @@ export class Category {
     return categoryRecord;
   }
 
-  static async getCategoriesById(categoryId) {
-    const query = {
-      _id: new ObjectId(categoryId),
-    };
-    const categoryRecords = await database.getRecordsByQuery(
-      query,
-      "categories"
-    );
-    return categoryRecords;
-  }
-
-  static async getAllCategories() {
+  static async getAllCategories(database) {
     const categoryRecords = await database.getRecordsByQuery({}, "categories");
     return categoryRecords;
   }
 
-  static async deleteCategory(categoryId) {
+  static async deleteCategory(categoryId, database) {
     const isDeleteSuccess = await database.deleteRecordById(
       categoryId,
       "categories"

@@ -1,12 +1,13 @@
 import { ROLE } from "../../constants/index.js";
 import { Category } from "../../models/Category.js";
 import { Admin } from "../../models/Admin.js";
+import { database } from "../../di/index.js";
 
 async function getAdminEmailsByIds(adminIds) {
   const adminNames = [];
   for (const adminId of adminIds) {
     console.log("adminId", adminId);
-    const admin = await Admin.getAdminEmailsByIds(adminId);
+    const admin = await Admin.getAdminEmailsByIds(adminId, database);
     console.log("adminNames", admin);
     adminNames.push(admin);
   }
@@ -16,7 +17,7 @@ async function getAdminEmailsByIds(adminIds) {
 async function getCategoryNamesByIds(categoryIds) {
   const categoryNames = [];
   for (const categoryId of categoryIds) {
-    const category = await Category.getCategoryById(categoryId);
+    const category = await Category.getCategoryById(categoryId, database);
     categoryNames.push(category.name);
   }
   return categoryNames;
@@ -31,7 +32,7 @@ export const getAllCategoryAPI = async (req, res) => {
   }
 
   try {
-    const categories = await Category.getAllCategories();
+    const categories = await Category.getAllCategories(database);
     const count = categories.length;
 
     const categoriesWithAdminNames = await Promise.all(

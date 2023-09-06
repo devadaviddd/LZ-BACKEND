@@ -2,7 +2,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { API } from '../router/router.js';
-import { database } from '../di/index.js';
 
 export class Application {
   #server;
@@ -18,7 +17,7 @@ export class Application {
     this.#server.use(API);
   }
   
-  startServer() {
+  startServer(database) {
     const host = this.#server.get('host');
     const port = this.#server.get('port');
     this.#server.listen(port, host, () => {

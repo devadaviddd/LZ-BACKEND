@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { AdminMapper } from "../repository/Mapper/mapper.js";
-import { database } from "../di/index.js";
 import { SELLER_STATUS } from "../constants/index.js";
 import { User } from "./User.js";
 const ObjectId = mongoose.Types.ObjectId;
@@ -29,19 +28,14 @@ export class Admin {
     }
   }
 
-  static async getAdminNamesByIds(adminId) {
-    const adminRecord = await User.findUserById(adminId);
-    return adminRecord.name;
-  }
-
-  static async getAdminEmailsByIds(adminId) {
-    const adminRecord = await User.findUserById(adminId);
+  static async getAdminEmailsByIds(adminId, database) {
+    const adminRecord = await User.findUserById(adminId, database);
     console.log("adminId", adminId);
     console.log("adminRecord", adminRecord);
     return adminRecord.email;
   }
 
-  static async getProfile(adminId) {
+  static async getProfile(adminId, database) {
     const adminRecord = await database.getRecordById(adminId, "admins");
     return {
       _id: adminRecord._id,
@@ -51,7 +45,7 @@ export class Admin {
     };
   }
 
-  static async rejectSeller(sellerId) {
+  static async rejectSeller(sellerId, database) {
     const seller = await database.updateRecordById(
       sellerId,
       { status: SELLER_STATUS.REJECTED },
@@ -60,7 +54,7 @@ export class Admin {
     return seller;
   }
 
-  static async approveSeller(sellerId) {
+  static async approveSeller(sellerId, database) {
     const seller = await database.updateRecordById(
       sellerId,
       { status: SELLER_STATUS.APPROVED },

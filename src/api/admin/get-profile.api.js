@@ -1,4 +1,5 @@
 import { ROLE } from "../../constants/index.js";
+import { database } from "../../di/index.js";
 import { Admin } from "../../models/Admin.js";
 
 export const getAdminProfileAPI = async (req, res) => {
@@ -18,7 +19,7 @@ export const getAdminProfileAPI = async (req, res) => {
   }
 
   try {
-    const admin = await Admin.getProfile(_id);
+    const admin = await Admin.getProfile(_id, database);
     if (!admin) {
       return res.status(404).json({
         message: "admin not found",

@@ -1,4 +1,5 @@
 import { ROLE } from "../../constants/index.js";
+import { database } from "../../di/index.js";
 import { Customer } from "../../models/Customer.js";
 
 export const getCustomerProfileAPI = async (req, res) => {
@@ -18,7 +19,7 @@ export const getCustomerProfileAPI = async (req, res) => {
   }
 
   try {
-    const customer = await Customer.getProfile(_id);
+    const customer = await Customer.getProfile(_id, database);
     if (!customer) {
       return res.status(404).json({
         message: "customer not found",

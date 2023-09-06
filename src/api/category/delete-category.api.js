@@ -79,7 +79,7 @@ export const deleteCategoryAPI = async (req, res) => {
         await Promise.all(deleteThisSubCategories);
       }
 
-      await Category.deleteCategory(categoryId, adminId);
+      await Category.deleteCategory(categoryId, database);
       return res.status(200).json({
         message: "Category deleted successfully",
       });

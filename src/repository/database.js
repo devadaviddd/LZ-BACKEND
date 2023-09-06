@@ -23,15 +23,6 @@ export class Database {
     }
   }
 
-  async deleteOneRecord(filter, collectionName) {
-    try {
-      const result = await this.db.collection(collectionName).deleteOne(filter);
-      return result;
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
-
   async getRecordById(id, collectionName) {
     try {
       const record = await this.db
@@ -117,17 +108,6 @@ export class Database {
   async deleteRecordsByQuery(query, collectionName) {
     try {
       const result = await this.db.collection(collectionName).deleteMany(query);
-      return result;
-    } catch (error) {
-      throw Error(error.message);
-    }
-  }
-
-  async updateManyRecordsByQuery(query, pipeline, collectionName) {
-    try {
-      const result = await this.db
-        .collection(collectionName)
-        .updateMany(query, pipeline);
       return result;
     } catch (error) {
       throw Error(error.message);

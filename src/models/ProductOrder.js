@@ -37,7 +37,7 @@ export class ProductOrder {
     }
   }
 
-  static async getProductOrdersByOrderId(orderId) {
+  static async getProductOrdersByOrderId(orderId, database) {
     const productOrderRecords = await database.getRecordsByQuery(
       { order: orderId },
       "productorders"
@@ -45,7 +45,7 @@ export class ProductOrder {
     return productOrderRecords;
   }
 
-  static async deleteProductOrdersByOrderId(orderId) {
+  static async deleteProductOrdersByOrderId(orderId, database) {
     const productOrderRecords = await database.deleteRecordsByQuery(
       { order: new ObjectId(orderId) },
       "productorders"
@@ -53,7 +53,7 @@ export class ProductOrder {
     return productOrderRecords;
   }
 
-  static async getProductOrder(productId) {
+  static async getProductOrder(productId, database) {
     const productOrderRecord = await database.getRecordById(
       productId,
       "productorders"
@@ -61,7 +61,7 @@ export class ProductOrder {
     return productOrderRecord;
   }
 
-  async acceptProduct() {
+  async acceptProduct(database) {
     await this.#productOrderModel.updateOne(
       { _id: this._id },
       { $set: { status: PRODUCT_STATUS.ACCEPTED } }
@@ -74,7 +74,7 @@ export class ProductOrder {
     return updatedProductOrder;
   }
 
-  async rejectProduct() {
+  async rejectProduct(database) {
     const productRecord = await database.getRecordById(
       this.#productOrder.product,
       "products"
@@ -114,7 +114,7 @@ export class ProductOrder {
     return updatedProductOrder;
   }
 
-  async shipProduct() {
+  async shipProduct(database) {
     const quantity = this.#productOrder.quantity;
     const productRecord = await database.getRecordById(
       this.#productOrder.product,

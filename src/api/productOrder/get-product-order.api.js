@@ -1,4 +1,5 @@
 import { ROLE } from "../../constants";
+import { database } from "../../di";
 import { ProductOrder } from "../../models/ProductOrder";
 
 export const getProductOrderAPI = async (req, res) => {
@@ -25,7 +26,7 @@ export const getProductOrderAPI = async (req, res) => {
   }
 
   try {
-    const productOrder = await ProductOrder.getProductOrder(id);
+    const productOrder = await ProductOrder.getProductOrder(id, database);
     return res.status(200).json({
       message: "Get product order successfully",
       productOrder,

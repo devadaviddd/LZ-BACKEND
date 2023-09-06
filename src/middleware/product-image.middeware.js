@@ -5,28 +5,27 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     return cb(null, "./public/product");
   },
-  filename: (req, file, cb) => {
+  filename: async (req, file, cb) => {
     const id = req.params.id;
     const newFileName = id + ".png";
     const avatarPreFix = `public/product/${newFileName}`;
 
-    fs.readFile(avatarPreFix, (err, data) => {
-      if (err) {
-        if (err.code === "ENOENT") {
-          console.log("File does not exist");
-        } else {
-          throw err;
-        }
-      } else {
-        console.log("File exists");
-        fs.unlink(avatarPreFix, (err) => {
-          if (err) throw err;
-          console.log("File deleted");
-        });
-      }
+    try {
+      // Check if the file exists
+      await fs.promises.access(avatarPreFix, fs.constants.F_OK);
 
-      cb(null, newFileName);
-    });
+      // File exists, so delete it
+      await fs.promises.unlink(avatarPreFix);
+      console.log("File deleted");
+    } catch (err) {
+      if (err.code === "ENOENT") {
+        console.log("File does not exist");
+      } else {
+        console.error("Error while checking/deleting file:", err);
+      }
+    }
+
+    cb(null, newFileName);
   },
 });
 
