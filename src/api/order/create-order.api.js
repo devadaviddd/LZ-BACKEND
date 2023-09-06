@@ -1,6 +1,7 @@
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
 import { Order } from "../../models/Order.js";
+import { Product } from "../../models/Product.js";
 import { ProductOrder } from "../../models/ProductOrder.js";
 import { orderSchema } from "../../repository/Schemas/order.schema.js";
 import { productOrderSchema } from "../../repository/Schemas/productOrder.schema.js";
@@ -36,13 +37,13 @@ export const createOrderAPI = async (req, res) => {
     const orderId = newOrder._id;
 
     for (const productOrder of productOrders) {
-      const existedProduct = await database.getRecordById(
+      const existedProduct = await Product.getProductById(
         productOrder.product,
-        "products"
+        database
       );
 
       if (!existedProduct) {
-        await database.deleteRecordById(orderId, "orders");
+        await Order.deleteOrderById(orderId, database);
         await ProductOrder.deleteProductOrdersByOrderId(orderId, database);
         return res.status(400).json({
           message: "Product not found",
@@ -50,7 +51,7 @@ export const createOrderAPI = async (req, res) => {
       }
 
       if (!productOrder.product) {
-        await database.deleteRecordById(orderId, "orders");
+        await Order.deleteOrderById(orderId, database);
         await ProductOrder.deleteProductOrdersByOrderId(orderId, database);
         return res.status(400).json({
           message: "Product is required",
@@ -58,7 +59,7 @@ export const createOrderAPI = async (req, res) => {
       }
 
       if (!productOrder.quantity) {
-        await database.deleteRecordById(orderId, "orders");
+        await Order.deleteOrderById(orderId, database);
         await ProductOrder.deleteProductOrdersByOrderId(orderId, database);
         return res.status(400).json({
           message: "Quantity is required",
@@ -81,14 +82,10 @@ export const createOrderAPI = async (req, res) => {
       (productOrderRecord) => productOrderRecord._id
     );
     console.log("productOrderIds", productOrderIds);
-
-    await database.updateRecordById(
-      orderId,
-      {
-        productOrders: productOrderIds,
-      },
-      "orders"
-    );
+    
+    await Order.updateOrderById(orderId, {
+      productOrders: productOrderIds,
+    }, database);
 
     const updatedOrder = await Order.getOrderById(orderId, database);
 

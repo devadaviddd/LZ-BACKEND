@@ -21,14 +21,14 @@ export const deleteCategoryAPI = async (req, res) => {
   }
 
   try {
-    const existedCategoryRecord = await database.getRecordById(
+    const existedCategoryRecord = await Category.getCategoryById(
       categoryId,
-      "categories"
+      database
     );
     console.log("existedCategoryRecord", existedCategoryRecord);
 
     if (existedCategoryRecord) {
-      const productsHasThisCategory = await database.getRecordsByQuery(
+      const productsHasThisCategory = await Category.getRecordsByQuery(
         {
           categories: {
             $elemMatch: {
@@ -36,7 +36,7 @@ export const deleteCategoryAPI = async (req, res) => {
             },
           },
         },
-        "products"
+        database
       );
       console.log("productsHasThisCategory", productsHasThisCategory);
 
@@ -46,7 +46,7 @@ export const deleteCategoryAPI = async (req, res) => {
         });
       }
 
-      const categoriesHasThisCategory = await database.getRecordsByQuery(
+      const categoriesHasThisCategory = await Category.getRecordsByQuery(
         {
           subCategories: {
             $elemMatch: {
@@ -54,8 +54,9 @@ export const deleteCategoryAPI = async (req, res) => {
             },
           },
         },
-        "categories"
+        database
       );
+
       console.log("categoriesHasThisCategory", categoriesHasThisCategory);
       const category = new Category(categorySchema, existedCategoryRecord);
 
@@ -64,7 +65,6 @@ export const deleteCategoryAPI = async (req, res) => {
           message: "Cannot delete category because it has sub categories",
         });
       }
-
 
       if (categoriesHasThisCategory.length > 0) {
         const deleteThisSubCategories = categoriesHasThisCategory.map(

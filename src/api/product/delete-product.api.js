@@ -9,10 +9,7 @@ const deleteProductImage = async (productId) => {
   const avatarPreFix = `public/product/${fileName}`;
 
   try {
-    // Check if the file exists
     await fs.promises.access(avatarPreFix, fs.constants.F_OK);
-
-    // File exists, so delete it
     await fs.promises.unlink(avatarPreFix);
     console.log("File deleted");
   } catch (err) {

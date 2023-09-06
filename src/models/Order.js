@@ -13,6 +13,25 @@ export class Order {
     this.productOrders = this.#order.productOrders;
   }
 
+  static async getOrderById(orderId, database) {
+    const orderRecord = await database.getRecordById(orderId, "orders");
+    return orderRecord;
+  }
+
+  static async updateOrderById(orderId, updateFields, database) {
+    const result = await database.updateRecordById(
+      orderId,
+      updateFields,
+      "orders"
+    );
+    return result;
+  }
+
+  static async deleteOrderById(orderId, database) {
+    const result = await database.deleteRecordById(orderId, "orders");
+    return result;
+  }
+
   async insertOrderToDatabase(orderId) {
     try {
       if (orderId) {
@@ -26,11 +45,6 @@ export class Order {
     } catch (error) {
       throw error;
     }
-  }
-
-  static async getOrderById(orderId, database) {
-    const orderRecord = await database.getRecordById(orderId, "orders");
-    return orderRecord;
   }
 
   async getShippedProductOrders(customerId) {

@@ -8,25 +8,6 @@ export class Seller {
   constructor(sellerSchema, dto) {
     this.#sellerModel = SellerMapper.mapToSchema(sellerSchema, dto);
   }
-  async insertSellerToDatabase(userId) {
-    try {
-      if (userId) {
-        this.#sellerModel._id = new ObjectId(userId);
-      }
-      await this.#sellerModel.save();
-      console.log("seller created");
-      this._id = this.#sellerModel._id;
-      this.name = this.#sellerModel.name;
-      this.email = this.#sellerModel.email;
-      this.password = this.#sellerModel.password;
-      this.status = this.#sellerModel.status;
-      this.product = this.#sellerModel.product;
-      this.order = this.#sellerModel.order;
-      this.businessName = this.#sellerModel.businessName;
-    } catch (error) {
-      throw error;
-    }
-  }
 
   static async getProfile(sellerId, database) {
     const sellerRecord = await database.getRecordById(sellerId, "sellers");
@@ -50,4 +31,31 @@ export class Seller {
     return productRecords;
   }
 
+  static async updateSeller(sellerId, updatedFields, database) {
+    await database.updateRecordById(sellerId, updatedFields, "sellers");
+    const updatedSeller = await database.getRecordById(sellerId, "sellers");
+    console.log("updatedSeller", updatedSeller);
+    return updatedSeller;
+  } 
+
+
+  async insertSellerToDatabase(userId) {
+    try {
+      if (userId) {
+        this.#sellerModel._id = new ObjectId(userId);
+      }
+      await this.#sellerModel.save();
+      console.log("seller created");
+      this._id = this.#sellerModel._id;
+      this.name = this.#sellerModel.name;
+      this.email = this.#sellerModel.email;
+      this.password = this.#sellerModel.password;
+      this.status = this.#sellerModel.status;
+      this.product = this.#sellerModel.product;
+      this.order = this.#sellerModel.order;
+      this.businessName = this.#sellerModel.businessName;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

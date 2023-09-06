@@ -3,7 +3,6 @@ import { database } from "../../di/index.js";
 import { Category } from "../../models/Category.js";
 import { categorySchema } from "../../repository/Schemas/category.schema.js";
 import { isCategoryNameExist } from "../../utils/errors/duplicateCategoryName.js";
-import { ObjectId } from "mongodb";
 
 export const createSubCategoryAPI = async (req, res) => {
   const authUser = req.authUser;
@@ -17,11 +16,9 @@ export const createSubCategoryAPI = async (req, res) => {
   console.log("updateFields", updateFields);
   const parentId = req.params.id;
 
-  const existedSubCategoryRecord = await database.getRecordsByQuery(
-    {
-      name: name,
-    },
-    "categories"
+  const existedSubCategoryRecord = await Category.getSubCategoryByName(
+    name,
+    database
   );
   console.log("existedSubCategoryRecord", existedSubCategoryRecord);
 
@@ -31,7 +28,10 @@ export const createSubCategoryAPI = async (req, res) => {
     });
   }
   try {
-    const parentCategoryRecord = await Category.getCategoryById(parentId, database);
+    const parentCategoryRecord = await Category.getCategoryById(
+      parentId,
+      database
+    );
 
     if (!parentCategoryRecord) {
       return res.status(400).json({
@@ -40,40 +40,28 @@ export const createSubCategoryAPI = async (req, res) => {
     }
 
     let category;
-    if (existedSubCategoryRecord.length === 0) {
-      category = new Category(categorySchema, {
-        name,
-        parentId,
-        updateFields,
-        admins: [adminId],
-      });
-      parentCategoryRecord.subCategories.push(category._id);
-    } else {
-      parentCategoryRecord.subCategories.push(existedSubCategoryRecord[0]._id);
-      await database.updateRecordById(
-        existedSubCategoryRecord[0]._id,
-        {
-          parentId,
-        },
-        "categories"
-      );
-    }
+    category = new Category(categorySchema, {
+      name,
+      parentId,
+      updateFields,
+      admins: [adminId],
+    });
+    parentCategoryRecord.subCategories.push(category._id);
 
     const parentCategory = new Category(categorySchema, parentCategoryRecord);
     await parentCategory.updateSubCategory({
       parentId: parentCategoryRecord._id,
-      subCategoryId: category ? category._id : existedSubCategoryRecord[0]._id,
+      subCategoryId: category ? category._id : existedSubCategoryRecord._id,
     });
-    if (existedSubCategoryRecord.length === 0) {
-      await category.insertCategory(category._id);
-      await database.updateRecordById(
-        category._id,
-        {
-          ...updateFields,
-        },
-        "categories"  
-      );
-    }
+
+    await category.insertCategory(category._id);
+    await category.updateCategory(
+      category._id,
+      adminId,
+      updateFields,
+      database
+    );
+
     return res.status(200).json({
       message: "Sub Category created successfully",
       parentCategory: parentCategory,

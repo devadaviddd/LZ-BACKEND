@@ -20,6 +20,51 @@ export class Product {
     this.stock = this.#product.stock;
     this.seller = this.#product.seller;
   }
+
+  static async updateProductImage(id, imagePath, database) {
+    const updateFields = {
+      image: imagePath,
+    };
+    await database.updateRecordById(id, updateFields, "products");
+    const updateProduct = await database.getRecordById(id, "products");
+    return updateProduct;
+  }
+
+  static async getProductById(productId, database) {
+    const productRecord = await database.getRecordById(productId, "products");
+    return productRecord;
+  }
+
+  static async getProductByCategoryId(categoryId, database) {
+    const productRecords = await database.getRecordsByQuery(
+      { categories: new ObjectId(categoryId) },
+      "products"
+    );
+    console.log("productRecords", productRecords);
+    return productRecords;
+  }
+
+  static async getImagePath(productId, database) {
+    const productRecord = await database.getRecordById(productId, "products");
+    return productRecord.image;
+  }
+
+  static async getAllAvailableProducts(database) {
+    const productRecords = await database.getRecordsByQuery(
+      { stock: { $gt: 0 } },
+      "products"
+    );
+    return productRecords;
+  }
+
+  static async getProductBySellerId(sellerId, database) {
+    const productRecords = await database.getRecordsByQuery(
+      { seller: new ObjectId(sellerId) },
+      "products"
+    );
+    return productRecords;
+  }
+
   async insertProductToDatabase(productId) {
     try {
       if (productId) {
@@ -83,41 +128,6 @@ export class Product {
       return updateProduct;
     }
     return null;
-  }
-
-  static async getProductById(productId, database) {
-    const productRecord = await database.getRecordById(productId, "products");
-    return productRecord;
-  }
-
-  static async getProductByCategoryId(categoryId, database) {
-    const productRecords = await database.getRecordsByQuery(
-      { categories: new ObjectId(categoryId) },
-      "products"
-    );
-    console.log("productRecords", productRecords);
-    return productRecords;
-  }
-
-  static async getImagePath(productId, database) {
-    const productRecord = await database.getRecordById(productId, "products");
-    return productRecord.image;
-  }
-
-  static async getAllAvailableProducts(database) {
-    const productRecords = await database.getRecordsByQuery(
-      { stock: { $gt: 0 } },
-      "products"
-    );
-    return productRecords;
-  }
-
-  static async getProductBySellerId(sellerId, database) {
-    const productRecords = await database.getRecordsByQuery(
-      { seller: new ObjectId(sellerId) },
-      "products"
-    );
-    return productRecords;
   }
 
   async deleteProduct(productId, database) {

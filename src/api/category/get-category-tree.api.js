@@ -1,39 +1,7 @@
 import { database } from "../../di/index.js";
 import { Category } from "../../models/Category.js";
 
-/**
- * @openapi
- * /admin/category:
- *   get:
- *     tags: [Admin]
- *     summary: Get the hierarchical category tree
- *     description: Use this route to retrieve the hierarchical category tree.
- *     responses:
- *       200:
- *         description: Category tree retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *              type: object
- *              properties:
- *                message:
- *                  type: string
- *                hierarchicalCategoryTree:
- *                  type: object
- *  
- *                    
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 error:
- *                   type: string
- */
+
 function generateSubCategories(category, allCategories) {
   const subCategoryMap = {};
 
