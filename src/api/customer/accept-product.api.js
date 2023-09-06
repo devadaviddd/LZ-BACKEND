@@ -1,4 +1,5 @@
 import { PRODUCT_STATUS, ROLE } from "../../constants/index.js";
+import { database } from "../../di/index.js";
 import { ProductOrder } from "../../models/ProductOrder.js";
 import { productOrderSchema } from "../../repository/Schemas/productOrder.schema.js";
 
@@ -26,7 +27,7 @@ export const acceptProductAPI = async (req, res) => {
   }
 
   try {
-    const existedProductOrder = await ProductOrder.getProductOrder(id);
+    const existedProductOrder = await ProductOrder.getProductOrder(id, database);
     if (!existedProductOrder) {
       return res.status(404).json({
         message: "Product order not found to set status",
@@ -44,7 +45,7 @@ export const acceptProductAPI = async (req, res) => {
       productOrderSchema,
       existedProductOrder
     );
-    const updatedOrder = await productOrder.acceptProduct();
+    const updatedOrder = await productOrder.acceptProduct(database);
 
     return res.status(200).json({
       message: "Accept product successfully",

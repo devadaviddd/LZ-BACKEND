@@ -1,4 +1,3 @@
-import { database } from "../di/index.js";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 import { ProductMapper } from "../repository/Mapper/mapper.js";
@@ -44,7 +43,7 @@ export class Product {
     }
   }
 
-  async updateProduct(productId, dto) {
+  async updateProduct(productId, dto, database) {
     const updateFields = {};
 
     const { title, price, description, categoryId, stock } = dto;
@@ -86,17 +85,12 @@ export class Product {
     return null;
   }
 
-  static async getAllProducts() {
-    const productRecords = await database.getRecordsByQuery({}, "products");
-    return productRecords;
-  }
-
-  static async getProductById(productId) {
+  static async getProductById(productId, database) {
     const productRecord = await database.getRecordById(productId, "products");
     return productRecord;
   }
 
-  static async getProductByCategoryId(categoryId) {
+  static async getProductByCategoryId(categoryId, database) {
     const productRecords = await database.getRecordsByQuery(
       { categories: new ObjectId(categoryId) },
       "products"
@@ -105,12 +99,12 @@ export class Product {
     return productRecords;
   }
 
-  static async getImagePath(productId) {
+  static async getImagePath(productId, database) {
     const productRecord = await database.getRecordById(productId, "products");
     return productRecord.image;
   }
 
-  static async getAllAvailableProducts() {
+  static async getAllAvailableProducts(database) {
     const productRecords = await database.getRecordsByQuery(
       { stock: { $gt: 0 } },
       "products"
@@ -118,7 +112,7 @@ export class Product {
     return productRecords;
   }
 
-  static async getProductBySellerId(sellerId) {
+  static async getProductBySellerId(sellerId, database) {
     const productRecords = await database.getRecordsByQuery(
       { seller: new ObjectId(sellerId) },
       "products"
@@ -126,10 +120,7 @@ export class Product {
     return productRecords;
   }
 
-  async deleteProduct(productId) {
-    // const product = await database.deleteRecordById(productId, "products");
-    console.log("productId", productId);
-
+  async deleteProduct(productId, database) {
     const productOrderRecords = await database.getRecordsByQuery(
       {
         product: new ObjectId(productId),

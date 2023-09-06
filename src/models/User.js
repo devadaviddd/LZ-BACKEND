@@ -1,5 +1,4 @@
 import { UserMapper } from "../repository/Mapper/mapper.js";
-import { database } from "../di/index.js";
 import { isPassword } from "../utils/regex/isPassword.js";
 export class User {
   #userModel;
@@ -31,17 +30,17 @@ export class User {
     }
   }
 
-  static async findUserById(userId) {
+  static async findUserById(userId, database) {
     const userRecord = await database.getRecordById(userId, "users");
     return userRecord;
   }
 
-  static async findUserByEmail(email) {
+  static async findUserByEmail(email, database) {
     const userRecord = await database.getRecordsByQuery({ email }, "users");
     return userRecord[0];
   }
 
-  static async findUserByPhone(phone) {
+  static async findUserByPhone(phone, database) {
     const userRecord = await database.getRecordsByQuery({ phone }, "users");
     return userRecord[0];
   }

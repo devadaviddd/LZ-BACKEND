@@ -1,3 +1,4 @@
+import { database } from "../../di/index.js";
 import { Category } from "../../models/Category.js";
 
 /**
@@ -66,7 +67,7 @@ function generateCategoryTree(rootCategories, allCategories) {
 
 export const getAllCategoryTreeAPI = async (req, res) => {
   try {
-    const categories = await Category.getAllCategories();
+    const categories = await Category.getAllCategories(database);
     const mainCategory = categories.filter((category) => {
       return !category.parentId;
     });

@@ -57,7 +57,7 @@ export const createProductAPI = async (req, res) => {
 
   const { _id: seller } = authUser;
 
-  const existedSeller = await Seller.getProfile(seller);
+  const existedSeller = await Seller.getProfile(seller, database);
   if (!existedSeller) {
     return res.status(400).json({
       message: "Seller not found to create product",

@@ -31,7 +31,7 @@ export const createSubCategoryAPI = async (req, res) => {
     });
   }
   try {
-    const parentCategoryRecord = await Category.getCategoryById(parentId);
+    const parentCategoryRecord = await Category.getCategoryById(parentId, database);
 
     if (!parentCategoryRecord) {
       return res.status(400).json({

@@ -1,10 +1,11 @@
+import { database } from "../../di/index.js";
 import { Product } from "../../models/Product.js";
 import fs from "fs";
 
 export const getProductImageAPI = async (req, res) => {
   const productId = req.params.id;
   try {
-    const imagePath = await Product.getImagePath(productId);
+    const imagePath = await Product.getImagePath(productId, database);
     if (imagePath) {
       fs.readFile(imagePath, (err, data) => {
         if (err) {

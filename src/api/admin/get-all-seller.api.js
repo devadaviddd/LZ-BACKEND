@@ -1,4 +1,5 @@
 import { ROLE } from "../../constants/index.js";
+import { database } from "../../di/index.js";
 import { Seller } from "../../models/Seller.js";
 
 export const getAllSellerAPI = async (req, res) => {
@@ -15,7 +16,7 @@ export const getAllSellerAPI = async (req, res) => {
     });
   }
   try {
-    const sellers = await Seller.getAllSellers();
+    const sellers = await Seller.getAllSellers(database);
     const count = sellers.length;
     return res.status(200).json({
       message: "Get all seller successfully",

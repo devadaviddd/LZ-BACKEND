@@ -43,7 +43,7 @@ export const createOrderAPI = async (req, res) => {
 
       if (!existedProduct) {
         await database.deleteRecordById(orderId, "orders");
-        await ProductOrder.deleteProductOrdersByOrderId(orderId);
+        await ProductOrder.deleteProductOrdersByOrderId(orderId, database);
         return res.status(400).json({
           message: "Product not found",
         });
@@ -51,7 +51,7 @@ export const createOrderAPI = async (req, res) => {
 
       if (!productOrder.product) {
         await database.deleteRecordById(orderId, "orders");
-        await ProductOrder.deleteProductOrdersByOrderId(orderId);
+        await ProductOrder.deleteProductOrdersByOrderId(orderId, database);
         return res.status(400).json({
           message: "Product is required",
         });
@@ -59,7 +59,7 @@ export const createOrderAPI = async (req, res) => {
 
       if (!productOrder.quantity) {
         await database.deleteRecordById(orderId, "orders");
-        await ProductOrder.deleteProductOrdersByOrderId(orderId);
+        await ProductOrder.deleteProductOrdersByOrderId(orderId, database);
         return res.status(400).json({
           message: "Quantity is required",
         });
@@ -73,7 +73,8 @@ export const createOrderAPI = async (req, res) => {
     }
 
     const productOrderRecords = await ProductOrder.getProductOrdersByOrderId(
-      orderId
+      orderId,
+      database
     );
     console.log("productOrderRecords", productOrderRecords);
     const productOrderIds = productOrderRecords.map(
@@ -89,7 +90,7 @@ export const createOrderAPI = async (req, res) => {
       "orders"
     );
 
-    const updatedOrder = await Order.getOrderById(orderId);
+    const updatedOrder = await Order.getOrderById(orderId, database);
 
     return res.status(200).json({
       message: "Create order successfully",

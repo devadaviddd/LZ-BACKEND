@@ -1,5 +1,4 @@
 import { CustomerMapper } from "../repository/Mapper/mapper.js";
-import { database } from "../di/index.js";
 
 export class Customer {
   #customerModel;
@@ -25,7 +24,7 @@ export class Customer {
     }
   }
 
-  static async getProfile(customerId) {
+  static async getProfile(customerId, database) {
     const customerRecord = await database.getRecordById(
       customerId,
       "customers"

@@ -1,4 +1,5 @@
 import { ROLE } from "../../constants/index.js";
+import { database } from "../../di/index.js";
 import { Category } from "../../models/Category.js";
 
 export const getCategoryByIdAPI = async (req, res) => {
@@ -11,7 +12,7 @@ export const getCategoryByIdAPI = async (req, res) => {
   }
 
   try {
-    const category = await Category.getCategoryById(categoryId);
+    const category = await Category.getCategoryById(categoryId, database);
     if (!category) {
       return res.status(404).json({
         message: "Category not found",

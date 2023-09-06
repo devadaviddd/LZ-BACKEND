@@ -28,7 +28,7 @@ export class Seller {
     }
   }
 
-  static async getProfile(sellerId) {
+  static async getProfile(sellerId, database) {
     const sellerRecord = await database.getRecordById(sellerId, "sellers");
     return {
       _id: sellerRecord._id,
@@ -40,7 +40,7 @@ export class Seller {
     };
   }
 
-  static async getAllSellers() {
+  static async getAllSellers(database) {
     const sellerRecords = await database.getRecordsByQuery({}, "sellers");
     return sellerRecords;
   }

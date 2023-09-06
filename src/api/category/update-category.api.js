@@ -38,7 +38,7 @@ export const updateCategoryAPI = async (req, res) => {
     }
     if (existedCategoryRecord) {
       const category = new Category(categorySchema, existedCategoryRecord);
-      await category.updateCategory(categoryId, adminId, updateFields);
+      await category.updateCategory(categoryId, adminId, updateFields, database);
       return res.status(200).json({
         message: "Category updated successfully",
         category,

@@ -1,3 +1,4 @@
+import { database } from "../../di/index.js";
 import { Product } from "../../models/Product.js";
 
 export const getProductByCategoryIdAPI = async (req, res) => {
@@ -10,7 +11,7 @@ export const getProductByCategoryIdAPI = async (req, res) => {
   }
 
   try {
-    const products = await Product.getProductByCategoryId(categoryId);
+    const products = await Product.getProductByCategoryId(categoryId, database);
     const count = products.length;
     return res.status(200).json({
       message: "Get products by category id successfully",

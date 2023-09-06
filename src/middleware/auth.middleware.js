@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
+import { database } from "../di/index.js";
 
 export const authenticateUser = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -9,7 +10,7 @@ export const authenticateUser = async (req, res, next) => {
     const { _id } = decodedToken;
     if (_id) {
       const requesterId = _id;
-      const user = await User.findUserById(requesterId);
+      const user = await User.findUserById(requesterId, database);
       user ? req.authUser = user: req.authUser = null;
     } else {
       req.authUser = null;

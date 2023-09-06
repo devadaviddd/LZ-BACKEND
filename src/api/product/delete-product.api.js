@@ -1,6 +1,28 @@
 import { ROLE } from "../../constants/index.js";
+import { database } from "../../di/index.js";
 import { Product } from "../../models/Product.js";
 import { productSchema } from "../../repository/Schemas/product.schema.js";
+import fs from "fs";
+
+const deleteProductImage = async (productId) => {
+  const fileName = productId + ".png";
+  const avatarPreFix = `public/product/${fileName}`;
+
+  try {
+    // Check if the file exists
+    await fs.promises.access(avatarPreFix, fs.constants.F_OK);
+
+    // File exists, so delete it
+    await fs.promises.unlink(avatarPreFix);
+    console.log("File deleted");
+  } catch (err) {
+    if (err.code === "ENOENT") {
+      console.log("File does not exist");
+    } else {
+      console.error("Error while checking/deleting file:", err);
+    }
+  }
+};
 
 export const deleteProductAPI = async (req, res) => {
   const authUser = req.authUser;
@@ -25,18 +47,20 @@ export const deleteProductAPI = async (req, res) => {
   }
 
   try {
-    const existedProductRecord = await Product.getProductById(id);
+    const existedProductRecord = await Product.getProductById(id, database);
     if (!existedProductRecord) {
       return res.status(404).json({
         message: "Product not found to delete",
       });
     }
+
+    await deleteProductImage(existedProductRecord._id);
+
     const product = new Product(productSchema, existedProductRecord);
     console.log("product.id", product._id);
     console.log("existed.id", existedProductRecord._id);
-  
-    
-    const isDeleteSuccess = await product.deleteProduct(id);
+
+    const isDeleteSuccess = await product.deleteProduct(id, database);
     console.log("isDeleteSuccess", isDeleteSuccess);
     return res.status(200).json({
       message: "Product deleted successfully",

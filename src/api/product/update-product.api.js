@@ -1,4 +1,5 @@
 import { ROLE } from "../../constants/index.js";
+import { database } from "../../di/index.js";
 import { Product } from "../../models/Product.js";
 import { productSchema } from "../../repository/Schemas/product.schema.js";
 
@@ -25,7 +26,7 @@ export const updateProductAPI = async (req, res) => {
   const { updateFields } = req.body;
 
   try {
-    const existedProductRecord = await Product.getProductById(id);
+    const existedProductRecord = await Product.getProductById(id, database);
     const productId = existedProductRecord._id;
     console.log("existedProductRecord", existedProductRecord);
     const oldProduct = new Product(productSchema, existedProductRecord);
@@ -36,13 +37,17 @@ export const updateProductAPI = async (req, res) => {
       });
     }
 
-    const updateProduct = await oldProduct.updateProduct(productId, {
-      title: updateFields ? updateFields.title : undefined,
-      description: updateFields ? updateFields.description : undefined,
-      price: updateFields ? updateFields.price : undefined,
-      stock: updateFields ? updateFields.stock : undefined,
-      categoryId: updateFields ? updateFields.categoryId : undefined,
-    });
+    const updateProduct = await oldProduct.updateProduct(
+      productId,
+      {
+        title: updateFields ? updateFields.title : undefined,
+        description: updateFields ? updateFields.description : undefined,
+        price: updateFields ? updateFields.price : undefined,
+        stock: updateFields ? updateFields.stock : undefined,
+        categoryId: updateFields ? updateFields.categoryId : undefined,
+      },
+      database
+    );
     console.log("updateProduct", updateProduct);
 
     return res.status(200).json({

@@ -1,3 +1,4 @@
+import { database } from "../../di/index.js";
 import { Product } from "../../models/Product.js";
 
 export const getProductByIdAPI = async (req, res) => {
@@ -10,7 +11,7 @@ export const getProductByIdAPI = async (req, res) => {
   }
 
   try {
-    const product = await Product.getProductById(productId);
+    const product = await Product.getProductById(productId, database);
     if (!product) {
       return res.status(404).json({
         message: "Product not found",
