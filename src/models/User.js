@@ -1,9 +1,9 @@
 import { UserMapper } from "../repository/Mapper/mapper.js";
 import { isPassword } from "../utils/regex/isPassword.js";
 export class User {
-  #userModel;
+  #user;
   constructor(userSchema, dto) {
-    this.#userModel = UserMapper.mapToSchema(userSchema, dto);
+    this.#user = UserMapper.mapToSchema(userSchema, dto);
     this.isValidPasswordBeforeHash(dto.password);
   }
 
@@ -24,14 +24,14 @@ export class User {
 
   async insertUserToDatabase() {
     try {
-      await this.#userModel.save();
+      await this.#user.save();
       console.log("User created");
-      this._id = this.#userModel._id;
-      this.name = this.#userModel.name;
-      this.email = this.#userModel.email;
-      this.password = this.#userModel.password;
-      this.role = this.#userModel.role;
-      this.phone = this.#userModel.phone;
+      this._id = this.#user._id;
+      this.name = this.#user.name;
+      this.email = this.#user.email;
+      this.password = this.#user.password;
+      this.role = this.#user.role;
+      this.phone = this.#user.phone;
     } catch (error) {
       throw error;
     }

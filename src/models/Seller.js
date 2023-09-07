@@ -1,12 +1,20 @@
 import mongoose from "mongoose";
-import { database } from "../di/index.js";
 import { SellerMapper } from "../repository/Mapper/mapper.js";
 const ObjectId = mongoose.Types.ObjectId;
 
 export class Seller {
-  #sellerModel;
+  #seller;
   constructor(sellerSchema, dto) {
-    this.#sellerModel = SellerMapper.mapToSchema(sellerSchema, dto);
+    this.#seller = SellerMapper.mapToSchema(sellerSchema, dto);
+    this._id = this.#seller._id;
+    this.name = this.#seller.name;
+    this.email = this.#seller.email;
+    this.password = this.#seller.password;
+    this.status = this.#seller.status;
+    this.product = this.#seller.product;
+    this.order = this.#seller.order;
+    this.businessName = this.#seller.businessName;
+    this.phone = this.#seller.phone;
   }
 
   static async getProfile(sellerId, database) {
@@ -26,36 +34,10 @@ export class Seller {
     return sellerRecords;
   }
 
-  static async getAllProductsSeller(sellerID) {
-    const productRecords = await database.getRecordsByQuery({}, "products");
-    return productRecords;
-  }
-
   static async updateSeller(sellerId, updatedFields, database) {
     await database.updateRecordById(sellerId, updatedFields, "sellers");
     const updatedSeller = await database.getRecordById(sellerId, "sellers");
     console.log("updatedSeller", updatedSeller);
     return updatedSeller;
-  } 
-
-
-  async insertSellerToDatabase(userId) {
-    try {
-      if (userId) {
-        this.#sellerModel._id = new ObjectId(userId);
-      }
-      await this.#sellerModel.save();
-      console.log("seller created");
-      this._id = this.#sellerModel._id;
-      this.name = this.#sellerModel.name;
-      this.email = this.#sellerModel.email;
-      this.password = this.#sellerModel.password;
-      this.status = this.#sellerModel.status;
-      this.product = this.#sellerModel.product;
-      this.order = this.#sellerModel.order;
-      this.businessName = this.#sellerModel.businessName;
-    } catch (error) {
-      throw error;
-    }
   }
 }

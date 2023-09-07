@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 import { dbConfig, dbEndpoint } from "../config/db.config.js";
 import { ObjectId } from "mongodb";
 export class Database {
-  db;
+  #db;
   async connect() {
     try {
       await mongoose.connect(dbEndpoint, dbConfig);
-      this.db = mongoose.connection;
+      this.#db = mongoose.connection;
       console.log("Database connected");
     } catch (error) {
       throw Error("Database connection error");
@@ -14,7 +14,7 @@ export class Database {
   }
   async insertRecord(document, collectionName) {
     try {
-      const result = await this.db
+      const result = await this.#db
         .collection(collectionName)
         .insertOne(document);
       return result;
@@ -25,7 +25,7 @@ export class Database {
 
   async getRecordById(id, collectionName) {
     try {
-      const record = await this.db
+      const record = await this.#db
         .collection(collectionName)
         .findOne({ _id: new ObjectId(id) });
       return record;
@@ -35,7 +35,7 @@ export class Database {
   }
   async getRecordsByQuery(query, collectionName) {
     try {
-      const records = await this.db
+      const records = await this.#db
         .collection(collectionName)
         .find(query)
         .toArray();
@@ -46,7 +46,7 @@ export class Database {
   }
   async updateRecordById(id, updateFields, collectionName) {
     try {
-      const result = await this.db
+      const result = await this.#db
         .collection(collectionName)
         .updateOne({ _id: new ObjectId(id) }, { $set: updateFields });
       return result;
@@ -55,39 +55,24 @@ export class Database {
     }
   }
 
-  async removeIdFromListById(id, targetId, collectionName) {
+  async updateOneRecordByQuery(query, updatePipeline, collectionName) {
     try {
-      const result = await this.db.collection(collectionName).updateOne(
-        { _id: new ObjectId(id) },
-        {
-          $pull: {
-            subCategories: {
-              $in: [new ObjectId(targetId)],
-            },
-          },
-        }
-      );
+      const result = await this.#db.collection(collectionName).updateOne(
+        query,
+        updatePipeline
+      )
       return result;
     } catch (error) {
       throw Error(error.message);
     }
   }
-
-  async removeDeletedProductFromOrder(productOrderIds, collectionName) {
+  async updateManyRecordsByQuery(query, updatePipeline, collectionName) {
     try {
-      const result = await this.db.collection(collectionName).updateMany(
-        {},
-        {
-          $pull: {
-            productOrders: {
-              $in: [...productOrderIds],
-            },
-          },
-        },
-        {
+      const result = await this.#db
+        .collection(collectionName)
+        .updateMany(query, updatePipeline, {
           multi: true,
-        }
-      );
+        });
       return result;
     } catch (error) {
       throw Error(error.message);
@@ -96,7 +81,7 @@ export class Database {
 
   async deleteRecordById(id, collectionName) {
     try {
-      const result = await this.db
+      const result = await this.#db
         .collection(collectionName)
         .deleteOne({ _id: new ObjectId(id) });
       return result;
@@ -107,7 +92,9 @@ export class Database {
 
   async deleteRecordsByQuery(query, collectionName) {
     try {
-      const result = await this.db.collection(collectionName).deleteMany(query);
+      const result = await this.#db
+        .collection(collectionName)
+        .deleteMany(query);
       return result;
     } catch (error) {
       throw Error(error.message);

@@ -1,9 +1,15 @@
 import { CustomerMapper } from "../repository/Mapper/mapper.js";
 
 export class Customer {
-  #customerModel;
-  constructor(customerModel, dto) {
-    this.#customerModel = CustomerMapper.mapToSchema(customerModel, dto);
+  #customer;
+  constructor(customerSchema, dto) {
+    this.#customer = CustomerMapper.mapToSchema(customerSchema, dto);
+    this._id = this.#customer._id;
+    this.name = this.#customer.name;
+    this.email = this.#customer.email;
+    this.password = this.#customer.password;
+    this.phone = this.#customer.phone;
+    this.address = this.#customer.address;
   }
   
   static async getProfile(customerId, database) {
@@ -19,7 +25,6 @@ export class Customer {
       address: customerRecord.address,
     };
   }
-
   static async updateCustomer(customerId, updatedFields, database) {
     await database.updateRecordById(customerId, updatedFields, "customers");
     const updatedCustomer = await database.getRecordById(
@@ -28,23 +33,5 @@ export class Customer {
     );
     console.log("updatedCustomer", updatedCustomer);
     return updatedCustomer;
-  }
-
-  async insertCustomerToDatabase(customerId) {
-    try {
-      if (customerId) {
-        this.#customerModel._id = new ObjectId(customerId);
-      }
-      await this.#customerModel.save();
-      console.log("Customer created");
-      this._id = this.#customerModel._id;
-      this.name = this.#customerModel.name;
-      this.email = this.#customerModel.email;
-      this.password = this.#customerModel.password;
-      this.phone = this.#customerModel.phone;
-      this.address = this.#customerModel.address;
-    } catch (error) {
-      throw error;
-    }
   }
 }

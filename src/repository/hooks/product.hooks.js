@@ -1,5 +1,6 @@
 import { database } from "../../di/index.js";
 import { ObjectId } from "mongodb";
+import { Order } from "../../models/Order.js";
 
 export async function beforeDeleteToProducts(doc, next) {
   const { _id } = doc;
@@ -17,9 +18,9 @@ export async function beforeDeleteToProducts(doc, next) {
 
     await database.deleteRecordsByQuery({ product: _id }, "productorders");
 
-    const updateOrders = await database.removeDeletedProductFromOrder(
+    const updateOrders = await Order.removeDeletedProductFromOrder(
       productOrderIds,
-      "orders"
+      database
     );
 
     console.log("updateOrders", updateOrders);

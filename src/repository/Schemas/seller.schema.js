@@ -54,10 +54,6 @@ export const sellerSchema = new mongoose.Schema({
     type: String,
     default: SELLER_STATUS.PENDING,
   },
-  product: {
-    type: [mongoose.Schema.Types.ObjectId],
-    default: [],
-  },
   order: {
     type: [mongoose.Schema.Types.ObjectId],
     default: [],

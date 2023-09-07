@@ -1,18 +1,17 @@
 import { ProductOrderMapper } from "../repository/Mapper/mapper.js";
-import { database } from "../di/index.js";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 import { PRODUCT_STATUS } from "../constants/index.js";
 
 export class ProductOrder {
   #productOrder;
-  #productOrderModel;
+  #productOrderCollection;
   constructor(productOrderSchema, dto) {
     this.#productOrder = ProductOrderMapper.mapToSchema(
       productOrderSchema,
       dto
     );
-    this.#productOrderModel = mongoose.model("ProductOrder");
+    this.#productOrderCollection = mongoose.model("ProductOrder");
     this._id = this.#productOrder._id;
     this.product = this.#productOrder.product;
     this.quantity = this.#productOrder.quantity;
@@ -62,7 +61,7 @@ export class ProductOrder {
   }
 
   async acceptProduct(database) {
-    await this.#productOrderModel.updateOne(
+    await this.#productOrderCollection.updateOne(
       { _id: this._id },
       { $set: { status: PRODUCT_STATUS.ACCEPTED } }
     );
@@ -90,7 +89,7 @@ export class ProductOrder {
       "products"
     );
 
-    await this.#productOrderModel.updateOne(
+    await this.#productOrderCollection.updateOne(
       { _id: this._id },
       { $set: { status: PRODUCT_STATUS.REJECTED } }
     );
@@ -102,8 +101,8 @@ export class ProductOrder {
     return updatedProductOrder;
   }
 
-  async cancelProduct() {
-    await this.#productOrderModel.updateOne(
+  async cancelProduct(database) {
+    await this.#productOrderCollection.updateOne(
       { _id: this._id },
       { $set: { status: PRODUCT_STATUS.CANCELED } }
     );
@@ -125,7 +124,7 @@ export class ProductOrder {
     const { stock, _id } = productRecord;
 
     if (quantity <= stock) {
-      await this.#productOrderModel.updateOne(
+      await this.#productOrderCollection.updateOne(
         { _id: this._id },
         { $set: { status: PRODUCT_STATUS.SHIPPED } }
       );
@@ -148,7 +147,7 @@ export class ProductOrder {
 
   async getProductOrdersBySeller(sellerId) {
     console.log("sellerId", sellerId);
-    const productOrderOfSeller = await this.#productOrderModel.aggregate([
+    const productOrderOfSeller = await this.#productOrderCollection.aggregate([
       {
         $lookup: {
           from: "products", // The name of the Product collection

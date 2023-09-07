@@ -1,7 +1,8 @@
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
 import { Admin } from "../../models/Admin.js";
-import { AdminMapper, SellerMapper, CustomerMapper } from "../Mapper/mapper.js";
+import { Customer } from "../../models/Customer.js";
+import { Seller } from "../../models/Seller.js";
 import { adminSchema } from "../Schemas/admin.schema.js";
 import { customerSchema } from "../Schemas/customer.schema.js";
 import { sellerSchema } from "../Schemas/seller.schema.js";
@@ -27,7 +28,8 @@ export async function afterInsertToUsers(doc, next) {
     const { role } = doc;
     switch (role) {
       case ROLE.ADMIN:
-        const admin = AdminMapper.mapToSchema(adminSchema, doc);
+        // const admin = AdminMapper.mapToSchema(adminSchema, doc);
+        const admin = new Admin(adminSchema, doc);
         await database.insertRecord(
           {
             _id: admin._id,
@@ -41,7 +43,8 @@ export async function afterInsertToUsers(doc, next) {
         );
         break;
       case ROLE.SELLER:
-        const seller = SellerMapper.mapToSchema(sellerSchema, doc);
+        // const seller = SellerMapper.mapToSchema(sellerSchema, doc);
+        const seller = new Seller(sellerSchema, doc);  
         await database.insertRecord(
           {
             _id: seller._id,
@@ -58,7 +61,8 @@ export async function afterInsertToUsers(doc, next) {
         );
         break;
       case ROLE.CUSTOMER:
-        const customer = CustomerMapper.mapToSchema(customerSchema, doc);
+        const customer = new Customer(customerSchema, doc);
+        // const customer = CustomerMapper.mapToSchema(customerSchema, doc);
         await database.insertRecord(
           {
             _id: customer._id,

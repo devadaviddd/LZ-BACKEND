@@ -2,53 +2,19 @@ import { CategoryMapper } from "../repository/Mapper/mapper.js";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 
-function isArraysEqual(array1, array2) {
-  if (array1.length !== array2.length) {
-    return false; // Arrays are of different lengths, so not equal
-  }
-
-  for (let i = 0; i < array1.length; i++) {
-    if (!array1[i].equals(array2[i])) {
-      return false; // Elements at position i are not equal
-    }
-  }
-
-  return true; // All elements are equal
-}
-
-function elementDiff(array1, array2) {
-  const filteredArray1 = array1.filter(
-    (id) => !array2.some((compareId) => compareId.equals(id))
-  );
-  console.log(filteredArray1);
-  return filteredArray1;
-}
-
-function handleCategoryModified(newAdmin, admins) {
-  if (admins.includes(newAdmin)) {
-    return null;
-  } else {
-    return {
-      $push: {
-        admins: new ObjectId(newAdmin),
-      },
-    };
-  }
-}
-
 export class Category {
   #category;
-  #categoryModel;
+  #categoryCollection;
   constructor(categorySchema, dto) {
     this.#category = CategoryMapper.mapToSchema(categorySchema, dto);
-    this.#categoryModel = mongoose.model("Category");
+    this.#categoryCollection = mongoose.model("Category");
     this._id = this.#category._id;
     this.name = this.#category.name;
     this.parentId = this.#category.parentId;
     this.admins = this.#category.admins;
     this.subCategories = this.#category.subCategories;
   }
-  
+
   static async getCategoryById(categoryId, database) {
     const categoryRecord = await database.getRecordById(
       categoryId,
@@ -70,6 +36,25 @@ export class Category {
     return isDeleteSuccess;
   }
 
+  static async removeSubCategory(parentId, subCategoryId, database) {
+    const updatePipeLine = {
+      $pull: {
+        subCategories: {
+          $in: [new ObjectId(subCategoryId)],
+        },
+      },
+    }
+    const query = {
+      _id: new ObjectId(parentId),
+    }
+
+    const result = await database.updateOneRecordByQuery(
+      query,
+      updatePipeLine,
+    )
+    return result;
+  }
+
   static async getSubCategoryByName(name, database) {
     const subCategoryRecord = await database.getRecordsByQuery(
       {
@@ -79,10 +64,44 @@ export class Category {
     );
     return subCategoryRecord[0];
   }
-  
+
   static async getRecordsByQuery(query, database) {
     const records = await database.getRecordsByQuery(query, "categories");
     return records;
+  }
+
+  #isArraysEqual(array1, array2) {
+    if (array1.length !== array2.length) {
+      return false; // Arrays are of different lengths, so not equal
+    }
+
+    for (let i = 0; i < array1.length; i++) {
+      if (!array1[i].equals(array2[i])) {
+        return false; // Elements at position i are not equal
+      }
+    }
+
+    return true; // All elements are equal
+  }
+
+  #elementDiff(array1, array2) {
+    const filteredArray1 = array1.filter(
+      (id) => !array2.some((compareId) => compareId.equals(id))
+    );
+    console.log(filteredArray1);
+    return filteredArray1;
+  }
+
+  #handleCategoryModified(newAdmin, admins) {
+    if (admins.includes(newAdmin)) {
+      return null;
+    } else {
+      return {
+        $push: {
+          admins: new ObjectId(newAdmin),
+        },
+      };
+    }
   }
 
   async insertCategory(categoryId) {
@@ -158,16 +177,16 @@ export class Category {
 
     let subCategoryDiff;
     if (
-      !isArraysEqual(this.#category.subCategories, subCategoriesId) &&
+      !this.#isArraysEqual(this.#category.subCategories, subCategoriesId) &&
       !isCreateNewSubCategory
     ) {
       console.log("array1", this.#category.subCategories);
       console.log("array2", subCategoriesId);
       console.log(
         "elementDiff",
-        elementDiff(this.#category.subCategories, subCategoriesId)
+        this.#elementDiff(this.#category.subCategories, subCategoriesId)
       );
-      subCategoryDiff = elementDiff(
+      subCategoryDiff = this.#elementDiff(
         this.#category.subCategories,
         subCategoriesId
       );
@@ -206,7 +225,7 @@ export class Category {
 
       await database.updateRecordById(categoryId, updateFields, "categories");
 
-      const newCategory = await this.#categoryModel.findOneAndUpdate(
+      const newCategory = await this.#categoryCollection.findOneAndUpdate(
         {
           _id: categoryId,
         },
@@ -215,7 +234,7 @@ export class Category {
             name: dto.name,
             parentId: dto.parentId,
           },
-          ...handleCategoryModified(adminId, this.admins),
+          ...this.#handleCategoryModified(adminId, this.admins),
         },
         {
           new: true,
@@ -237,7 +256,7 @@ export class Category {
 
   async updateSubCategory({ parentId, subCategoryId }) {
     try {
-      const newCategory = await this.#categoryModel.findOneAndUpdate(
+      const newCategory = await this.#categoryCollection.findOneAndUpdate(
         {
           _id: parentId,
         },
