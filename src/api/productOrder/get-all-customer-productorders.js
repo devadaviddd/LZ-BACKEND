@@ -26,7 +26,7 @@ export const getAllCustomerProductOrders = async (req, res) => {
   try {
     const orderInstance = new Order(orderSchema, {});
     const productOrderOfCustomer =
-      await orderInstance.getShippedProductOrders(customerId);
+      await orderInstance.getAllCustomerProductOrders(customerId);
 
     return res.status(200).json({
       message: "Filter product order by customer successfully",

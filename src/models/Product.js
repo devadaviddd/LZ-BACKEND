@@ -4,11 +4,11 @@ import { ProductMapper } from "../repository/Mapper/mapper.js";
 import { getCategories } from "../api/product/create-product.api.js";
 export class Product {
   #product;
-  #productModel;
+  #productCollection;
   constructor(productSchema, dto) {
     console.log("dto", dto);
     this.#product = ProductMapper.mapToSchema(productSchema, dto);
-    this.#productModel = mongoose.model("Product");
+    this.#productCollection = mongoose.model("Product");
     this._id = this.#product._id;
     this.title = this.#product.title;
     this.price = this.#product.price;
@@ -64,7 +64,6 @@ export class Product {
     );
     return productRecords;
   }
-
   async insertProductToDatabase(productId) {
     try {
       if (productId) {
@@ -153,7 +152,7 @@ export class Product {
     );
     console.log("updateOrders", updateOrders);
 
-    const isDeleteSuccess = await this.#productModel.deleteOne({
+    const isDeleteSuccess = await this.#productCollection.deleteOne({
       _id: new ObjectId(productId),
     });
     return isDeleteSuccess;

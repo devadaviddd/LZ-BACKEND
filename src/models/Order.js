@@ -4,10 +4,10 @@ import { ObjectId } from "mongodb";
 
 export class Order {
   #order;
-  #orderModel;
+  #orderCollection;
   constructor(orderSchema, dto) {
     this.#order = OrderMapper.mapToSchema(orderSchema, dto);
-    this.#orderModel = mongoose.model("Order");
+    this.#orderCollection = mongoose.model("Order");
     this._id = this.#order._id;
     this.customer = this.#order.customer;
     this.productOrders = this.#order.productOrders;
@@ -32,6 +32,23 @@ export class Order {
     return result;
   }
 
+  static async removeDeletedProductFromOrder(productOrderIds, database) {
+    const updatePipeLine = {
+      $pull: {
+        productOrders: {
+          $in: [...productOrderIds],
+        },
+      },
+    };
+
+    const result = await database.updateManyRecordsByQuery(
+      {},
+      updatePipeLine,
+      "orders"
+    );
+    return result;
+  }
+
   async insertOrderToDatabase(orderId) {
     try {
       if (orderId) {
@@ -47,9 +64,9 @@ export class Order {
     }
   }
 
-  async getShippedProductOrders(customerId) {
+  async getAllCustomerProductOrders(customerId) {
     console.log("customerId", customerId);
-    const productOrderOfCustomer = await this.#orderModel.aggregate([
+    const productOrderOfCustomer = await this.#orderCollection.aggregate([
       {
         $lookup: {
           from: "productorders",

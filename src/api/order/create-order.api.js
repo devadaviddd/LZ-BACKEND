@@ -22,6 +22,7 @@ export const createOrderAPI = async (req, res) => {
   }
 
   const { productOrders } = req.body;
+  console.log("productOrders", productOrders);
 
   if (!productOrders || productOrders.length === 0) {
     return res.status(400).json({
@@ -36,11 +37,15 @@ export const createOrderAPI = async (req, res) => {
     await newOrder.insertOrderToDatabase();
     const orderId = newOrder._id;
 
+
     for (const productOrder of productOrders) {
+      console.log("productOrder", productOrder);
+
       const existedProduct = await Product.getProductById(
         productOrder.product,
         database
       );
+      console.log("existedProduct", existedProduct);
 
       if (!existedProduct) {
         await Order.deleteOrderById(orderId, database);
