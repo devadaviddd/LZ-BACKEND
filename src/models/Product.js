@@ -23,9 +23,9 @@ export class Product {
 
   static async updateProductImage(id, imagePath, database) {
     const updateFields = {
-      image: imagePath,
+      imagePath,
     };
-    await database.updateRecordById(id, updateFields, "products");
+    await database.updateRecordById(id, imagePath, "products");
     const updateProduct = await database.getRecordById(id, "products");
     return updateProduct;
   }
