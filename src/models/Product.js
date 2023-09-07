@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 import { ProductMapper } from "../repository/Mapper/mapper.js";
 import { getCategories } from "../api/product/create-product.api.js";
+import { Order } from "./Order.js";
 export class Product {
   #product;
   #productCollection;
@@ -146,9 +147,9 @@ export class Product {
       "productorders"
     );
 
-    const updateOrders = await database.removeDeletedProductFromOrder(
+    const updateOrders = await Order.removeDeletedProductFromOrder(
       productOrderIds,
-      "orders"
+      database
     );
     console.log("updateOrders", updateOrders);
 
