@@ -15,7 +15,6 @@ export async function getCategories(categoryId) {
     return [];
   }
 
-
   let parentId = existedCategory.parentId;
 
   if (!parentId) {
@@ -110,11 +109,16 @@ export const createProductAPI = async (req, res) => {
     });
 
     await newProduct.insertProductToDatabase();
-    await newProduct.updateExtraAttributes(newProduct._id, extraAttributes, database);
-    const updateProduct = await Product.getProductById(newProduct._id, database);
+    await newProduct.updateExtraAttributes(
+      newProduct._id,
+      extraAttributes,
+      database
+    );
+    const updateProduct = await Product.getProductById(
+      newProduct._id,
+      database
+    );
 
-
-    
     return res.status(200).json({
       message: "Product created successfully",
       product: updateProduct,

@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 import { ProductMapper } from "../repository/Mapper/mapper.js";
 import { getCategories } from "../api/product/create-product.api.js";
 import { Order } from "./Order.js";
+import { Category } from "./Category.js";
 export class Product {
   #product;
   #productCollection;
@@ -20,7 +21,6 @@ export class Product {
     this.date = this.#product.date;
     this.stock = this.#product.stock;
     this.seller = this.#product.seller;
-
   }
 
   static async updateProductImage(id, imagePath, database) {
@@ -95,12 +95,13 @@ export class Product {
       productId,
       extraAttributes,
       "products"
-    )
+    );
     return result;
   }
 
   async updateProduct(productId, dto, database) {
     let updateFields = {};
+    let extraAttributes = {};
 
     const { title, price, description, categoryId, stock } = dto;
 
