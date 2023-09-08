@@ -27,7 +27,6 @@ export class SellerMapper {
       email: dto.email,
       password: dto.password,
       status: dto.status,
-      product: dto.product,
       order: dto.order,
       businessName: dto.businessName,
       phone: dto.phone,

@@ -2,13 +2,14 @@ import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 import { ProductMapper } from "../repository/Mapper/mapper.js";
 import { getCategories } from "../api/product/create-product.api.js";
+import { Order } from "./Order.js";
 export class Product {
   #product;
-  #productModel;
+  #productCollection;
   constructor(productSchema, dto) {
     console.log("dto", dto);
     this.#product = ProductMapper.mapToSchema(productSchema, dto);
-    this.#productModel = mongoose.model("Product");
+    this.#productCollection = mongoose.model("Product");
     this._id = this.#product._id;
     this.title = this.#product.title;
     this.price = this.#product.price;
@@ -19,13 +20,14 @@ export class Product {
     this.date = this.#product.date;
     this.stock = this.#product.stock;
     this.seller = this.#product.seller;
+
   }
 
   static async updateProductImage(id, imagePath, database) {
     const updateFields = {
-      image: imagePath,
+      imagePath,
     };
-    await database.updateRecordById(id, updateFields, "products");
+    await database.updateRecordById(id, imagePath, "products");
     const updateProduct = await database.getRecordById(id, "products");
     return updateProduct;
   }
@@ -64,13 +66,13 @@ export class Product {
     );
     return productRecords;
   }
-
   async insertProductToDatabase(productId) {
     try {
       if (productId) {
         this.#product._id = new ObjectId(productId);
       }
       await this.#product.save();
+
       console.log("Product created");
       this._id = this.#product._id;
       this.title = this.#product.title;
@@ -88,31 +90,67 @@ export class Product {
     }
   }
 
+  async updateExtraAttributes(productId, extraAttributes, database) {
+    const result = await database.updateRecordById(
+      productId,
+      extraAttributes,
+      "products"
+    )
+    return result;
+  }
+
   async updateProduct(productId, dto, database) {
-    const updateFields = {};
+    let updateFields = {};
 
     const { title, price, description, categoryId, stock } = dto;
 
     if (title && title !== this.title) {
+      console.log("title", title);
       updateFields.title = title;
+    } else {
+      updateFields.title = this.title;
     }
 
     if (price && price !== this.price) {
       updateFields.price = price;
+    } else {
+      updateFields.price = this.price;
     }
 
     if (description && description !== this.description) {
       updateFields.description = description;
+    } else {
+      updateFields.description = this.description;
     }
 
     if (categoryId) {
       const categories = await getCategories(categoryId);
       console.log("categories", categories);
       updateFields.categories = categories;
+    } else {
+      updateFields.categories = this.categories;
     }
 
     if (stock && stock !== this.stock) {
       updateFields.stock = stock;
+    } else {
+      updateFields.stock = this.stock;
+    }
+
+    console.log("updateFields", updateFields);
+    console.log("dto", dto);
+
+    for (const key in dto) {
+      if (
+        dto.hasOwnProperty(key) &&
+        key !== "title" &&
+        key !== "price" &&
+        key !== "description" &&
+        key !== "categoryId" &&
+        key !== "stock"
+      ) {
+        updateFields[key] = dto[key];
+      }
     }
 
     if (Object.keys(updateFields).length > 0) {
@@ -147,13 +185,13 @@ export class Product {
       "productorders"
     );
 
-    const updateOrders = await database.removeDeletedProductFromOrder(
+    const updateOrders = await Order.removeDeletedProductFromOrder(
       productOrderIds,
-      "orders"
+      database
     );
     console.log("updateOrders", updateOrders);
 
-    const isDeleteSuccess = await this.#productModel.deleteOne({
+    const isDeleteSuccess = await this.#productCollection.deleteOne({
       _id: new ObjectId(productId),
     });
     return isDeleteSuccess;

@@ -22,6 +22,12 @@ export const createSubCategoryAPI = async (req, res) => {
   );
   console.log("existedSubCategoryRecord", existedSubCategoryRecord);
 
+  if(existedSubCategoryRecord) {
+    return res.status(400).json({
+      message: "Sub category name already exist",
+    });
+  }
+  
   if (role !== ROLE.ADMIN) {
     return res.status(403).json({
       message: "You don't have permission to create subcategory",

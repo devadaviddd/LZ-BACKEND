@@ -15,6 +15,7 @@ export async function getCategories(categoryId) {
     return [];
   }
 
+
   let parentId = existedCategory.parentId;
 
   if (!parentId) {
@@ -64,6 +65,28 @@ export const createProductAPI = async (req, res) => {
 
   const { title, description, price, stock, categoryId } = req.body;
 
+  const existedCategory = await Category.getCategoryById(categoryId, database);
+  console.log("existedCategory", existedCategory);
+
+  if (!existedCategory) {
+    return [];
+  }
+
+  let extraAttributes = {};
+  for (const key in existedCategory) {
+    if (
+      existedCategory.hasOwnProperty(key) &&
+      key !== "_id" &&
+      key !== "parentId" &&
+      key !== "name" &&
+      key !== "admins" &&
+      key !== "subCategories" &&
+      key !== "__v"
+    ) {
+      extraAttributes[key] = existedCategory[key];
+    }
+  }
+
   try {
     let categories = [];
 
@@ -87,9 +110,14 @@ export const createProductAPI = async (req, res) => {
     });
 
     await newProduct.insertProductToDatabase();
+    await newProduct.updateExtraAttributes(newProduct._id, extraAttributes, database);
+    const updateProduct = await Product.getProductById(newProduct._id, database);
+
+
+    
     return res.status(200).json({
       message: "Product created successfully",
-      product: newProduct,
+      product: updateProduct,
     });
   } catch (err) {
     console.log(err);

@@ -69,11 +69,7 @@ export const deleteCategoryAPI = async (req, res) => {
       if (categoriesHasThisCategory.length > 0) {
         const deleteThisSubCategories = categoriesHasThisCategory.map(
           async (record) => {
-            await database.removeIdFromListById(
-              record._id,
-              categoryId,
-              "categories"
-            );
+            await Category.removeSubCategory(record._id, categoryId, database)
           }
         );
         await Promise.all(deleteThisSubCategories);
