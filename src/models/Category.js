@@ -51,6 +51,7 @@ export class Category {
     const result = await database.updateOneRecordByQuery(
       query,
       updatePipeLine,
+      "categories"
     )
     return result;
   }
