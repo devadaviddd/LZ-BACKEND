@@ -45,6 +45,7 @@ export const updateProductAPI = async (req, res) => {
         price: updateFields ? updateFields.price : undefined,
         stock: updateFields ? updateFields.stock : undefined,
         categoryId: updateFields ? updateFields.categoryId : undefined,
+        ...updateFields,
       },
       database
     );
