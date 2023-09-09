@@ -41,7 +41,7 @@ export const cancelProductAPI = async (req, res) => {
         existedProductOrderRecord
       );
 
-      const updateProductOrder = await productOrder.cancelProduct();
+      const updateProductOrder = await productOrder.cancelProduct(database);
 
       return res.status(200).json({
         message: "Cancel product order successfully",
