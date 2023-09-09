@@ -54,10 +54,6 @@ export const sellerSchema = new mongoose.Schema({
     type: String,
     default: SELLER_STATUS.PENDING,
   },
-  order: {
-    type: [mongoose.Schema.Types.ObjectId],
-    default: [],
-  },
 });
 
 sellerSchema.pre("save", beforeInsertToSellers);
