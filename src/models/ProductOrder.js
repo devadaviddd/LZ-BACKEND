@@ -15,7 +15,10 @@ export class ProductOrder {
     this._id = this.#productOrder._id;
     this.product = this.#productOrder.product;
     this.quantity = this.#productOrder.quantity;
-    this.price = this.#productOrder.price;
+    console.log("price", this.#productOrder.price)
+    console.log("quantity", this.#productOrder.quantity);
+    this.price = this.#productOrder.price * this.#productOrder.quantity;
+    this.#productOrder.price = this.price;
     this.order = this.#productOrder.order;
   }
 

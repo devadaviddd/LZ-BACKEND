@@ -33,13 +33,20 @@ export const updateCartAPI = async (req, res) => {
     });
   }
 
-  for (const product of cart) {
-    if (!isValidProduct(product)) {
-      return res.status(400).json({
-        message: "Product and quantity are required",
-      });
-    }
-  }
+  // check if cart is {}
+  // if (Object.keys(cart).length === 0) {
+  //   return res.status(200).json({
+  //     message: "Cart updated successfully",
+  //   })
+  // }
+
+  // for (const product of cart) {
+  //   if (!isValidProduct(product)) {
+  //     return res.status(400).json({
+  //       message: "Product and quantity are required",
+  //     });
+  //   }
+  // }
 
   const existedCart = await Cart.getCartByCustomerId(customerId, database);
   if (!existedCart) {
