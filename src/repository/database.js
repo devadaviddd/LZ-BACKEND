@@ -100,4 +100,17 @@ export class Database {
       throw Error(error.message);
     }
   }
+
+  async modifyRecordById(id, updateList, collectionName) {
+    try {
+      const result = await this.#db
+        .collection(collectionName)
+        .updateOne({ _id: new ObjectId(id) }, {
+          $mod: updateList
+        });
+      return result;
+    } catch (error) {
+      throw Error(error.message);
+    }
+  }
 }
