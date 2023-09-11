@@ -43,16 +43,16 @@ export class Category {
           $in: [new ObjectId(subCategoryId)],
         },
       },
-    }
+    };
     const query = {
       _id: new ObjectId(parentId),
-    }
+    };
 
     const result = await database.updateOneRecordByQuery(
       query,
       updatePipeLine,
       "categories"
-    )
+    );
     return result;
   }
 
@@ -89,7 +89,6 @@ export class Category {
     const filteredArray1 = array1.filter(
       (id) => !array2.some((compareId) => compareId.equals(id))
     );
-    console.log(filteredArray1);
     return filteredArray1;
   }
 
@@ -111,7 +110,6 @@ export class Category {
         this.#category._id = new ObjectId(categoryId);
       }
       await this.#category.save();
-      console.log("Category created");
       this._id = this.#category._id;
       this.name = this.#category.name;
       this.parentId = this.#category.parentId;
@@ -128,20 +126,16 @@ export class Category {
     const subCategoriesName = [];
     if (this.#category.subCategories.length > 0) {
       const subCategoriesId = this.#category.subCategories;
-      console.log("this subCategoriesId", subCategoriesId);
 
       for (const subCategoryId of subCategoriesId) {
         const subCategoryRecord = await database.getRecordById(
           subCategoryId.toString(),
           "categories"
         );
-        console.log("this subCategoryRecord", subCategoryRecord);
         subCategoriesName.push(subCategoryRecord.name);
       }
     }
-    console.log("subCategoriesName", subCategoriesName);
 
-    console.log("dto", dto);
     const { subCategories } = dto;
     const subCategoriesId = [];
     if (subCategories) {
@@ -152,7 +146,6 @@ export class Category {
           },
           "categories"
         );
-        console.log("subCategoryRecord", subCategoryRecord);
         if (subCategoryRecord.length > 0) {
           subCategoriesId.push(subCategoryRecord[0]._id);
         }
@@ -161,7 +154,6 @@ export class Category {
     if (subCategories && subCategoriesId.length !== subCategories.length) {
       isCreateNewSubCategory = true;
     }
-    console.log("subCategoriesId", subCategoriesId);
 
     const dtoProperties = Object.keys(dto);
     dtoProperties.forEach((property) => {
@@ -181,17 +173,10 @@ export class Category {
       !this.#isArraysEqual(this.#category.subCategories, subCategoriesId) &&
       !isCreateNewSubCategory
     ) {
-      console.log("array1", this.#category.subCategories);
-      console.log("array2", subCategoriesId);
-      console.log(
-        "elementDiff",
-        this.#elementDiff(this.#category.subCategories, subCategoriesId)
-      );
       subCategoryDiff = this.#elementDiff(
         this.#category.subCategories,
         subCategoriesId
       );
-      console.log("subCategoryDiff", subCategoryDiff);
       if (subCategoryDiff.length > 0) {
         subCategoryDiff.map(async (id) => {
           await database.removeIdFromListById(
@@ -204,15 +189,12 @@ export class Category {
     }
 
     try {
-      console.log("updateFields", updateFields);
       const ancestorCategoryRecords = await database.getRecordsByQuery(
         {
           parentId: new ObjectId(categoryId),
         },
         "categories"
       );
-      console.log("categoryId", categoryId);
-      console.log("ancestorCategoryRecords", ancestorCategoryRecords);
       const updateAncestorCategories = ancestorCategoryRecords.map(
         async (record) => {
           await database.updateRecordById(
@@ -241,8 +223,6 @@ export class Category {
           new: true,
         }
       );
-      console.log("newCategory", newCategory);
-      console.log("Category updated");
       this.#category = newCategory;
       this._id = this.#category._id;
       this.name = this.#category.name;
@@ -270,7 +250,6 @@ export class Category {
           new: true,
         }
       );
-      console.log("Category updated");
       this.#category = newCategory;
       this._id = this.#category._id;
       this.name = this.#category.name;

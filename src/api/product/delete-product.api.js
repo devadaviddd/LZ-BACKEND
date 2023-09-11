@@ -11,7 +11,6 @@ const deleteProductImage = async (productId) => {
   try {
     await fs.promises.access(avatarPreFix, fs.constants.F_OK);
     await fs.promises.unlink(avatarPreFix);
-    console.log("File deleted");
   } catch (err) {
     if (err.code === "ENOENT") {
       console.log("File does not exist");
@@ -54,11 +53,8 @@ export const deleteProductAPI = async (req, res) => {
     await deleteProductImage(existedProductRecord._id);
 
     const product = new Product(productSchema, existedProductRecord);
-    console.log("product.id", product._id);
-    console.log("existed.id", existedProductRecord._id);
 
     const isDeleteSuccess = await product.deleteProduct(id, database);
-    console.log("isDeleteSuccess", isDeleteSuccess);
     return res.status(200).json({
       message: "Product deleted successfully",
     });

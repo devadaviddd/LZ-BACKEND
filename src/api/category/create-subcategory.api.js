@@ -13,21 +13,19 @@ export const createSubCategoryAPI = async (req, res) => {
   }
   const { _id: adminId, role } = authUser;
   const { name, updateFields } = req.body;
-  console.log("updateFields", updateFields);
   const parentId = req.params.id;
 
   const existedSubCategoryRecord = await Category.getSubCategoryByName(
     name,
     database
   );
-  console.log("existedSubCategoryRecord", existedSubCategoryRecord);
 
-  if(existedSubCategoryRecord) {
+  if (existedSubCategoryRecord) {
     return res.status(400).json({
       message: "Sub category name already exist",
     });
   }
-  
+
   if (role !== ROLE.ADMIN) {
     return res.status(403).json({
       message: "You don't have permission to create subcategory",
@@ -75,7 +73,6 @@ export const createSubCategoryAPI = async (req, res) => {
       createdBy: `${authUser.name} - ${authUser.email}`,
     });
   } catch (err) {
-    console.log(err);
     if (err.errors) {
       const { name } = err.errors;
       return res.status(400).json({

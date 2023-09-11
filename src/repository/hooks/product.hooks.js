@@ -4,7 +4,6 @@ import { Order } from "../../models/Order.js";
 
 export async function beforeDeleteToProducts(doc, next) {
   const { _id } = doc;
-  console.log("before delete", doc);
   try {
     const productOrderRecords = await database.getRecordsByQuery(
       {
@@ -14,7 +13,6 @@ export async function beforeDeleteToProducts(doc, next) {
     );
     const productOrderIds = productOrderRecords.map((record) => record._id);
 
-    console.log("productOrderRecords", productOrderRecords);
 
     await database.deleteRecordsByQuery({ product: _id }, "productorders");
 
@@ -23,11 +21,9 @@ export async function beforeDeleteToProducts(doc, next) {
       database
     );
 
-    console.log("updateOrders", updateOrders);
 
     next();
   } catch (error) {
-    console.log(error);
     next(error);
   }
 }

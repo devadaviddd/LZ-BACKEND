@@ -38,7 +38,6 @@ export const createCategoryAPI = async (req, res) => {
       createdBy: `${authUser.name} - ${authUser.email}`,
     });
   } catch (err) {
-    console.log(err);
     if (err.errors) {
       const { name } = err.errors;
       return res.status(400).json({

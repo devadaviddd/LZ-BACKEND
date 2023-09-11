@@ -11,7 +11,6 @@ export const getCustomerProfileAPI = async (req, res) => {
   }
 
   const { role, _id } = authUser;
-  console.log("id", _id);
   if (role !== ROLE.CUSTOMER) {
     return res.status(403).json({
       message: "You don't have permission to get customer",

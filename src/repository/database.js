@@ -7,7 +7,6 @@ export class Database {
     try {
       await mongoose.connect(dbEndpoint, dbConfig);
       this.#db = mongoose.connection;
-      console.log("Database connected");
     } catch (error) {
       throw Error("Database connection error");
     }

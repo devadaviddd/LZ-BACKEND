@@ -28,7 +28,6 @@ export const updateProductAPI = async (req, res) => {
   try {
     const existedProductRecord = await Product.getProductById(id, database);
     const productId = existedProductRecord._id;
-    console.log("existedProductRecord", existedProductRecord);
     const oldProduct = new Product(productSchema, existedProductRecord);
 
     if (!existedProductRecord) {
@@ -49,14 +48,12 @@ export const updateProductAPI = async (req, res) => {
       },
       database
     );
-    console.log("updateProduct", updateProduct);
 
     return res.status(200).json({
       message: "Product updated successfully",
       updateProduct,
     });
   } catch (err) {
-    console.log(err);
     if (err.errors) {
       const { title, description, price, stock } = err.errors;
       return res.status(400).json({

@@ -25,7 +25,6 @@ export const deleteCategoryAPI = async (req, res) => {
       categoryId,
       database
     );
-    console.log("existedCategoryRecord", existedCategoryRecord);
 
     if (existedCategoryRecord) {
       const productsHasThisCategory = await Category.getRecordsByQuery(
@@ -38,7 +37,6 @@ export const deleteCategoryAPI = async (req, res) => {
         },
         database
       );
-      console.log("productsHasThisCategory", productsHasThisCategory);
 
       if (productsHasThisCategory.length > 0) {
         return res.status(400).json({
@@ -57,7 +55,6 @@ export const deleteCategoryAPI = async (req, res) => {
         database
       );
 
-      console.log("categoriesHasThisCategory", categoriesHasThisCategory);
       const category = new Category(categorySchema, existedCategoryRecord);
 
       if (category.subCategories.length > 0) {
@@ -69,7 +66,7 @@ export const deleteCategoryAPI = async (req, res) => {
       if (categoriesHasThisCategory.length > 0) {
         const deleteThisSubCategories = categoriesHasThisCategory.map(
           async (record) => {
-            await Category.removeSubCategory(record._id, categoryId, database)
+            await Category.removeSubCategory(record._id, categoryId, database);
           }
         );
         await Promise.all(deleteThisSubCategories);

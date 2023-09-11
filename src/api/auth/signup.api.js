@@ -26,7 +26,6 @@ export const signUpAPI = async (req, res) => {
           message: "Business name is required",
         });
       }
-      console.log("user._id", user._id);
       await Seller.updateSeller(
         user._id.toString(),
         {
@@ -66,7 +65,6 @@ export const signUpAPI = async (req, res) => {
       accessToken,
     });
   } catch (err) {
-    console.log(err);
     if (err.errors) {
       const { email, password, name, role } = err.errors;
       return res.status(400).json({

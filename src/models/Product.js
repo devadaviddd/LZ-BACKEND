@@ -8,7 +8,6 @@ export class Product {
   #product;
   #productCollection;
   constructor(productSchema, dto) {
-    console.log("dto", dto);
     this.#product = ProductMapper.mapToSchema(productSchema, dto);
     this.#productCollection = mongoose.model("Product");
     this._id = this.#product._id;
@@ -42,7 +41,6 @@ export class Product {
       { categories: new ObjectId(categoryId) },
       "products"
     );
-    console.log("productRecords", productRecords);
     return productRecords;
   }
 
@@ -73,7 +71,6 @@ export class Product {
       }
       await this.#product.save();
 
-      console.log("Product created");
       this._id = this.#product._id;
       this.title = this.#product.title;
       this.price = this.#product.price;
@@ -106,7 +103,6 @@ export class Product {
     const { title, price, description, categoryId, stock } = dto;
 
     if (title && title !== this.title) {
-      console.log("title", title);
       updateFields.title = title;
     } else {
       updateFields.title = this.title;
@@ -126,7 +122,6 @@ export class Product {
 
     if (categoryId) {
       const categories = await getCategories(categoryId);
-      console.log("categories", categories);
       updateFields.categories = categories;
     } else {
       updateFields.categories = this.categories;
@@ -137,9 +132,6 @@ export class Product {
     } else {
       updateFields.stock = this.stock;
     }
-
-    console.log("updateFields", updateFields);
-    console.log("dto", dto);
 
     for (const key in dto) {
       if (
@@ -155,7 +147,6 @@ export class Product {
     }
 
     if (Object.keys(updateFields).length > 0) {
-      console.log("updateFields", updateFields);
       await database.updateRecordById(
         productId,
         {
@@ -179,7 +170,6 @@ export class Product {
 
     const productOrderIds = productOrderRecords.map((record) => record._id);
 
-    console.log("productOrderRecords", productOrderRecords);
 
     await database.deleteRecordsByQuery(
       { product: new ObjectId(productId) },
@@ -190,7 +180,6 @@ export class Product {
       productOrderIds,
       database
     );
-    console.log("updateOrders", updateOrders);
 
     const isDeleteSuccess = await this.#productCollection.deleteOne({
       _id: new ObjectId(productId),

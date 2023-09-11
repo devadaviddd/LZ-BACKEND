@@ -31,7 +31,6 @@ export class Customer {
       customerId,
       "customers"
     );
-    console.log("updatedCustomer", updatedCustomer);
     return updatedCustomer;
   }
 }

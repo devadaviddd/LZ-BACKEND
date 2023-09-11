@@ -6,9 +6,7 @@ import { database } from "../../di/index.js";
 async function getAdminEmailsByIds(adminIds) {
   const adminNames = [];
   for (const adminId of adminIds) {
-    console.log("adminId", adminId);
     const admin = await Admin.getAdminEmailsByIds(adminId, database);
-    console.log("adminNames", admin);
     adminNames.push(admin);
   }
   return adminNames;

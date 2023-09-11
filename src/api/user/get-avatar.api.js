@@ -2,7 +2,6 @@ import fs from "fs";
 
 export const getAvatarAPi = async (req, res) => {
   const id = req.params.id;
-  console.log("id", id);
 
   const authUser = req.authUser;
   if (!authUser) {
@@ -23,7 +22,6 @@ export const getAvatarAPi = async (req, res) => {
         });
       }
     } else {
-      console.log("File exists");
       return res.status(200).sendFile(avatarPreFix, { root: "." });
     }
   });

@@ -55,7 +55,6 @@ export class Order {
         this.#order._id = new ObjectId(orderId);
       }
       await this.#order.save();
-      console.log("Order created");
       this._id = this.#order._id;
       this.customer = this.#order.customer;
       this.productOrders = this.#order.productOrders;
@@ -65,7 +64,6 @@ export class Order {
   }
 
   async getAllCustomerProductOrders(customerId) {
-    console.log("customerId", customerId);
     const productOrderOfCustomer = await this.#orderCollection.aggregate([
       {
         $lookup: {
@@ -130,7 +128,6 @@ export class Order {
         },
       },
     ]);
-    console.log("productOrderOfCustomer", productOrderOfCustomer);
     return productOrderOfCustomer;
   }
 }

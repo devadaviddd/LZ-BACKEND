@@ -36,7 +36,6 @@ export class Seller {
   static async updateSeller(sellerId, updatedFields, database) {
     await database.updateRecordById(sellerId, updatedFields, "sellers");
     const updatedSeller = await database.getRecordById(sellerId, "sellers");
-    console.log("updatedSeller", updatedSeller);
     return updatedSeller;
   }
 }

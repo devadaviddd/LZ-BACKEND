@@ -15,7 +15,6 @@ export const getProductImageAPI = async (req, res) => {
             });
           }
         } else {
-          console.log("File exists");
           return res.status(200).sendFile(imagePath, { root: "." });
         }
       });

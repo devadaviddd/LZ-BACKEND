@@ -5,14 +5,11 @@ import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
 
 export async function beforeInsertToAdmins(next) {
-  console.log("before insert to admins");
   try {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
-    console.log("hash successfully");
     next();
   } catch (error) {
-    console.log(error);
     next(error);
   }
 }
@@ -26,7 +23,6 @@ export async function afterInsertToAdmins(doc, next) {
     );
     next();
   } catch (error) {
-    console.log(error);
     next(error);
   }
 }

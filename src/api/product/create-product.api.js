@@ -65,7 +65,6 @@ export const createProductAPI = async (req, res) => {
   const { title, description, price, stock, categoryId } = req.body;
 
   const existedCategory = await Category.getCategoryById(categoryId, database);
-  console.log("existedCategory", existedCategory);
 
   if (!existedCategory) {
     return [];
@@ -124,7 +123,6 @@ export const createProductAPI = async (req, res) => {
       product: updateProduct,
     });
   } catch (err) {
-    console.log(err);
     if (err.errors) {
       const { title, description, price, stock } = err.errors;
       return res.status(400).json({

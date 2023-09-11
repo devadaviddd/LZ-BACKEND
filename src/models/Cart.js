@@ -3,9 +3,7 @@ import { CartMapper } from "../repository/Mapper/mapper.js";
 export class Cart {
   #cart;
   constructor(cartSchema, dto) {
-    console.log("dto", dto);
     this.#cart = CartMapper.mapToSchema(cartSchema, dto);
-    console.log("this.#cart", this.#cart);
     this.cart = this.#cart.cart;
   }
 
@@ -19,7 +17,6 @@ export class Cart {
       cart: newCart,
     };
 
-    console.log("newCart", newCart);
     await database.updateRecordById(customerId, pipeline, "carts");
     const updatedCart = await database.getRecordById(customerId, "carts");
     return updatedCart;
@@ -36,7 +33,6 @@ export class Cart {
     }
     this.#cart._id = customerId;
     await this.#cart.save();
-    console.log("Cart created");
     try {
     } catch (error) {
       throw error;

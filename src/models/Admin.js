@@ -17,8 +17,6 @@ export class Admin {
 
   static async getAdminEmailsByIds(adminId, database) {
     const adminRecord = await User.findUserById(adminId, database);
-    console.log("adminId", adminId);
-    console.log("adminRecord", adminRecord);
     return adminRecord.email;
   }
 

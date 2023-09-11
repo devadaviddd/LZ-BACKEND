@@ -8,7 +8,6 @@ export const updateCategoryAPI = async (req, res) => {
   const authUser = req.authUser;
   const { updateFields, parentId } = req.body;
   const categoryId = req.params.id;
-  console.log("categoryId", categoryId);
   if (!authUser) {
     return res.status(401).json({
       message: "You are unauthorized to create category",

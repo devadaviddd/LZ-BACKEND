@@ -11,7 +11,6 @@ export const getAdminProfileAPI = async (req, res) => {
   }
 
   const { role, _id } = authUser;
-  console.log("id", _id);
   if (role !== ROLE.ADMIN) {
     return res.status(403).json({
       message: "You don't have permission to get admin",

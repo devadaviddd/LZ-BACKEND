@@ -15,8 +15,6 @@ export class ProductOrder {
     this._id = this.#productOrder._id;
     this.product = this.#productOrder.product;
     this.quantity = this.#productOrder.quantity;
-    console.log("price", this.#productOrder.price)
-    console.log("quantity", this.#productOrder.quantity);
     this.price = this.#productOrder.price * this.#productOrder.quantity;
     this.#productOrder.price = this.price;
     this.order = this.#productOrder.order;
@@ -52,7 +50,6 @@ export class ProductOrder {
         this.#productOrder._id = new ObjectId(productOrderId);
       }
       await this.#productOrder.save();
-      console.log("ProductOrder created");
       this._id = this.#productOrder._id;
       this.product = this.#productOrder.product;
       this.quantity = this.#productOrder.quantity;
@@ -81,7 +78,6 @@ export class ProductOrder {
       this.#productOrder.product,
       "products"
     );
-    console.log("productRecord", productRecord);
 
     const { stock, _id } = productRecord;
     const updatedStock = stock + this.#productOrder.quantity;
@@ -122,7 +118,6 @@ export class ProductOrder {
       this.#productOrder.product,
       "products"
     );
-    console.log("productRecord", productRecord);
 
     const { stock, _id } = productRecord;
 
@@ -149,7 +144,6 @@ export class ProductOrder {
   }
 
   async getProductOrdersBySeller(sellerId) {
-    console.log("sellerId", sellerId);
     const productOrderOfSeller = await this.#productOrderCollection.aggregate([
       {
         $lookup: {
@@ -193,7 +187,6 @@ export class ProductOrder {
         },
       },
     ]);
-    console.log("productOrderOfSeller", productOrderOfSeller);
     return productOrderOfSeller;
   }
 }

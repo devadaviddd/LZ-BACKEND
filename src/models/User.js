@@ -25,7 +25,6 @@ export class User {
   async insertUserToDatabase() {
     try {
       await this.#user.save();
-      console.log("User created");
       this._id = this.#user._id;
       this.name = this.#user.name;
       this.email = this.#user.email;

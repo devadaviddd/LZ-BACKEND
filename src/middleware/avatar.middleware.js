@@ -19,10 +19,8 @@ const storage = multer.diskStorage({
           throw err;
         }
       } else {
-        console.log("File exists");
         fs.unlink(avatarPreFix, (err) => {
           if (err) throw err;
-          console.log("File deleted");
         });
       }
 

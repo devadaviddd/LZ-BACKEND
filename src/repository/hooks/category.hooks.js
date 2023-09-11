@@ -1,8 +1,6 @@
 import { database } from "../../di/index.js";
 
 export async function afterUpdateToCategory(doc, next) {
-  console.log("after update to category");
-  console.log("doc", doc);
   try {
     const { _id, subCategories } = doc;
     const subCategoryRecords = await database.getRecordsByQuery(
@@ -12,11 +10,9 @@ export async function afterUpdateToCategory(doc, next) {
       "categories"
     );
     const subCategoriesId = subCategoryRecords.map((record) => record._id);
-    console.log("subCategoriesId", subCategoriesId);
 
     for (const subCategoryId of subCategoriesId) {
       if (!subCategories.includes(subCategoryId)) {
-        console.log("this id is not in sub categories", subCategoryId);
         await database.updateRecordById(
           subCategoryId.toString(),
           {
@@ -27,7 +23,6 @@ export async function afterUpdateToCategory(doc, next) {
       }
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
   next();
