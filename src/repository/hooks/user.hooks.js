@@ -44,7 +44,7 @@ export async function afterInsertToUsers(doc, next) {
         break;
       case ROLE.SELLER:
         // const seller = SellerMapper.mapToSchema(sellerSchema, doc);
-        const seller = new Seller(sellerSchema, doc);  
+        const seller = new Seller(sellerSchema, doc);
         await database.insertRecord(
           {
             _id: seller._id,
@@ -74,6 +74,8 @@ export async function afterInsertToUsers(doc, next) {
           },
           "customers"
         );
+
+        await database.insertRecord({ _id: customer._id, cart: [{}] }, "carts");
         break;
       default:
         break;
@@ -84,4 +86,3 @@ export async function afterInsertToUsers(doc, next) {
     next(error);
   }
 }
-

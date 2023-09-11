@@ -108,7 +108,7 @@ export class Order {
               "$$ROOT",
               {
                 title: "$productData.title",
-                price: "$productData.price",
+                // price: "$productData.price",
                 description: "$productData.description",
                 image: "$productData.image",
                 category: "$productData.categories",

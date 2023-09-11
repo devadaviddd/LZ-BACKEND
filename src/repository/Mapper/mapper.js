@@ -131,3 +131,14 @@ export class OrderMapper {
     return order;
   }
 }
+
+export class CartMapper {
+  static mapToSchema(schema, dto) {
+    mongoose.model("Cart", schema);
+    const CartModel = mongoose.model("Cart");
+    const cart = new CartModel({
+      cart: dto,
+    });
+    return cart;
+  }
+}

@@ -12,7 +12,6 @@ export class Seller {
     this.password = this.#seller.password;
     this.status = this.#seller.status;
     this.product = this.#seller.product;
-    this.order = this.#seller.order;
     this.businessName = this.#seller.businessName;
     this.phone = this.#seller.phone;
   }
