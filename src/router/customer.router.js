@@ -10,9 +10,7 @@ import { getAllCustomerProductOrders } from "../api/productOrder/get-all-custome
 import { rejectProductAPI } from "../api/customer/reject-product.api.js";
 import { acceptProductAPI } from "../api/customer/accept-product.api.js";
 import { getCartAPI } from "../api/cart/get-cart.api.js";
-import { createCartAPI } from "../api/cart/create-cart.api.js";
 import { updateCartAPI } from "../api/cart/update-cart.api.js";
-import { deleteCartAPI } from "../api/cart/delete-cart.api.js";
 
 const router = express.Router();
 router.get("/category/:id", getCategoryByIdAPI);
@@ -25,7 +23,5 @@ router.get("/order", authenticateUser, getAllCustomerProductOrders);
 router.patch("/order/reject/:id", authenticateUser, rejectProductAPI);
 router.patch("/order/accept/:id", authenticateUser, acceptProductAPI);
 router.get("/cart", authenticateUser, getCartAPI);
-router.post("/cart", authenticateUser, createCartAPI);
 router.put("/cart", authenticateUser, updateCartAPI);
-router.delete("/cart", authenticateUser, deleteCartAPI);
 export const customerRouter = router;
