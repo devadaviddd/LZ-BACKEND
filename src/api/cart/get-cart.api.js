@@ -1,6 +1,6 @@
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
-import { Cart } from "../../models/Cart.js";
+import { Cart } from "../../models/cart.js";
 
 export const getCartAPI = async (req, res) => {
   const authUser = req.authUser;
@@ -23,12 +23,10 @@ export const getCartAPI = async (req, res) => {
       message: "Cart get successfully",
       cart,
     });
-  
   } catch (err) {
     return res.status(500).json({
       message: "Internal server error",
       error: err.message,
     });
   }
-
-}
+};

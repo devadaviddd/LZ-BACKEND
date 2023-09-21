@@ -1,6 +1,6 @@
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
-import { Product } from "../../models/Product.js";
+import { Product } from "../../models/product.js";
 
 export const getSellerProductsAPI = async (req, res) => {
   const authUser = req.authUser;
@@ -17,7 +17,10 @@ export const getSellerProductsAPI = async (req, res) => {
   }
 
   try {
-    const productsOfSeller = await Product.getProductBySellerId(sellerId, database);
+    const productsOfSeller = await Product.getProductBySellerId(
+      sellerId,
+      database
+    );
     const count = productsOfSeller.length;
 
     return res.status(200).json({

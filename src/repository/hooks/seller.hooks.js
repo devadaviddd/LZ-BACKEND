@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { User } from "../../models/User.js";
+import { User } from "../../models/user.js";
 import { userSchema } from "../Schemas/user.schema.js";
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";

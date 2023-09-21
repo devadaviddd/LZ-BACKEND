@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 import { ProductMapper } from "../repository/Mapper/mapper.js";
 import { getCategories } from "../api/product/create-product.api.js";
-import { Order } from "./Order.js";
-import { Category } from "./Category.js";
+import { Order } from "./order.js";
+import { Category } from "./category.js";
 export class Product {
   #product;
   #productCollection;
@@ -169,7 +169,6 @@ export class Product {
     );
 
     const productOrderIds = productOrderRecords.map((record) => record._id);
-
 
     await database.deleteRecordsByQuery(
       { product: new ObjectId(productId) },

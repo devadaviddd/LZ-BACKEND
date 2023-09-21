@@ -1,5 +1,5 @@
 import { database } from "../../di/index.js";
-import { Product } from "../../models/Product.js";
+import { Product } from "../../models/product.js";
 
 export const getProductByCategoryIdAPI = async (req, res) => {
   const categoryId = req.params.categoryId;
@@ -24,4 +24,4 @@ export const getProductByCategoryIdAPI = async (req, res) => {
       error: err.message,
     });
   }
-}
+};

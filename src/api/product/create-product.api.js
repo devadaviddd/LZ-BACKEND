@@ -1,9 +1,9 @@
 import { ROLE } from "../../constants/index.js";
 import { productSchema } from "../../repository/Schemas/product.schema.js";
-import { Seller } from "../../models/Seller.js";
-import { Product } from "../../models/Product.js";
+import { Seller } from "../../models/seller.js";
+import { Product } from "../../models/product.js";
 import { database } from "../../di/index.js";
-import { Category } from "../../models/Category.js";
+import { Category } from "../../models/category.js";
 
 export async function getCategories(categoryId) {
   if (!categoryId) {

@@ -1,5 +1,5 @@
 import { ROLE } from "../../constants/index.js";
-import { Order } from "../../models/Order.js";
+import { Order } from "../../models/order.js";
 import { orderSchema } from "../../repository/Schemas/order.schema.js";
 
 export const getAllCustomerProductOrders = async (req, res) => {

@@ -1,6 +1,6 @@
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
-import { Seller } from "../../models/Seller.js";
+import { Seller } from "../../models/seller.js";
 
 export const getAllSellerAPI = async (req, res) => {
   const authUser = req.authUser;

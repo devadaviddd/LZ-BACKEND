@@ -1,6 +1,6 @@
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
-import { Category } from "../../models/Category.js";
+import { Category } from "../../models/category.js";
 import { categorySchema } from "../../repository/Schemas/category.schema.js";
 import { isCategoryNameExist } from "../../utils/errors/duplicateCategoryName.js";
 

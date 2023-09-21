@@ -1,5 +1,5 @@
 import { database } from "../../di/index.js";
-import { Product } from "../../models/Product.js";
+import { Product } from "../../models/product.js";
 
 export const getProductByIdAPI = async (req, res) => {
   const productId = req.params.id;

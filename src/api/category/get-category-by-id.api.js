@@ -1,5 +1,5 @@
 import { database } from "../../di/index.js";
-import { Category } from "../../models/Category.js";
+import { Category } from "../../models/category.js";
 
 export const getCategoryByIdAPI = async (req, res) => {
   const categoryId = req.params.id;

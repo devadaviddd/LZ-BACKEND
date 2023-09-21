@@ -1,7 +1,6 @@
-import {ROLE} from '../../constants/index.js';
-import { database } from '../../di/index.js';
-import { Admin } from '../../models/Admin.js';
-
+import { ROLE } from "../../constants/index.js";
+import { database } from "../../di/index.js";
+import { Admin } from "../../models/admin.js";
 
 export const rejectSellerAPI = async (req, res) => {
   const sellerId = req.params.sellerId;
@@ -24,8 +23,12 @@ export const rejectSellerAPI = async (req, res) => {
       return res.status(404).json({ message: "404 Unable to Reject Seller" });
     }
 
-    return res.status(200).json({ message: "Seller rejected", seller: updatedSeller });
+    return res
+      .status(200)
+      .json({ message: "Seller rejected", seller: updatedSeller });
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };

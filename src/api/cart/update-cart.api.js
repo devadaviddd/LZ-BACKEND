@@ -1,6 +1,6 @@
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
-import { Cart } from "../../models/Cart.js";
+import { Cart } from "../../models/cart.js";
 
 const isValidProduct = (product) => {
   if (!product.product || !product.quantity) {

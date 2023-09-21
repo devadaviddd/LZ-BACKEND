@@ -1,6 +1,6 @@
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
-import { Product } from "../../models/Product.js";
+import { Product } from "../../models/product.js";
 import { productSchema } from "../../repository/Schemas/product.schema.js";
 
 export const updateProductAPI = async (req, res) => {

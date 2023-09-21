@@ -1,6 +1,5 @@
 import { database } from "../../di/index.js";
-import { Category } from "../../models/Category.js";
-
+import { Category } from "../../models/category.js";
 
 function generateSubCategories(category, allCategories) {
   const subCategoryMap = {};

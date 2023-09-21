@@ -1,4 +1,4 @@
-import { ProductOrder } from "../../models/ProductOrder.js";
+import { ProductOrder } from "../../models/productOrder.js";
 import { productOrderSchema } from "../../repository/Schemas/productOrder.schema.js";
 import { ROLE } from "../../constants/index.js";
 
@@ -25,7 +25,8 @@ export const getAllSellerProductOrders = async (req, res) => {
 
   try {
     const productOrderInstance = new ProductOrder(productOrderSchema, {});
-    const productOrderOfSeller =  await productOrderInstance.getProductOrdersBySeller(sellerId);
+    const productOrderOfSeller =
+      await productOrderInstance.getProductOrdersBySeller(sellerId);
 
     return res.status(200).json({
       message: "Filter product order by seller successfully",

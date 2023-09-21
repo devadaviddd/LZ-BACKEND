@@ -1,8 +1,8 @@
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
-import { Admin } from "../../models/Admin.js";
-import { Customer } from "../../models/Customer.js";
-import { Seller } from "../../models/Seller.js";
+import { Admin } from "../../models/admin.js";
+import { Customer } from "../../models/customer.js";
+import { Seller } from "../../models/seller.js";
 import { adminSchema } from "../Schemas/admin.schema.js";
 import { customerSchema } from "../Schemas/customer.schema.js";
 import { sellerSchema } from "../Schemas/seller.schema.js";

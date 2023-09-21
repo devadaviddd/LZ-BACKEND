@@ -1,6 +1,6 @@
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
-import { Admin } from "../../models/Admin.js";
+import { Admin } from "../../models/admin.js";
 
 export const getAdminProfileAPI = async (req, res) => {
   const authUser = req.authUser;

@@ -1,8 +1,8 @@
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
-import { Order } from "../../models/Order.js";
-import { Product } from "../../models/Product.js";
-import { ProductOrder } from "../../models/ProductOrder.js";
+import { Order } from "../../models/order.js";
+import { Product } from "../../models/product.js";
+import { ProductOrder } from "../../models/productOrder.js";
 import { orderSchema } from "../../repository/Schemas/order.schema.js";
 import { productOrderSchema } from "../../repository/Schemas/productOrder.schema.js";
 import { ObjectId } from "mongodb";

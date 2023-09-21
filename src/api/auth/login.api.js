@@ -1,4 +1,4 @@
-import { User } from "../../models/User.js";
+import { User } from "../../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { isEmail } from "../../utils/regex/isEmail.js";
@@ -37,7 +37,6 @@ export const loginAPI = async (req, res) => {
 
     const existedUserEmail = await User.findUserByEmail(email, database);
     const existedUserPhone = await User.findUserByPhone(phone, database);
-
 
     if (!existedUserEmail && !existedUserPhone) {
       return res.status(400).json({

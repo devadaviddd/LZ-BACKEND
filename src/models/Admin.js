@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { AdminMapper } from "../repository/Mapper/mapper.js";
 import { SELLER_STATUS } from "../constants/index.js";
-import { User } from "./User.js";
+import { User } from "./user.js";
 
 export class Admin {
   #admin;

@@ -1,6 +1,6 @@
 import { ROLE } from "../../constants/index.js";
-import { Category } from "../../models/Category.js";
-import { Admin } from "../../models/Admin.js";
+import { Category } from "../../models/category.js";
+import { Admin } from "../../models/admin.js";
 import { database } from "../../di/index.js";
 
 async function getAdminEmailsByIds(adminIds) {

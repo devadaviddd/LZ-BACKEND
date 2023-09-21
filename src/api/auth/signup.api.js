@@ -1,11 +1,11 @@
 import { createAccessToken, maxAge } from "../../config/auth.config.js";
 import { userSchema } from "../../repository/Schemas/user.schema.js";
-import { User } from "../../models/User.js";
+import { User } from "../../models/user.js";
 import { isEmailOrPhoneExist } from "../../utils/errors/duplicateEmailOrPhone.js";
 import { ROLE } from "../../constants/index.js";
 import { database } from "../../di/index.js";
-import { Seller } from "../../models/Seller.js";
-import { Customer } from "../../models/Customer.js";
+import { Seller } from "../../models/seller.js";
+import { Customer } from "../../models/customer.js";
 
 export const signUpAPI = async (req, res) => {
   const { name, email, password, phone, businessName, address, role } =
