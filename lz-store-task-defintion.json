@@ -1,0 +1,95 @@
+{
+  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:725435586437:task-definition/lz-store-task-defintion:8",
+  "containerDefinitions": [
+      {
+          "name": "lz-store",
+          "image": "725435586437.dkr.ecr.ap-southeast-1.amazonaws.com/lz-store:latest",
+          "cpu": 0,
+          "memory": 512,
+          "memoryReservation": 307,
+          "portMappings": [
+              {
+                  "name": "lz-store-5000-tcp",
+                  "containerPort": 5000,
+                  "hostPort": 5000,
+                  "protocol": "tcp",
+                  "appProtocol": "http"
+              }
+          ],
+          "essential": true,
+          "environment": [
+              {
+                  "name": "SECRET_KEY",
+                  "value": "appLz"
+              },
+              {
+                  "name": "DB_ENDPOINT",
+                  "value": "mongodb+srv://dev:dev1234@lazadaapp.euzawej.mongodb.net/Store"
+              }
+          ],
+          "environmentFiles": [],
+          "mountPoints": [],
+          "volumesFrom": [],
+          "ulimits": [],
+          "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                  "awslogs-create-group": "true",
+                  "awslogs-group": "/ecs/lz-store-task-defintion",
+                  "awslogs-region": "ap-southeast-1",
+                  "awslogs-stream-prefix": "ecs"
+              },
+              "secretOptions": []
+          }
+      }
+  ],
+  "family": "lz-store-task-defintion",
+  "taskRoleArn": "arn:aws:iam::725435586437:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::725435586437:role/ecsTaskExecutionRole",
+  "revision": 8,
+  "volumes": [],
+  "status": "ACTIVE",
+  "requiresAttributes": [
+      {
+          "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+      },
+      {
+          "name": "ecs.capability.execution-role-awslogs"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.ecr-auth"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.task-iam-role"
+      },
+      {
+          "name": "ecs.capability.execution-role-ecr-pull"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+      }
+  ],
+  "placementConstraints": [],
+  "compatibilities": [
+      "EC2"
+  ],
+  "requiresCompatibilities": [
+      "EC2"
+  ],
+  "runtimePlatform": {
+      "cpuArchitecture": "X86_64",
+      "operatingSystemFamily": "LINUX"
+  },
+  "registeredAt": "2023-09-22T08:51:02.262Z",
+  "registeredBy": "arn:aws:iam::725435586437:root",
+  "tags": []
+}
