@@ -1,12 +1,12 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:725435586437:task-definition/lz-store-task-defintion:8",
+  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:725435586437:task-definition/lz-store-task-defintion:10",
   "containerDefinitions": [
       {
           "name": "lz-store",
           "image": "725435586437.dkr.ecr.ap-southeast-1.amazonaws.com/lz-store:latest",
           "cpu": 0,
-          "memory": 512,
-          "memoryReservation": 307,
+          "memory": 3072,
+          "memoryReservation": 1024,
           "portMappings": [
               {
                   "name": "lz-store-5000-tcp",
@@ -27,10 +27,8 @@
                   "value": "mongodb+srv://dev:dev1234@lazadaapp.euzawej.mongodb.net/Store"
               }
           ],
-          "environmentFiles": [],
           "mountPoints": [],
           "volumesFrom": [],
-          "ulimits": [],
           "logConfiguration": {
               "logDriver": "awslogs",
               "options": {
@@ -46,7 +44,7 @@
   "family": "lz-store-task-defintion",
   "taskRoleArn": "arn:aws:iam::725435586437:role/ecsTaskExecutionRole",
   "executionRoleArn": "arn:aws:iam::725435586437:role/ecsTaskExecutionRole",
-  "revision": 8,
+  "revision": 10,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -72,9 +70,6 @@
           "name": "ecs.capability.execution-role-ecr-pull"
       },
       {
-          "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
-      },
-      {
           "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
       }
   ],
@@ -89,7 +84,7 @@
       "cpuArchitecture": "X86_64",
       "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2023-09-22T08:51:02.262Z",
+  "registeredAt": "2023-09-22T10:32:10.224Z",
   "registeredBy": "arn:aws:iam::725435586437:root",
   "tags": []
 }
