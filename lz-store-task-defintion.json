@@ -1,12 +1,12 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:725435586437:task-definition/lz-store-task-defintion:10",
+  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:725435586437:task-definition/lz-store-task-defintion:12",
   "containerDefinitions": [
       {
           "name": "lz-store",
           "image": "725435586437.dkr.ecr.ap-southeast-1.amazonaws.com/lz-store:latest",
-          "cpu": 0,
-          "memory": 3072,
-          "memoryReservation": 1024,
+          "cpu": 1024,
+          "memory": 921,
+          "memoryReservation": 102,
           "portMappings": [
               {
                   "name": "lz-store-5000-tcp",
@@ -44,7 +44,7 @@
   "family": "lz-store-task-defintion",
   "taskRoleArn": "arn:aws:iam::725435586437:role/ecsTaskExecutionRole",
   "executionRoleArn": "arn:aws:iam::725435586437:role/ecsTaskExecutionRole",
-  "revision": 10,
+  "revision": 12,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -84,7 +84,7 @@
       "cpuArchitecture": "X86_64",
       "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2023-09-22T10:32:10.224Z",
+  "registeredAt": "2023-09-22T10:46:46.200Z",
   "registeredBy": "arn:aws:iam::725435586437:root",
   "tags": []
 }
