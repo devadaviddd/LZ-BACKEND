@@ -1,17 +1,16 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:725435586437:task-definition/lz-store-task-defintion:15",
+  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:725435586437:task-definition/lz-store-task-defintion:21",
   "containerDefinitions": [
       {
           "name": "lz-store",
-          "image": "725435586437.dkr.ecr.ap-southeast-1.amazonaws.com/lz-store:latest",
-          "cpu": 1024,
-          "memory": 131,
-          "memoryReservation": 102,
+          "image": "725435586437.dkr.ecr.ap-southeast-1.amazonaws.com/lz-store",
+          "cpu": 0,
+          "memory": 512,
           "portMappings": [
               {
                   "name": "lz-store-5000-tcp",
                   "containerPort": 5000,
-                  "hostPort": 5000,
+                  "hostPort": 80,
                   "protocol": "tcp",
                   "appProtocol": "http"
               }
@@ -27,8 +26,10 @@
                   "value": "mongodb+srv://dev:dev1234@lazadaapp.euzawej.mongodb.net/Store"
               }
           ],
+          "environmentFiles": [],
           "mountPoints": [],
           "volumesFrom": [],
+          "ulimits": [],
           "logConfiguration": {
               "logDriver": "awslogs",
               "options": {
@@ -42,9 +43,9 @@
       }
   ],
   "family": "lz-store-task-defintion",
-  "taskRoleArn": "arn:aws:iam::725435586437:role/ecsTaskExecutionRole",
   "executionRoleArn": "arn:aws:iam::725435586437:role/ecsTaskExecutionRole",
-  "revision": 15,
+  "networkMode": "bridge",
+  "revision": 21,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -61,13 +62,10 @@
           "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
       },
       {
-          "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
-      },
-      {
-          "name": "com.amazonaws.ecs.capability.task-iam-role"
-      },
-      {
           "name": "ecs.capability.execution-role-ecr-pull"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
       },
       {
           "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
@@ -84,7 +82,7 @@
       "cpuArchitecture": "X86_64",
       "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2023-09-22T12:13:09.510Z",
+  "registeredAt": "2023-09-23T08:42:28.672Z",
   "registeredBy": "arn:aws:iam::725435586437:root",
   "tags": []
 }

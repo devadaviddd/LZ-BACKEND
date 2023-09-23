@@ -20,7 +20,7 @@ export class Application {
   startServer(database) {
     const host = this.#server.get('host');
     const port = this.#server.get('port');
-    this.#server.listen(port, host, () => {
+    this.#server.listen(port, () => {
       console.log(`Server started at http://${host}:${port}`);
     });
     database.connect();
